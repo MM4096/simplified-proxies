@@ -24,7 +24,7 @@ export default function RootLayout({children,}: Readonly<{
 }>) {
 	return (
 		<html lang="en" data-theme="light">
-		<body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex items-center justify-center`}>
+		<body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex items-center justify-center overflow-y-none`}>
 		{children}
 		</body>
 		</html>

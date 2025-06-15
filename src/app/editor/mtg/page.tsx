@@ -7,6 +7,8 @@ import {Card, CardList} from "@/app/editor/components/cardList";
 import {FormEvent, useEffect, useState} from "react";
 import {MtgCard} from "@/app/editor/components/cards/mtgCard";
 import {renderToStaticMarkup} from "react-dom/server";
+import {getItem, setItem} from "@/lib/storage";
+import Link from "next/link";
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -43,23 +45,45 @@ export default function MTGEditorPage() {
 		setEditingIndex(null);
 	}
 
+	// grab cards
+	useEffect(() => {
+		console.log("get cards")
+		setCards(getItem("mtg-cards", []) as MTGCard[]);
+	}, []);
+
+	// update storage on card change
+	useEffect(() => {
+		if (cards.length == 0) {
+			return;
+		}
+		console.log("set cards")
+		setItem("mtg-cards", cards);
+	}, [cards]);
+
 	// update preview card when form changed
 	useEffect(() => {
+		const listener = function (e: Event) {
+			const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+			if (target && target.name && previewCard !== undefined) {
+				const previewCopy: Record<string, unknown> = structuredClone(previewCard as Record<string, unknown>);
+				const targetName = target.name as keyof MTGCard;
+				previewCopy[targetName] = target.value;
+
+				setPreviewCard(previewCopy as MTGCard);
+			}
+		}
+
 		const form = document.querySelector<HTMLFormElement>("form");
 		if (form) {
-			form.addEventListener("change", (e) => {
-				const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-				if (target && target.name && previewCard !== undefined) {
-
-					const previewCopy: Record<string, unknown> = {...previewCard};
-					const targetName = target.name as keyof MTGCard;
-					previewCopy[targetName] = target.value;
-
-					setPreviewCard(previewCopy as MTGCard);
-				}
-			})
+			form.addEventListener("change", listener);
 		}
-	}, [previewCard]);
+
+		return () => {
+			if (form) {
+				form.removeEventListener("change", listener);
+			}
+		}
+	}, [previewCard])
 
 	// update preview view when previewCard updated
 	useEffect(() => {
@@ -108,7 +132,8 @@ export default function MTGEditorPage() {
 
 					<fieldset className="fieldset">
 						<legend className="fieldset-legend">Type Line</legend>
-						<input type="text" placeholder="Creature {-} Snake Shaman" name="type_line" className="input"/>
+						<input type="text" placeholder="Creature {-} Snake Shaman" name="type_line"
+							   className="input"/>
 					</fieldset>
 
 					<fieldset className="fieldset">
@@ -195,7 +220,8 @@ export default function MTGEditorPage() {
 
 			</form>
 
-			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex} setEditingIndex={setEditingIndex}/>
+			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
+					  setEditingIndex={setEditingIndex}/>
 
 			<div className="card-preview">
 				<h2 className="custom-divider">Preview</h2>
@@ -208,6 +234,10 @@ export default function MTGEditorPage() {
 				</div>
 			</div>
 
+		</div>
+
+		<div className="flex flex-row gap-2 w-full">
+			<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
 		</div>
 	</div>)
 }

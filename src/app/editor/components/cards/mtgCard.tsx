@@ -5,22 +5,25 @@ import {convertStringToIconObject} from "@/app/editor/components/cards/iconDatab
 
 function getPowerToughnessText(power?: string, toughness?: string): string | null {
 
-	if (power === undefined && toughness === undefined) {
+	if ((power === undefined || power === "") && (toughness === undefined || toughness === "")) {
 		return null;
 	}
 
 	const parts: string[] = [];
-	if (power !== undefined) {
+	if (power !== undefined && power !== "") {
 		parts.push(power);
 	}
-	if (toughness !== undefined) {
+	if (toughness !== undefined && toughness !== "") {
 		parts.push(toughness);
 	}
 	return parts.join(" / ");
 }
 
 function hasReverseFace(card: MTGCard): boolean {
-	return card.reverse_card_name !== undefined || card.reverse_mana_cost !== undefined || card.reverse_type_line !== undefined || card.reverse_text !== undefined;
+	if (card.reverse_card_name || card.reverse_mana_cost || card.reverse_type_line || card.reverse_text) {
+		return true;
+	}
+	return false;
 }
 
 export function MtgCard({card, isBlackWhite, id}: {
