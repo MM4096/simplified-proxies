@@ -1,0 +1,49 @@
+.main-container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	width: 100vw;
+	padding: 10px;
+	gap: 2px;
+
+	.main-wrapper {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		border: 1px solid black;
+		gap: 0;
+
+		.input-container, .card-list {
+			flex-grow: 1;
+			flex-shrink: 0;
+			padding: 5px;
+			border-right: 1px solid black;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5em;
+		}
+	}
+
+	.card-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+
+	.card-preview {
+		padding: 10px;
+	}
+}
+
+textarea {
+	min-height: 100px;
+	text-wrap: wrap;
+}
+
+.custom-divider {
+	border-bottom: 1px solid black;
+}
+
+legend {
+	padding: 0;
+}

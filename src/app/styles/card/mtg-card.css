@@ -1,0 +1,41 @@
+.card-title-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.1in;
+	font-size: 0.125in;
+}
+
+.card-title {
+	flex-grow: 1;
+	font-weight: bold;
+}
+
+.mana-symbol {
+	width: 1em;
+	height: 1em;
+	vertical-align: sub;
+	display: inline-block;
+	margin-left: 0.01in;
+	margin-right: 0.01in;
+}
+
+.bottom-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.1in;
+
+	.notes {
+		flex-grow: 1;
+	}
+}
+
+.power-toughness {
+	padding: 0.05in;
+	border: 1px solid black;
+	border-radius: 0.1in;
+}
+
+.card-reverse {
+	height: 50%;
+	transform: rotate(180deg);
+}
