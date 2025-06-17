@@ -8,6 +8,7 @@
 .card-title {
 	flex-grow: 1;
 	font-weight: bold;
+	width: min-content;
 }
 
 .mana-symbol {

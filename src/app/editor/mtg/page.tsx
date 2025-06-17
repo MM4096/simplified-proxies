@@ -9,6 +9,7 @@ import {MtgCard} from "@/app/editor/components/cards/mtgCard";
 import {renderToStaticMarkup} from "react-dom/server";
 import {getItem, setItem} from "@/lib/storage";
 import Link from "next/link";
+import {ImportMTG} from "@/app/editor/mtg/components/import";
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -238,6 +239,7 @@ export default function MTGEditorPage() {
 
 		<div className="flex flex-row gap-2 w-full">
 			<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
+			<ImportMTG cards={cards} setCardsAction={setCards}/>
 		</div>
 	</div>)
 }
