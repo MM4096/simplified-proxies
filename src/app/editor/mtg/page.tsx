@@ -117,7 +117,7 @@ export default function MTGEditorPage() {
 		<h1>Simplified Proxies: <i>Magic: The Gathering</i> editor</h1>
 		<div className="main-wrapper">
 
-			<form className="input-container max-h-full overflow-y-auto" onSubmit={onSubmit}>
+			<form className="input-container h-full overflow-y-auto" onSubmit={onSubmit}>
 				<h2 className="custom-divider">Details</h2>
 
 				<div className="flex flex-col gap-2 overflow-y-auto grow">
