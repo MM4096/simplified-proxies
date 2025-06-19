@@ -238,6 +238,7 @@ export default function MTGEditorPage() {
 		</div>
 
 		<div className="flex flex-row gap-2 w-full">
+			<Link className="btn btn-secondary" href="/">Home</Link>
 			<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
 			<ImportMTG cards={cards} setCardsAction={setCards}/>
 		</div>

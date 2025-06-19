@@ -1,0 +1,155 @@
+"use client";
+
+import "../../styles/editor.css";
+import "../../styles/card/card.css";
+import "../../styles/card/ptcg-card.css";
+import {Card, CardList} from "@/app/editor/components/cardList";
+import {useState} from "react";
+import {AttacksAbilitiesList} from "@/app/editor/ptcg/components/attacksAbilitiesList";
+import {PTCGInput} from "@/app/editor/components/inputs";
+import Link from "next/link";
+import {ImportMTG} from "@/app/editor/mtg/components/import";
+import {ImportPTCG} from "@/app/editor/ptcg/components/import";
+
+export interface PTCGCard extends Card {
+	card_type?: string,
+	additional_rules?: string,
+	attacks_abilities?: AttackOrAbility[],
+
+	pokemon_hp?: string,
+	pokemon_evolution_level?: string,
+	pokemon_evolves_from?: string,
+	pokemon_weakness?: string,
+	pokemon_resistance?: string,
+	pokemon_retreat_cost?: string,
+}
+
+export interface AttackOrAbility {
+	name?: string,
+	text?: string,
+	cost?: string,
+	damage?: string,
+}
+
+export default function PTCGEditorPage() {
+	const [cards, setCards] = useState<PTCGCard[]>([]);
+	const [editingIndex, setEditingIndex] = useState<number | null>(null);
+	const [tempCard, setTempCard] = useState<PTCGCard>({} as PTCGCard);
+
+	const [editingAttacksAndAbilities, setEditingAttacksAndAbilities] = useState<Array<AttackOrAbility>>([
+		{
+			name: "Test Ability",
+			text: "Do something cool",
+			cost: "ABILITY",
+		},
+		{
+			name: "Test Attack",
+			text: "Do something cool x2",
+			cost: "{p}{p}",
+			damage: "100"
+		}
+	]);
+
+	function changeVal(key: string, value: string) {
+		setTempCard({...tempCard, [key as keyof PTCGCard]: value});
+	}
+
+	// either saves or creates the card
+	function saveChanges() {
+		if (editingIndex !== null) {
+			setCards([...cards.slice(0, editingIndex), tempCard, ...cards.slice(editingIndex + 1)]);
+		} else {
+			setCards([...cards, tempCard]);
+		}
+		setTempCard({} as PTCGCard);
+		setEditingIndex(null);
+	}
+
+	return (<div className="main-container">
+		<h1>Simplified Proxies: <i>Pokémon Trading Card Game</i> editor</h1>
+		<div className="main-wrapper">
+
+			<div className="input-container h-full overflow-y-auto">
+				<h2 className="custom-divider">Details</h2>
+
+				<div className="flex flex-col gap-2 overflow-y-auto grow">
+
+					<PTCGInput card={tempCard} valKey="card_name" setValue={changeVal} title="Card Name"
+							   placeholder="Pikachu ex"/>
+
+					<PTCGInput card={tempCard} valKey="card_type" setValue={changeVal} title="Card Type"
+							   placeholder="Pokemon"/>
+
+					<AttacksAbilitiesList attacksAndAbilities={editingAttacksAndAbilities}
+										  setAttacksAndAbilities={setEditingAttacksAndAbilities}/>
+
+					<PTCGInput card={tempCard} valKey="additional_rules" setValue={changeVal} title="Additional Rules"
+							   placeholder="Pokemon ex rule: When your Pokemon ex is Knocked Out, your opponent takes 2 Prize cards."
+							   isTextarea={true}/>
+
+					<div className="collapse bg-base-100 border flex-none">
+						<input type="checkbox"/>
+						<div className="collapse-title">Pokemon Options</div>
+						<div className="collapse-content">
+
+							<PTCGInput card={tempCard} valKey="pokemon_hp" setValue={changeVal} title="HP"
+									   placeholder="190"/>
+
+							<PTCGInput card={tempCard} valKey="pokemon_evolution_level" setValue={changeVal}
+									   title="Evolution Level" placeholder="Basic"/>
+
+							<PTCGInput card={tempCard} valKey="pokemon_evolves_from" setValue={changeVal}
+									   title="Evolves From" placeholder="N/A"/>
+
+							<PTCGInput card={tempCard} valKey="pokemon_weakness" setValue={changeVal} title="Weakness"
+									   placeholder="{f} x2"/>
+
+							<PTCGInput card={tempCard} valKey="pokemon_resistance" setValue={changeVal}
+									   title="Resistance" placeholder=""/>
+
+							<PTCGInput card={tempCard} valKey="pokemon_retreat_cost" setValue={changeVal}
+									   title="Retreat Cost" placeholder="3"/>
+						</div>
+
+					</div>
+				</div>
+
+				<div className="flex flex-row gap-2 w-full">
+					<button className="btn btn-primary" onClick={saveChanges}>{
+						editingIndex !== null ? "Update Card" : "Add Card"
+					}</button>
+					{
+						(editingIndex !== null) && (<>
+							<button className="btn btn-secondary" onClick={() => {
+								setEditingIndex(null);
+							}}>Cancel Edits
+							</button>
+						</>)
+					}
+				</div>
+
+			</div>
+
+			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
+					  setEditingIndex={setEditingIndex}/>
+
+			<div className="card-preview">
+				<h2 className="custom-divider">Preview</h2>
+				<br/>
+				<div id="card-container" className="w-full h-full">
+					<div className="card">
+						<p>Text</p>
+						<div className="card-divider"/>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div className="flex flex-row gap-2 w-full">
+			<Link className="btn btn-secondary" href="/">Home</Link>
+			<Link className="btn btn-primary" href="/editor/ptcg/print">Preview and Print Proxies</Link>
+			<ImportPTCG cards={cards} setCardsAction={setCards}/>
+		</div>
+	</div>)
+}
