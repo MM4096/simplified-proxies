@@ -11,15 +11,6 @@
 	width: min-content;
 }
 
-.mana-symbol {
-	width: 1em;
-	height: 1em;
-	vertical-align: sub;
-	display: inline-block;
-	margin-left: 0.01in;
-	margin-right: 0.01in;
-}
-
 .bottom-container {
 	display: flex;
 	flex-direction: row;

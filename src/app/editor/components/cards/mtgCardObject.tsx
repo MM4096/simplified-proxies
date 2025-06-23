@@ -26,7 +26,7 @@ function hasReverseFace(card: MTGCard): boolean {
 	return false;
 }
 
-export function MtgCard({card, isBlackWhite, id}: {
+export function MTGCardObject({card, isBlackWhite, id}: {
 	card: MTGCard,
 	isBlackWhite: boolean,
 	id?: string,

@@ -1,0 +1,74 @@
+.card-title-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.1in;
+	font-size: 0.125in;
+}
+
+.card-title {
+	margin-left: 0.05in;
+	flex-grow: 1;
+	font-weight: bold;
+	width: min-content;
+}
+
+.card-type {
+	font-size: 0.1in;
+	margin-right: 0.05in;
+}
+
+.card-type {
+	font-size: 0.1in;
+}
+
+.card {
+	white-space: pre-line;
+}
+
+.mana-symbol {
+	width: 1em;
+	height: 1em;
+	vertical-align: sub;
+	display: inline-block;
+	margin-left: 0.01in;
+	margin-right: 0.01in;
+}
+
+.card-divider-left {
+	border-left: 1px solid black;
+}
+
+.attack-ability-title {
+	font-weight: bold;
+	display: flex;
+	flex-direction: row;
+
+	.attack-ability-name {
+		flex-grow: 1;
+	}
+
+	.attack-ability-cost {
+		min-width: 0.5in;
+	}
+}
+
+.additional-rules {
+	font-size: 0.075in;
+}
+
+
+.bottom-container {
+	font-size: 0.06in;
+	display: flex;
+	flex-direction: row;
+	gap: 0.1in;
+
+	.card-divider-left {
+		padding-left: 0.025in;
+		padding-right: 0.025in;
+	}
+
+	 * {
+		 width: max-content;
+	 }
+}

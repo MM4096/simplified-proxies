@@ -13,19 +13,29 @@ export function getIcon(code: string, game: "mtg" | "ptcg", isBlackWhite: boolea
 
 	const basePath = getIconPath(code, game, isBlackWhite);
 	const fallbackPath = getIconPath(code, game, false);
-
-	// return (<img src={basePath} alt={code} className="mana-symbol" onError={() => {
-	// 	if (this.src !== fallbackPath && !this.dataset.fallback) {
-	// 		this.dataset.fallback = true;
-	// 		this.src = fallbackPath;
-	// 	}
-	// }}/>)
 	return `<img src="${basePath}" alt="${code}" class="mana-symbol" onerror="if (this.src !== '${fallbackPath}' && !this.dataset.fallback) {  this.dataset.fallback='true'; this.src='${fallbackPath}';}" />`
 }
 
 export function convertStringToIconObject(string: string | null, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
 	string = string || "";
 	string = string.replaceAll("{-}", "—")
+
+	if (game === "ptcg") {
+		string = string.replaceAll("Dragon", "{a}");
+		string = string.replaceAll("Colorless", "{c}");
+		string = string.replaceAll("Darkness", "{d}");
+		string = string.replaceAll("Fighting", "{f}");
+		string = string.replaceAll("Grass", "{g}");
+		string = string.replaceAll("Lightning", "{l}");
+		string = string.replaceAll("Metal", "{m}");
+		string = string.replaceAll("Psychic", "{p}");
+		string = string.replaceAll("Fire", "{r}");
+		string = string.replaceAll("Water", "{w}");
+		string = string.replaceAll("Fairy", "{y}");
+		string = string.replaceAll("Free", "{n}");
+
+		string = string.replaceAll("okemon", "okémon")
+	}
 
 	const matches = string.match(/(?<!\\)\{.*?}/g);
 

@@ -5,7 +5,7 @@ import "../../styles/card/card.css";
 import "../../styles/card/mtg-card.css";
 import {Card, CardList} from "@/app/editor/components/cardList";
 import {FormEvent, useEffect, useState} from "react";
-import {MtgCard} from "@/app/editor/components/cards/mtgCard";
+import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {renderToStaticMarkup} from "react-dom/server";
 import {getItem, setItem} from "@/lib/storage";
 import Link from "next/link";
@@ -48,7 +48,6 @@ export default function MTGEditorPage() {
 
 	// grab cards
 	useEffect(() => {
-		console.log("get cards")
 		setCards(getItem("mtg-cards", []) as MTGCard[]);
 	}, []);
 
@@ -57,7 +56,6 @@ export default function MTGEditorPage() {
 		if (cards.length == 0) {
 			return;
 		}
-		console.log("set cards")
 		setItem("mtg-cards", cards);
 	}, [cards]);
 
@@ -90,7 +88,7 @@ export default function MTGEditorPage() {
 	useEffect(() => {
 		const previewElem = document.getElementById("card-container");
 		if (previewElem) {
-			previewElem.innerHTML = renderToStaticMarkup(<MtgCard card={previewCard || {}} isBlackWhite={true}/>);
+			previewElem.innerHTML = renderToStaticMarkup(<MTGCardObject card={previewCard || {}} isBlackWhite={true}/>);
 		}
 	}, [previewCard]);
 

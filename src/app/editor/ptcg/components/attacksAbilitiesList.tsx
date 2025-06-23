@@ -4,6 +4,7 @@ export function AttacksAbilitiesList({attacksAndAbilities, setAttacksAndAbilitie
 	attacksAndAbilities: AttackOrAbility[],
 	setAttacksAndAbilities: (attacksAndAbilities: AttackOrAbility[]) => void,
 }) {
+
 	function editVal(index: number, key: string, value: string) {
 		const newAttacksAndAbilities = [...attacksAndAbilities];
 		newAttacksAndAbilities[index][key as keyof AttackOrAbility] = value;
@@ -23,21 +24,21 @@ export function AttacksAbilitiesList({attacksAndAbilities, setAttacksAndAbilitie
 
 							<fieldset className="fieldset">
 								<legend className="fieldset-legend">Name</legend>
-								<input type="text" value={item.name} placeholder="Name" className="input"
+								<input type="text" value={item.name || ""} placeholder="Name" className="input"
 									   onChange={(e) => {
 										   editVal(index, "name", e.target.value);
 									   }}/>
 							</fieldset>
 							<fieldset className="fieldset">
 								<legend className="fieldset-legend">Cost or <i>ABILITY</i></legend>
-								<input type="text" value={item.cost} placeholder="Cost (or ABILITY)" className="input"
+								<input type="text" value={item.cost || ""} placeholder="Cost (or ABILITY)" className="input"
 									   onChange={(e) => {
 										   editVal(index, "cost", e.target.value);
 									   }}/>
 							</fieldset>
 							<fieldset className="fieldset">
 								<legend className="fieldset-legend">Damage</legend>
-								<input type="text" value={item.damage} placeholder="Damage (optional)" className="input"
+								<input type="text" value={item.damage || ""} placeholder="Damage (optional)" className="input"
 									   onChange={(e) => {
 										   editVal(index, "damage", e.target.value);
 									   }}/>
@@ -46,16 +47,30 @@ export function AttacksAbilitiesList({attacksAndAbilities, setAttacksAndAbilitie
 
 							<fieldset className="fieldset">
 								<legend className="fieldset-legend">Text</legend>
-								<textarea value={item.text} placeholder="Text" className="textarea"
-									   onChange={(e) => {
-										   editVal(index, "text", e.target.value);
-									   }}/>
+								<textarea value={item.text || ""} placeholder="Text" className="textarea"
+										  onChange={(e) => {
+											  editVal(index, "text", e.target.value);
+										  }}/>
 							</fieldset>
+
+							<button className="btn btn-secondary" onClick={() => {
+								setAttacksAndAbilities([...attacksAndAbilities.slice(0, index), ...attacksAndAbilities.slice(index + 1)]);
+							}}>Delete
+							</button>
 
 						</div>
 					</div>
 				})
 			}
+			<button className="btn btn-primary" onClick={() => {
+				setAttacksAndAbilities([...attacksAndAbilities, {
+					name: "",
+					cost: "",
+					damage: "",
+					text: ""
+				}]);
+			}}>Add New
+			</button>
 		</div>
 	</div>)
 }

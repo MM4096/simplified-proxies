@@ -4,12 +4,14 @@ import "../../styles/editor.css";
 import "../../styles/card/card.css";
 import "../../styles/card/ptcg-card.css";
 import {Card, CardList} from "@/app/editor/components/cardList";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {AttacksAbilitiesList} from "@/app/editor/ptcg/components/attacksAbilitiesList";
 import {PTCGInput} from "@/app/editor/components/inputs";
 import Link from "next/link";
-import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {ImportPTCG} from "@/app/editor/ptcg/components/import";
+import {getItem, setItem} from "@/lib/storage";
+import {renderToStaticMarkup} from "react-dom/server";
+import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 
 export interface PTCGCard extends Card {
 	card_type?: string,
@@ -22,6 +24,7 @@ export interface PTCGCard extends Card {
 	pokemon_weakness?: string,
 	pokemon_resistance?: string,
 	pokemon_retreat_cost?: string,
+	pokemon_type?: string,
 }
 
 export interface AttackOrAbility {
@@ -56,14 +59,47 @@ export default function PTCGEditorPage() {
 
 	// either saves or creates the card
 	function saveChanges() {
+		const tempCardCopy = {...tempCard};
+		tempCardCopy.attacks_abilities = editingAttacksAndAbilities;
 		if (editingIndex !== null) {
-			setCards([...cards.slice(0, editingIndex), tempCard, ...cards.slice(editingIndex + 1)]);
+			setCards([...cards.slice(0, editingIndex), tempCardCopy, ...cards.slice(editingIndex + 1)]);
 		} else {
-			setCards([...cards, tempCard]);
+			setCards([...cards, tempCardCopy]);
 		}
 		setTempCard({} as PTCGCard);
 		setEditingIndex(null);
 	}
+
+	// get cards
+	useEffect(() => {
+		setCards(getItem("ptcg-cards", []) as PTCGCard[]);
+	}, []);
+
+	// update cards
+	useEffect(() => {
+		if (cards.length == 0) {
+			return;
+		}
+		setItem("ptcg-cards", cards);
+	}, [cards]);
+
+	useEffect(() => {
+		if (editingIndex !== null && editingIndex >= 0 && editingIndex < cards.length) {
+			setTempCard(cards[editingIndex]);
+			setEditingAttacksAndAbilities(cards[editingIndex].attacks_abilities || []);
+		} else {
+			setTempCard({} as PTCGCard);
+			setEditingAttacksAndAbilities([]);
+		}
+	}, [cards, editingIndex]);
+
+	// update preview card
+	useEffect(() => {
+		const previewElem = document.getElementById("card-container");
+		if (previewElem) {
+			previewElem.innerHTML = renderToStaticMarkup(<PTCGCardObject card={tempCard || {}} isBlackWhite={true}/>);
+		}
+	}, [tempCard]);
 
 	return (<div className="main-container">
 		<h1>Simplified Proxies: <i>Pokémon Trading Card Game</i> editor</h1>
@@ -82,6 +118,10 @@ export default function PTCGEditorPage() {
 
 					<AttacksAbilitiesList attacksAndAbilities={editingAttacksAndAbilities}
 										  setAttacksAndAbilities={setEditingAttacksAndAbilities}/>
+
+					<PTCGInput card={tempCard} valKey="card_text" setValue={changeVal} title="Card Text"
+							   placeholder="Heal 30 damage from one of your Pokemon"
+							   isTextarea={true}/>
 
 					<PTCGInput card={tempCard} valKey="additional_rules" setValue={changeVal} title="Additional Rules"
 							   placeholder="Pokemon ex rule: When your Pokemon ex is Knocked Out, your opponent takes 2 Prize cards."
@@ -109,6 +149,9 @@ export default function PTCGEditorPage() {
 
 							<PTCGInput card={tempCard} valKey="pokemon_retreat_cost" setValue={changeVal}
 									   title="Retreat Cost" placeholder="3"/>
+
+							<PTCGInput card={tempCard} valKey="pokemon_type" setValue={changeVal}
+									   title="Pokemon Type" placeholder="{p}"/>
 						</div>
 
 					</div>
