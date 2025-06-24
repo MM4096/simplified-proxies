@@ -60,12 +60,20 @@ export function ImportMTG({cards, setCardsAction}: {
 		setImportMessage("");
 		setImportError("");
 
-		const lines = importText.split("\n");
+		let lines = importText.split("\n");
 		const importCards: Array<{ name: string, quantity: number }> = [];
 		let hasQuantities: boolean = false;
 
+		const tempLines: string[] = [];
+		for (const line of lines) {
+			if (line.trim() !== "") {
+				tempLines.push(line.trim());
+			}
+		}
+		lines = tempLines;
+
 		for (let i = 0; i < lines.length; i++) {
-			let line = lines[i].trim();
+			let line = lines[i];
 			if (line === "") {
 				continue;
 			}
@@ -91,6 +99,13 @@ export function ImportMTG({cards, setCardsAction}: {
 				}
 
 			}
+
+			// dfc
+			const dfcParts = line.split("//");
+			if (dfcParts.length > 1) {
+				line = dfcParts[0];
+			}
+
 			importCards.push({name: line, quantity: quantity});
 		}
 
@@ -112,7 +127,7 @@ export function ImportMTG({cards, setCardsAction}: {
 		for (let i = 0; i < chunks.length; i++) {
 			const thisChunk = chunks[i];
 
-			setImportMessage(`Getting chunk ${i+1} of ${chunks.length} chunks`);
+			setImportMessage(`Getting chunk ${i+1} of ${chunks.length}`);
 
 			const response = await fetch("https://api.scryfall.com/cards/collection", {
 				headers: {
@@ -124,9 +139,12 @@ export function ImportMTG({cards, setCardsAction}: {
 
 			if (response.ok) {
 				const json = await response.json();
+				console.log(json);
 
-				if (json["not-found"] && json["not-found"].length > 0) {
-					setImportError(`Chunk ${i+1} failed: Couldn't find cards: ${json["not-found"].join(", ")}`);
+				if (json["not_found"] && json["not_found"].length > 0) {
+					setImportError(`Chunk ${i+1} failed: Couldn't find cards: ${json["not_found"].slice(0,5).map((i: {name: string}) => i.name).join(", ")}\nMake sure that no headers are included, and that quantities are consistent (all cards need to have a quantity, or NO cards have a quantity)`);
+					setDisableButtons(false);
+					console.log("Import error")
 					return;
 				}
 
@@ -141,6 +159,8 @@ export function ImportMTG({cards, setCardsAction}: {
 			}
 			else {
 				setImportError(`Could not find chunk ${i+1}.`);
+				setDisableButtons(false);
+				console.log("Import error")
 				return;
 			}
 		}
@@ -157,8 +177,8 @@ export function ImportMTG({cards, setCardsAction}: {
 		}
 
 		setDisableButtons(false);
+		setImportMessage("");
 		dialogRef.current?.close();
-
 	}
 
 	return (<>
@@ -167,7 +187,7 @@ export function ImportMTG({cards, setCardsAction}: {
 		}}>Import Cards
 		</button>
 		<dialog className="modal w-full" ref={dialogRef}>
-			<div className="modal-box min-w-[50vw]">
+			<div className="modal-box min-w-[50vw] max-w-[75vw]">
 				<h3 className="font-bold text-xl">Import Cards</h3>
 
 				<div className="custom-divider"/>
@@ -181,20 +201,27 @@ export function ImportMTG({cards, setCardsAction}: {
 						<p>Deflecting Swat</p>
 						<p>sakura tribe elder</p>
 						<p>chandra flames fury</p>
+						<p>commit // memory</p>
 					</div>
 					<div className="border p-2 w-max">
 						<p>2 Plains</p>
 						<p>2 Deflecting Swat</p>
 						<p>4 sakura tribe elder</p>
 						<p>10 chandra flames fury</p>
+						<p>1 Commit</p>
 					</div>
 					<div className="border p-2 w-max">
 						<p>2x Plains</p>
 						<p>2x Deflecting Swat</p>
 						<p>4x sakura tribe elder</p>
 						<p>10x chandra flames fury</p>
+						<p>1x Memory</p>
 					</div>
 				</div>
+				<p className="text-xs">DFCs should either be entered with a double slash (//) or the name of one face (Commit//Memory as either Commit or Memory)<br/>
+				All cards must either have no quantity given, or all cards must have quantities.<br/>
+				Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
+
 				<fieldset className="fieldset">
 					<legend className="fieldset-legend"></legend>
 					<textarea className="textarea w-full" placeholder="Paste your card data here" value={importText}
@@ -205,7 +232,7 @@ export function ImportMTG({cards, setCardsAction}: {
 						importMessage !== "" && (<label className="label">{importMessage}</label>)
 					}
 					{
-						importError !== "" && (<label className="label text-error">{importError}</label>)
+						importError !== "" && (<label className="label text-error whitespace-pre">{importError}</label>)
 					}
 				</fieldset>
 				<br/>
