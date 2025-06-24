@@ -1,10 +1,49 @@
+import "./styles/index.css"
+
 import Link from "next/link";
+import {Carousel} from "@/app/components/carousel";
 
 export default function Home() {
-  return (<div className="flex flex-col items-center h-full justify-center w-max child-w-full gap-2">
-	  <h1>Simplified Proxies</h1>
-	  <div className="mb-5"/>
-	  <Link href="/editor/mtg" className="btn btn-primary">Magic: The Gathering Editor</Link>
-	  <Link href="/editor/ptcg" className="btn btn-primary">Pokemon Trading Card Game Editor</Link>
-  </div>);
+	return (<>
+		<div className="grid grid-cols-3">
+
+			<div className="flex flex-col items-center justify-center gap-4 mtg-panel">
+				<Carousel time={3000}
+						  standardPaths={{
+							  prefix: "/images/index/carousel/mtg/actual",
+							  paths: ["deflecting-swat", "explore", "jace-the-perfected-mind", "sakura-tribe-elder", "sol-ring"],
+							  suffix: ".png",
+						  }} className="w-1/3"/>
+				<Carousel time={3000}
+						  standardPaths={{
+							  prefix: "/images/index/carousel/mtg/proxy",
+							  paths: ["deflecting-swat", "explore", "jace-the-perfected-mind", "sakura-tribe-elder", "sol-ring"],
+							  suffix: ".png",
+						  }} className="w-1/3"/>
+			</div>
+
+			<div className="flex flex-col items-center h-full justify-center text-center child-w-full gap-2">
+				<h1>Simplified Proxies</h1>
+				<div className="mb-5"/>
+				<Link href="/editor/mtg" className="btn btn-primary mtg-editor">Magic: The Gathering Editor</Link>
+				<Link href="/editor/ptcg" className="btn btn-primary ptcg-editor">Pokemon Trading Card Game Editor</Link>
+			</div>
+
+			<div className="flex flex-col items-center justify-center gap-4 ptcg-panel">
+				<Carousel time={3000}
+						  standardPaths={{
+							  prefix: "/images/index/carousel/ptcg/actual",
+							  paths: ["arven", "budew", "gardevoir-ex", "legacy-energy", "tm-evo"],
+							  suffix: ".png",
+						  }} className="w-1/3"/>
+				<Carousel time={3000}
+						  standardPaths={{
+							  prefix: "/images/index/carousel/ptcg/proxy",
+							  paths: ["arven", "budew", "gardevoir-ex", "legacy-energy", "tm-evo"],
+							  suffix: ".png",
+						  }} className="w-1/3"/>
+			</div>
+
+		</div>
+	</>);
 }

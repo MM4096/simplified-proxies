@@ -1,0 +1,12 @@
+body:has(.mtg-editor:hover) .mtg-panel {
+	opacity: 1;
+}
+
+body:has(.ptcg-editor:hover) .ptcg-panel {
+	opacity: 1;
+}
+
+.mtg-panel, .ptcg-panel {
+	opacity: 0.3;
+	transition: opacity 0.25s ease-in-out;
+}

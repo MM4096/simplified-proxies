@@ -30,4 +30,13 @@
 	> *:not(.card-divider) {
 		padding: 0.05in;
 	}
+
+	.mana-symbol {
+		width: 1em;
+		height: 1em;
+		vertical-align: sub;
+		display: inline-block;
+		margin-left: 0.01in;
+		margin-right: 0.01in;
+	}
 }

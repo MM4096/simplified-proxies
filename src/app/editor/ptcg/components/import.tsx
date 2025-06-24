@@ -95,10 +95,10 @@ export function ImportPTCG({cards, setCardsAction}: {
 
 		switch (json["supertype"].toLowerCase()) {
 			case "energy":
-				thisCard.card_type = `Energy — ${json["subtypes"][0]}`;
+				thisCard.card_type = `${json["subtypes"][0]} Energy`;
 				break;
 			case "trainer":
-				thisCard.card_type = `Trainer — ${json["subtypes"][0]}`;
+				thisCard.card_type = json["subtypes"][0];
 				break;
 			case "pokémon":
 				thisCard.card_type = `Pokemon`;

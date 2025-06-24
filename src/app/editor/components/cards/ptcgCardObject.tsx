@@ -24,15 +24,18 @@ export function PTCGCardObject({card, isBlackWhite, id}: {
 			for (let i = 0; i < pokemonRetreatCost; i++) {
 				retreatCostText += "{c}";
 			}
-		}
-		else {
+		} else {
 			retreatCostText = pokemonRetreatCost.toString();
 		}
 	}
 
 	return (<div className="card" id={id} key={id}>
-		<div className="card-title-container card-divider">
-			<h2 className="card-title">{card.card_name}</h2>
+		<div className="card-title-container">
+			{
+				(card.card_type?.toLowerCase().indexOf("energy") || -1) >= 0 ? (<h2 className="card-title" dangerouslySetInnerHTML={{
+					__html: convertStringToIconObject(card.card_name || "", "ptcg", isBlackWhite)
+				}}/>): (<h2 className="card-title">{card.card_name}</h2>)
+			}
 			{
 				isPokemonCard ? (<div className="card-type">
 					<span>{card.pokemon_hp}HP</span>
@@ -42,17 +45,21 @@ export function PTCGCardObject({card, isBlackWhite, id}: {
 				</div>) : (<p className="card-type">{card.card_type?.replaceAll("-", "—")}</p>)
 			}
 		</div>
+		<div className="card-divider"/>
 
 		{
-			isPokemonCard && (<div className="pokemon-evolution-data card-divider p-1">
-				<span>{card.pokemon_evolution_level}</span>
-				{
-					card.pokemon_evolves_from && (<>
-						<span className="card-divider-left ml-2 pr-2"/>
-						<span>Evolves from {card.pokemon_evolves_from}</span>
-					</>)
-				}
-			</div>)
+			isPokemonCard && (<>
+				<div className="pokemon-evolution-data p-1">
+					<span>{card.pokemon_evolution_level}</span>
+					{
+						card.pokemon_evolves_from && (<>
+							<span className="card-divider-left ml-2 pr-2"/>
+							<span>Evolves from {card.pokemon_evolves_from}</span>
+						</>)
+					}
+				</div>
+				<div className="card-divider"/>
+			</>)
 		}
 
 		{card.card_text && (<p className="card-text" dangerouslySetInnerHTML={{
@@ -88,11 +95,16 @@ export function PTCGCardObject({card, isBlackWhite, id}: {
 		}
 
 		{/* Grow so additional rules is at the bottom */}
-		<div className="grow card-divider"/>
+		<div className="grow"/>
 
-		<div className="additional-rules">
-			<i>{card.additional_rules}</i>
-		</div>
+		{
+			card.additional_rules && (<>
+				<div className="card-divider"/>
+				<div className="additional-rules">
+					<i>{card.additional_rules}</i>
+				</div>
+			</>)
+		}
 
 		{
 			isPokemonCard && (<>
