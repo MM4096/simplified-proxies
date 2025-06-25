@@ -33,3 +33,35 @@ body:has(.ptcg-editor:hover) .ptcg-panel {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 }
+
+.links-box {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+	bottom: 5px;
+	right: 5px;
+}
+
+.index-link {
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 5px;
+}
+
+.github-link {
+	font-weight: bold;
+	background-color: black;
+	color: white;
+}
+
+.symbol {
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+}
