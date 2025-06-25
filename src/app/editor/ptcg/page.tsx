@@ -39,19 +39,9 @@ export default function PTCGEditorPage() {
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [tempCard, setTempCard] = useState<PTCGCard>({} as PTCGCard);
 
-	const [editingAttacksAndAbilities, setEditingAttacksAndAbilities] = useState<Array<AttackOrAbility>>([
-		{
-			name: "Test Ability",
-			text: "Do something cool",
-			cost: "ABILITY",
-		},
-		{
-			name: "Test Attack",
-			text: "Do something cool x2",
-			cost: "{p}{p}",
-			damage: "100"
-		}
-	]);
+	const [editingAttacksAndAbilities, setEditingAttacksAndAbilities] = useState<Array<AttackOrAbility>>([]);
+
+	const [activeTabName, setActiveTabName] = useState<"input" | "list" | "preview" | "options">("input");
 
 	function changeVal(key: string, value: string) {
 		setTempCard({...tempCard, [key as keyof PTCGCard]: value});
@@ -102,10 +92,10 @@ export default function PTCGEditorPage() {
 	}, [tempCard]);
 
 	return (<div className="main-container">
-		<h1>Simplified Proxies: <i>Pokémon Trading Card Game</i> editor</h1>
+		<h1 className="small-hidden">Simplified Proxies: <i>Pokémon Trading Card Game</i> editor</h1>
 		<div className="main-wrapper">
 
-			<div className="input-container h-full overflow-y-auto">
+			<div className={`input-container h-full overflow-y-auto ${activeTabName === "input" ? "active-tab" : ""}`}>
 				<h2 className="custom-divider">Details</h2>
 
 				<div className="flex flex-col gap-2 overflow-y-auto grow">
@@ -174,9 +164,9 @@ export default function PTCGEditorPage() {
 			</div>
 
 			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
-					  setEditingIndex={setEditingIndex}/>
+					  setEditingIndex={setEditingIndex} className={`${activeTabName === "list" ? "active-tab" : ""}`}/>
 
-			<div className="card-preview">
+			<div className={`card-preview ${activeTabName === "preview" ? "active-tab" : ""}`}>
 				<h2 className="custom-divider">Preview</h2>
 				<br/>
 				<div id="card-container" className="w-full h-full">
@@ -187,9 +177,37 @@ export default function PTCGEditorPage() {
 				</div>
 			</div>
 
+			<div className={`options p-1 ${activeTabName === "options" ? "active-tab" : "hidden"}`}>
+				<button className="btn btn-primary" onClick={() => {
+					setActiveTabName("input")
+				}}>Edit Card
+				</button>
+				<button className="btn btn-primary" onClick={() => {
+					setActiveTabName("list")
+				}}>Card List
+				</button>
+				<button className="btn btn-primary" onClick={() => {
+					setActiveTabName("preview")
+				}}>Preview
+				</button>
+
+				<div className="grow"/>
+
+				<ImportPTCG cards={cards} setCardsAction={setCards}/>
+				<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
+				<Link className="btn btn-secondary" href="/">Home</Link>
+			</div>
+
 		</div>
 
-		<div className="flex flex-row gap-2 w-full">
+		<div className="small-visible w-full">
+			<button className="btn btn-xs w-full" onClick={() => {
+				setActiveTabName("options")
+			}}>Menu
+			</button>
+		</div>
+
+		<div className="flex flex-row gap-2 w-full small-hidden">
 			<Link className="btn btn-secondary" href="/">Home</Link>
 			<Link className="btn btn-primary" href="/editor/ptcg/print">Preview and Print Proxies</Link>
 			<ImportPTCG cards={cards} setCardsAction={setCards}/>

@@ -1,3 +1,21 @@
+@media only screen and (max-width: 768px) {
+	.index {
+		display: flex !important;
+		flex-direction: column;
+		justify-items: center;
+		align-items: center;
+		grid-template-columns: none !important;
+	}
+
+	.carousel {
+		display: none;
+	}
+
+	.index-contents {
+		width: 90%;
+	}
+}
+
 body:has(.mtg-editor:hover) .mtg-panel {
 	opacity: 1;
 }
@@ -9,4 +27,9 @@ body:has(.ptcg-editor:hover) .ptcg-panel {
 .mtg-panel, .ptcg-panel {
 	opacity: 0.3;
 	transition: opacity 0.25s ease-in-out;
+}
+
+.index {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 }

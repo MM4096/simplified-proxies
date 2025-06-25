@@ -47,11 +47,16 @@ export function MTGCardObject({card, isBlackWhite, id}: {
 		<div className="card-text" dangerouslySetInnerHTML={{
 			__html: convertStringToIconObject(card.card_text || "", "mtg", isBlackWhite)
 		}}/>
-		<div className="mb-3"/>
 
-		<div className="flavor-text" dangerouslySetInnerHTML={{
-			__html: `<i>${convertStringToIconObject(card.flavor_text || "", "mtg", isBlackWhite)}</i>`
-		}}/>
+		{
+			card.flavor_text && (<>
+				<div className="mb-3"/>
+
+				<div className="flavor-text" dangerouslySetInnerHTML={{
+					__html: `<i>${convertStringToIconObject(card.flavor_text || "", "mtg", isBlackWhite)}</i>`
+				}}/>
+			</>)
+		}
 
 		<div className="grow"/>
 

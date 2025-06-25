@@ -1,3 +1,11 @@
+.small-hidden {
+	display: block;
+}
+
+.small-visible {
+	display: none !important;
+}
+
 .main-container {
 	display: flex;
 	flex-direction: column;
@@ -35,6 +43,18 @@
 
 	.card-preview {
 		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		flex-grow: 1;
+		overflow-y: scroll;
+	}
+
+	.options {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		height: 100%;
 	}
 }
 
@@ -49,4 +69,31 @@ textarea {
 
 legend {
 	padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+	.small-hidden {
+		display: none !important;
+	}
+
+	.small-visible {
+		display: flex !important;
+	}
+
+	.main-wrapper {
+		display: block !important;
+		height: 100%;
+		width: 100%;
+		padding: 0;
+		gap: 0;
+		overflow-y: scroll;
+	}
+
+	.main-wrapper > * {
+		display: none !important;
+	}
+
+	.main-wrapper > .active-tab {
+		display: flex !important;
+	}
 }

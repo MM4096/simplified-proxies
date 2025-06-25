@@ -24,6 +24,9 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>)
 			if (thisData.hasOwnProperty("loyalty")) {
 				thisCard.power = thisData["loyalty"].toString() || "";
 			}
+			if (thisData.hasOwnProperty("defense")) {
+				thisCard.power = thisData["defense"].toString() || "";
+			}
 		}
 		else {
 			isReverseFace = true;
@@ -36,6 +39,9 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>)
 
 			if (thisData.hasOwnProperty("loyalty")) {
 				thisCard.power = thisData["loyalty"].toString() || "";
+			}
+			if (thisData.hasOwnProperty("defense")) {
+				thisCard.power = thisData["defense"].toString() || "";
 			}
 		}
 	}

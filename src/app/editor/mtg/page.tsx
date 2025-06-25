@@ -4,12 +4,14 @@ import "../../styles/editor.css";
 import "../../styles/card/card.css";
 import "../../styles/card/mtg-card.css";
 import {Card, CardList} from "@/app/editor/components/cardList";
-import {FormEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {renderToStaticMarkup} from "react-dom/server";
 import {getItem, setItem} from "@/lib/storage";
 import Link from "next/link";
 import {ImportMTG} from "@/app/editor/mtg/components/import";
+import {MTGInput} from "@/app/editor/components/inputs";
+import {BiMenu} from "react-icons/bi";
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -29,20 +31,22 @@ export interface MTGCard extends Card {
 export default function MTGEditorPage() {
 	const [cards, setCards] = useState<MTGCard[]>([]);
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
+	const [tempCard, setTempCard] = useState<MTGCard>({} as MTGCard);
 
-	const [previewCard, setPreviewCard] = useState<MTGCard | null>({} as MTGCard);
+	const [activeTabName, setActiveTabName] = useState<"input" | "list" | "preview" | "options">("input");
 
-	function onSubmit(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault();
+	function changeVal(key: string, value: string) {
+		setTempCard({...tempCard, [key as keyof MTGCard]: value});
+	}
 
-		const formData = new FormData(e.currentTarget);
-		const jsonData = Object.fromEntries(formData.entries());
-
+	function saveChanges() {
+		const tempCardCopy = {...tempCard};
 		if (editingIndex !== null) {
-			setCards([...cards.slice(0, editingIndex), jsonData as MTGCard, ...cards.slice(editingIndex + 1)]);
+			setCards([...cards.slice(0, editingIndex), tempCardCopy, ...cards.slice(editingIndex + 1)]);
 		} else {
-			setCards([...cards, jsonData as MTGCard]);
+			setCards([...cards, tempCardCopy]);
 		}
+		setTempCard({} as MTGCard);
 		setEditingIndex(null);
 	}
 
@@ -59,139 +63,77 @@ export default function MTGEditorPage() {
 		setItem("mtg-cards", cards);
 	}, [cards]);
 
-	// update preview card when form changed
 	useEffect(() => {
-		const listener = function (e: Event) {
-			const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-			if (target && target.name && previewCard !== undefined) {
-				const previewCopy: Record<string, unknown> = structuredClone(previewCard as Record<string, unknown>);
-				const targetName = target.name as keyof MTGCard;
-				previewCopy[targetName] = target.value;
-
-				setPreviewCard(previewCopy as MTGCard);
-			}
+		if (editingIndex !== null && editingIndex >= 0 && editingIndex < cards.length) {
+			setTempCard(cards[editingIndex]);
+		} else {
+			setTempCard({} as MTGCard);
 		}
+	}, [cards, editingIndex]);
 
-		const form = document.querySelector<HTMLFormElement>("form");
-		if (form) {
-			form.addEventListener("change", listener);
-		}
-
-		return () => {
-			if (form) {
-				form.removeEventListener("change", listener);
-			}
-		}
-	}, [previewCard])
-
-	// update preview view when previewCard updated
+	// update preview view when tempCard updated
 	useEffect(() => {
 		const previewElem = document.getElementById("card-container");
 		if (previewElem) {
-			previewElem.innerHTML = renderToStaticMarkup(<MTGCardObject card={previewCard || {}} isBlackWhite={true}/>);
+			previewElem.innerHTML = renderToStaticMarkup(<MTGCardObject card={tempCard || {}} isBlackWhite={true}/>);
 		}
-	}, [previewCard]);
-
-	// whenever a new card is selected
-	useEffect(() => {
-		const thisCard = (editingIndex !== null && editingIndex >= 0 && editingIndex < cards.length) ? cards[editingIndex] : {};
-
-		const elems: Array<HTMLInputElement | HTMLTextAreaElement> = [];
-
-		const inputElems = document.querySelectorAll<HTMLInputElement>(".input-container input");
-		const textareaElems = document.querySelectorAll<HTMLTextAreaElement>(".input-container textarea");
-		elems.push(...inputElems);
-		elems.push(...textareaElems);
-
-		elems.forEach((elem) => {
-			elem.value = (thisCard[elem.name as keyof MTGCard] || "").toString();
-		});
-
-		setPreviewCard(thisCard);
-
-	}, [editingIndex, cards]);
+	}, [tempCard]);
 
 	return (<div className="main-container">
-		<h1>Simplified Proxies: <i>Magic: The Gathering</i> editor</h1>
+		<h1 className="small-hidden">Simplified Proxies: <i>Magic: The Gathering</i> editor</h1>
 		<div className="main-wrapper">
 
-			<form className="input-container h-full overflow-y-auto" onSubmit={onSubmit}>
+			<div className={`input-container h-full overflow-y-auto ${activeTabName === "input" ? "active-tab" : ""}`}>
 				<h2 className="custom-divider">Details</h2>
 
 				<div className="flex flex-col gap-2 overflow-y-auto grow">
-					<fieldset className="fieldset">
-						<legend className="fieldset-legend">Card Name</legend>
-						<input type="text" placeholder="Sakura Tribe-Elder" name="card_name" className="input"/>
-					</fieldset>
+					<MTGInput card={tempCard} valKey="card_name" setValue={changeVal} title="Card Name"
+							  placeholder="Sakura Tribe-Elder"/>
 
-					<fieldset className="fieldset">
-						<legend className="fieldset-legend">Mana Cost</legend>
-						<input type="text" placeholder="{1}{g}" name="mana_cost" className="input"/>
-					</fieldset>
+					<MTGInput card={tempCard} valKey="mana_cost" setValue={changeVal} title="Mana Cost"
+							  placeholder="{1}{g}"/>
 
-					<fieldset className="fieldset">
-						<legend className="fieldset-legend">Type Line</legend>
-						<input type="text" placeholder="Creature {-} Snake Shaman" name="type_line"
-							   className="input"/>
-					</fieldset>
+					<MTGInput card={tempCard} valKey="type_line" setValue={changeVal} title="Type Line"
+							  placeholder="Creature {-} Snake Shaman"/>
 
-					<fieldset className="fieldset">
-						<legend className="fieldset-legend">Card Text</legend>
-						<textarea
-							placeholder="Sacrifice this creature: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle."
-							name="card_text" className="textarea"></textarea>
-					</fieldset>
+					<MTGInput card={tempCard} valKey="card_text" setValue={changeVal} title="Card Text"
+							  placeholder="Sacrifice this creature: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle."
+							  isTextarea={true}/>
 
-					<fieldset className="fieldset">
-						<legend className="fieldset-legend">Flavor Text</legend>
-						<textarea
-							placeholder="There were no tombstones in orochi territory. Slain warriors were buried with a tree sapling, so they would become a part of the forest after death."
-							name="flavor_text" className="textarea"></textarea>
-					</fieldset>
+					<MTGInput card={tempCard} valKey="flavor_text" setValue={changeVal} title="Flavor Text"
+							  placeholder="There were no tombstones in orochi territory. Slain warriors were buried with a tree sapling, so they would become a part of the forest after death."
+							  isTextarea={true}/>
 
-					<fieldset className="fieldset w-full">
-						<legend className="fieldset-legend">Power / Toughness</legend>
-						<div className="flex flex-row gap-2">
-							<input type="text" name="power"
-								   className="input grow"/>
-							<input type="text" name="toughness"
-								   className="input grow"/>
-						</div>
-						<p className="label text-wrap">These can be omitted for non-creatures like lands.<br/>If
-							planeswalker
-							loyalty is desired, setting only Power will work.</p>
-					</fieldset>
+					<div className="flex flex-row gap-2">
+						<MTGInput card={tempCard} valKey="power" setValue={changeVal} title="Power"
+								  placeholder=""/>
+						<MTGInput card={tempCard} valKey="toughness" setValue={changeVal} title="Toughness"
+								  placeholder=""/>
+					</div>
+					<p className="label text-xs">If Planeswalker loyalty or Battle Defense is needed, just filling
+						out &apos;Power&apos; will work.</p>
 
 					<div className="collapse bg-base-100 border flex-none">
 						<input type="checkbox"/>
 						<div className="collapse-title">Dual-Faced Cards</div>
 						<div className="collapse-content">
-							<fieldset className="fieldset">
-								<legend className="fieldset-legend">Reverse Name</legend>
-								<input name="reverse_card_name" className="input"/>
-							</fieldset>
-							<fieldset className="fieldset">
-								<legend className="fieldset-legend">Reverse Mana Cost</legend>
-								<input name="reverse_mana_cost" className="input"/>
-							</fieldset>
-							<fieldset className="fieldset">
-								<legend className="fieldset-legend">Reverse Type Line</legend>
-								<input name="reverse_type_line" className="input"/>
-							</fieldset>
-							<fieldset className="fieldset">
-								<legend className="fieldset-legend">Reverse Text</legend>
-								<textarea name="reverse_text" className="textarea"></textarea>
-							</fieldset>
+							<MTGInput card={tempCard} valKey="reverse_card_name" setValue={changeVal} title="Name"
+									  placeholder=""/>
+							<MTGInput card={tempCard} valKey="reverse_mana_cost" setValue={changeVal} title="Mana Cost"
+									  placeholder=""/>
+							<MTGInput card={tempCard} valKey="reverse_type_line" setValue={changeVal} title="Type Line"
+									  placeholder=""/>
+							<MTGInput card={tempCard} valKey="reverse_text" setValue={changeVal} title="Card Text"
+									  placeholder="" isTextarea={true}/>
 
-							<fieldset className="fieldset">
-								<legend className="fieldset-legend">Reverse Power / Toughness</legend>
-								<div className="flex flex-row gap-2">
-									<input type="text" name="reverse_power"
-										   className="input"/>
-									<input type="text" name="reverse_toughness"
-										   className="input"/>
-								</div>
-							</fieldset>
+							<div className="flex flex-row gap-2">
+								<MTGInput card={tempCard} valKey="reverse_power" setValue={changeVal} title="Power"
+										  placeholder=""/>
+								<MTGInput card={tempCard} valKey="reverse_toughness" setValue={changeVal} title="Toughness"
+										  placeholder=""/>
+							</div>
+							<p className="label text-xs">If Planeswalker loyalty or Battle Defense is needed, just filling
+								out &apos;Power&apos; will work.</p>
 						</div>
 					</div>
 
@@ -203,7 +145,7 @@ export default function MTGEditorPage() {
 				</div>
 
 				<div className="flex flex-row gap-2 w-full">
-					<button className="btn btn-primary">{
+					<button className="btn btn-primary" onClick={saveChanges}>{
 						editingIndex !== null ? "Update Card" : "Add Card"
 					}</button>
 					{
@@ -217,12 +159,12 @@ export default function MTGEditorPage() {
 					}
 				</div>
 
-			</form>
+			</div>
 
 			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
-					  setEditingIndex={setEditingIndex}/>
+					  setEditingIndex={setEditingIndex} className={`${activeTabName === "list" ? "active-tab" : ""}`}/>
 
-			<div className="card-preview">
+			<div className={`card-preview ${activeTabName === "preview" ? "active-tab" : ""}`}>
 				<h2 className="custom-divider">Preview</h2>
 				<br/>
 				<div id="card-container" className="w-full h-full">
@@ -233,9 +175,33 @@ export default function MTGEditorPage() {
 				</div>
 			</div>
 
+			<div className={`options p-1 ${activeTabName === "options" ? "active-tab" : "hidden"}`}>
+				<button className="btn btn-primary" onClick={() => {
+					setActiveTabName("input")
+				}}>Edit Card</button>
+				<button className="btn btn-primary" onClick={() => {
+					setActiveTabName("list")
+				}}>Card List</button>
+				<button className="btn btn-primary" onClick={() => {
+					setActiveTabName("preview")
+				}}>Preview</button>
+
+				<div className="grow"/>
+
+				<ImportMTG cards={cards} setCardsAction={setCards}/>
+				<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
+				<Link className="btn btn-secondary" href="/">Home</Link>
+			</div>
+
 		</div>
 
-		<div className="flex flex-row gap-2 w-full">
+		<div className="small-visible w-full">
+			<button className="btn btn-xs w-full" onClick={() => {
+				setActiveTabName("options")
+			}}>Menu</button>
+		</div>
+
+		<div className="flex flex-row gap-2 w-full small-hidden">
 			<Link className="btn btn-secondary" href="/">Home</Link>
 			<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
 			<ImportMTG cards={cards} setCardsAction={setCards}/>

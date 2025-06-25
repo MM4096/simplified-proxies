@@ -4,11 +4,12 @@ export interface Card {
 	quantity?: number
 }
 
-export function CardList({cards, setCards, editingIndex, setEditingIndex,}: {
+export function CardList({cards, setCards, editingIndex, setEditingIndex, className}: {
 	cards: Card[];
 	setCards: (cards: Card[]) => void;
 	editingIndex: number | null;
 	setEditingIndex: (index: number | null) => void;
+	className?: string;
 }) {
 	if (cards.length === 0) return (
 		<div className="card-list">
@@ -16,7 +17,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex,}: {
 		</div>
 	)
 
-	return (<div className="card-list max-h-full overflow-y-auto">
+	return (<div className={`${className} card-list max-h-full overflow-y-auto`}>
 		{
 			cards.map((card, index) => {
 				return (<button className={`border border-black p-3 rounded-xl flex flex-row items-center text-left cursor-pointer ${index === editingIndex && "bg-gray-300"}`} key={index}
