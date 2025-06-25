@@ -11,7 +11,6 @@ import {getItem, setItem} from "@/lib/storage";
 import Link from "next/link";
 import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {MTGInput} from "@/app/editor/components/inputs";
-import {BiMenu} from "react-icons/bi";
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -129,10 +128,12 @@ export default function MTGEditorPage() {
 							<div className="flex flex-row gap-2">
 								<MTGInput card={tempCard} valKey="reverse_power" setValue={changeVal} title="Power"
 										  placeholder=""/>
-								<MTGInput card={tempCard} valKey="reverse_toughness" setValue={changeVal} title="Toughness"
+								<MTGInput card={tempCard} valKey="reverse_toughness" setValue={changeVal}
+										  title="Toughness"
 										  placeholder=""/>
 							</div>
-							<p className="label text-xs">If Planeswalker loyalty or Battle Defense is needed, just filling
+							<p className="label text-xs">If Planeswalker loyalty or Battle Defense is needed, just
+								filling
 								out &apos;Power&apos; will work.</p>
 						</div>
 					</div>
@@ -178,13 +179,16 @@ export default function MTGEditorPage() {
 			<div className={`options p-1 ${activeTabName === "options" ? "active-tab" : "hidden"}`}>
 				<button className="btn btn-primary" onClick={() => {
 					setActiveTabName("input")
-				}}>Edit Card</button>
+				}}>Edit Card
+				</button>
 				<button className="btn btn-primary" onClick={() => {
 					setActiveTabName("list")
-				}}>Card List</button>
+				}}>Card List
+				</button>
 				<button className="btn btn-primary" onClick={() => {
 					setActiveTabName("preview")
-				}}>Preview</button>
+				}}>Preview
+				</button>
 
 				<div className="grow"/>
 
@@ -198,7 +202,8 @@ export default function MTGEditorPage() {
 		<div className="small-visible w-full">
 			<button className="btn btn-xs w-full" onClick={() => {
 				setActiveTabName("options")
-			}}>Menu</button>
+			}}>Menu
+			</button>
 		</div>
 
 		<div className="flex flex-row gap-2 w-full small-hidden">
