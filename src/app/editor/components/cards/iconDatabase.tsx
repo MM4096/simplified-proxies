@@ -19,6 +19,7 @@ export function getIcon(code: string, game: "mtg" | "ptcg", isBlackWhite: boolea
 export function convertStringToIconObject(string: string | null, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
 	string = string || "";
 	string = string.replaceAll("{-}", "—")
+	string = string.replaceAll("{--}", "<div class='card-divider h-0'></div>")
 
 	if (game === "ptcg") {
 		string = string.replaceAll("Dragon", "{a}");
