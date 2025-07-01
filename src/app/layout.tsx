@@ -2,7 +2,7 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {ReactNode} from "react";
-import Script from "next/script";
+import {Analytics} from "@/app/components/analytics";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -25,12 +25,11 @@ export default function RootLayout({children,}: Readonly<{
 }>) {
 	return (
 		<html lang="en" data-theme="light">
-		<body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex items-center justify-center overflow-y-none`}>
+		<body
+			className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex items-center justify-center overflow-y-none`}>
 		{children}
 
-		{
-			process.env.NODE_ENV === "production" && (<Script src="https://cloud.umami.is/script.js" data-website-id="9aa6f2e5-7a33-4efc-be6f-d12d9733e183"/>)
-		}
+		<Analytics/>
 
 		</body>
 		</html>
