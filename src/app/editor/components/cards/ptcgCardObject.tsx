@@ -11,10 +11,11 @@ function isPokemon(card: PTCGCard): boolean {
 	return !isEmpty(card.pokemon_hp) || !isEmpty(card.pokemon_type) || !isEmpty(card.pokemon_weakness) || !isEmpty(card.pokemon_resistance);
 }
 
-export function PTCGCardObject({card, isBlackWhite, id}: {
+export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 	card: PTCGCard,
 	isBlackWhite: boolean,
 	id?: string,
+	includeCredit?: boolean,
 }) {
 	const isPokemonCard = isPokemon(card);
 	const pokemonRetreatCost = parseInt(card.pokemon_retreat_cost || "0");
@@ -125,6 +126,9 @@ export function PTCGCardObject({card, isBlackWhite, id}: {
 					}}/></span>
 				</div>
 			</>)
+		}
+		{
+			includeCredit && (<><div className="card-divider"/><p className="credit"/></>)
 		}
 
 	</div>)

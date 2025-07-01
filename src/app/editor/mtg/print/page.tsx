@@ -10,9 +10,12 @@ import {MTGCard} from "@/app/editor/mtg/page";
 import {getItem} from "@/lib/storage";
 import Link from "next/link";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
+import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 
 export default function MTGPrintPage() {
 	const [cards, setCards] = useState<MTGCard[]>([]);
+
+	const [showCredit, setShowCredit] = useState<boolean>(true);
 
 	const [allCards, setAllCards] = useState<MTGCard[]>([]);
 
@@ -36,18 +39,19 @@ export default function MTGPrintPage() {
 	return (<div className="text-left w-full h-full flex flex-col gap-2">
 		<div className="no-print">
 			<h1>Preview and Print Proxies</h1>
-			<div className="flex flex-row gap-2">
+			<div className="flex flex-row gap-2 items-center">
 				<Link href="/editor/mtg" className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
 				}}>Print</button>
+				<HideCreditBox showCredit={showCredit} setShowCreditAction={setShowCredit}/>
 			</div>
 		</div>
 		<div className="custom-divider"/>
 		<div className="card-print">
 			{
 				allCards.map((card, index) => {
-					return <MTGCardObject card={card} isBlackWhite={true} key={index}/>
+					return <MTGCardObject card={card} isBlackWhite={true} key={index} includeCredit={showCredit}/>
 				})
 			}
 		</div>

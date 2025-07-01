@@ -16,8 +16,14 @@
 	flex-direction: row;
 	gap: 0.1in;
 
-	.notes {
-		flex-grow: 1;
+	.credit {
+		font-size: 0.075in;
+		font-family: monospace;
+		font-style: italic;
+	}
+
+	.credit:before {
+		content: "simplified-proxies.mm4096.com";
 	}
 }
 

@@ -26,10 +26,11 @@ function hasReverseFace(card: MTGCard): boolean {
 	return false;
 }
 
-export function MTGCardObject({card, isBlackWhite, id}: {
+export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 	card: MTGCard,
 	isBlackWhite: boolean,
 	id?: string,
+	includeCredit?: boolean,
 }) {
 
 	return (<div className="card" id={id} key={id}>
@@ -61,7 +62,12 @@ export function MTGCardObject({card, isBlackWhite, id}: {
 		<div className="grow"/>
 
 		<div className="bottom-container">
-			<p className="notes">{card.notes}</p>
+			<div className="flex flex-col grow">
+				<p className="notes grow">{card.notes}</p>
+				{
+					includeCredit && (<p className="credit"/>)
+				}
+			</div>
 			{
 				getPowerToughnessText(card.power, card.toughness) !== null && (
 					<p className="power-toughness">{getPowerToughnessText(card.power, card.toughness)}</p>

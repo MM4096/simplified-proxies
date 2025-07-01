@@ -10,9 +10,12 @@ import {PTCGCard} from "@/app/editor/ptcg/page";
 import {getItem} from "@/lib/storage";
 import Link from "next/link";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
+import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 
 export default function PTCGPrintPage() {
 	const [cards, setCards] = useState<PTCGCard[]>([]);
+
+	const [showCredit, setShowCredit] = useState<boolean>(true);
 
 	const [allCards, setAllCards] = useState<PTCGCard[]>([]);
 
@@ -34,18 +37,19 @@ export default function PTCGPrintPage() {
 	return (<div className="text-left w-full h-full flex flex-col gap-2">
 		<div className="no-print">
 			<h1>Preview and Print Proxies</h1>
-			<div className="flex flex-row gap-2">
+			<div className="flex flex-row gap-2 items-center">
 				<Link href="/editor/ptcg" className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
 				}}>Print</button>
+				<HideCreditBox showCredit={showCredit} setShowCreditAction={setShowCredit}/>
 			</div>
 		</div>
 		<div className="custom-divider"/>
 		<div className="card-print">
 			{
 				allCards.map((card, index) => {
-					return <PTCGCardObject card={card} isBlackWhite={true} key={index}/>
+					return <PTCGCardObject card={card} isBlackWhite={true} key={index} includeCredit={showCredit}/>
 				})
 			}
 		</div>

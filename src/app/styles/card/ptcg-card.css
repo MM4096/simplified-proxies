@@ -66,3 +66,15 @@
 		 width: max-content;
 	 }
 }
+
+.credit {
+	font-size: 0.075in;
+	font-family: monospace;
+	font-style: italic;
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+.credit:before {
+	content: "simplified-proxies.mm4096.com";
+}
