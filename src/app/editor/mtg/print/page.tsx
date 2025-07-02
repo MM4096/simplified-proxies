@@ -7,7 +7,6 @@ import "../../../styles/card/mtg-card.css"
 
 import {useEffect, useState} from "react";
 import {MTGCard} from "@/app/editor/mtg/page";
-import {getItem} from "@/lib/storage";
 import Link from "next/link";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
@@ -69,7 +68,8 @@ export default function MTGPrintPage() {
 				<Link href="/editor/mtg" className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
-				}}>Print</button>
+				}}>Print
+				</button>
 				<div className="flex flex-row gap-2 items-center ml-3">
 					<span>Project:</span>
 					{
@@ -78,7 +78,8 @@ export default function MTGPrintPage() {
 						}}>
 							{
 								getProjectNames().map((project) => {
-									return <option key={project} value={project === "UNSAVED" ? "" : project}>{project}</option>
+									return <option key={project}
+												   value={project === "UNSAVED" ? "" : project}>{project}</option>
 								})
 							}
 						</select>)
