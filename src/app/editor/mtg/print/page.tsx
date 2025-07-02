@@ -13,15 +13,41 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 
 export default function MTGPrintPage() {
+	const [isMounted, setIsMounted] = useState<boolean>(false);
+
 	const [cards, setCards] = useState<MTGCard[]>([]);
 
 	const [showCredit, setShowCredit] = useState<boolean>(true);
 
 	const [allCards, setAllCards] = useState<MTGCard[]>([]);
 
+	const [project, setProject] = useState<string | null>(null);
+
+	function getProjectNames() {
+		let retProjects: string[] = [];
+		try {
+			const projectsStorage = JSON.parse(localStorage.getItem("mtg-cards") || "{}");
+			if (!Array.isArray(projectsStorage)) {
+				retProjects = Object.keys(projectsStorage);
+			}
+		} catch {
+		}
+		return retProjects.sort() as string[];
+	}
+
 	useEffect(() => {
-		setCards(getItem("mtg-cards", []) as MTGCard[]);
+		setIsMounted(true);
 	}, []);
+
+	useEffect(() => {
+		const projectStorage = JSON.parse(localStorage.getItem("mtg-cards") || "{}");
+		if (project) {
+			setCards(projectStorage[project] || []);
+		} else {
+			setCards(projectStorage["UNSAVED"] || []);
+		}
+
+	}, [project]);
 
 	useEffect(() => {
 		const temp: MTGCard[] = [];
@@ -44,6 +70,20 @@ export default function MTGPrintPage() {
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
 				}}>Print</button>
+				<div className="flex flex-row gap-2 items-center ml-3">
+					<span>Project:</span>
+					{
+						isMounted && (<select className="select" value={project || ""} onChange={(e) => {
+							setProject(e.target.value);
+						}}>
+							{
+								getProjectNames().map((project) => {
+									return <option key={project} value={project === "UNSAVED" ? "" : project}>{project}</option>
+								})
+							}
+						</select>)
+					}
+				</div>
 				<HideCreditBox showCredit={showCredit} setShowCreditAction={setShowCredit}/>
 			</div>
 		</div>
