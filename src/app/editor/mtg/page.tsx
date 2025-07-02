@@ -7,10 +7,10 @@ import {Card, CardList} from "@/app/editor/components/cardList";
 import {useEffect, useState} from "react";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {renderToStaticMarkup} from "react-dom/server";
-import {getItem, setItem} from "@/lib/storage";
 import Link from "next/link";
 import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {MTGInput} from "@/app/editor/components/inputs";
+import {ProjectsBox} from "@/app/editor/components/projectsBox";
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -34,6 +34,8 @@ export default function MTGEditorPage() {
 
 	const [activeTabName, setActiveTabName] = useState<"input" | "list" | "preview" | "options">("input");
 
+	const [currentProject, setCurrentProject] = useState<string | null>(null);
+
 	function changeVal(key: string, value: string) {
 		setTempCard({...tempCard, [key as keyof MTGCard]: value});
 	}
@@ -51,16 +53,46 @@ export default function MTGEditorPage() {
 
 	// grab cards
 	useEffect(() => {
-		setCards(getItem("mtg-cards", []) as MTGCard[]);
-	}, []);
+		function getProjectData() {
+			const savedData = localStorage.getItem("mtg-cards");
+
+			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
+				return [];
+			}
+			const parsedData = JSON.parse(savedData);
+
+			if (currentProject === null || currentProject === "") {
+				return (parsedData["UNSAVED"] || []) as MTGCard[];
+			}
+			return (parsedData[currentProject] || []) as MTGCard[];
+		}
+
+		const projectData = getProjectData();
+		console.log(currentProject, projectData);
+		if (projectData.length > 0) {
+			// if cards already exist in the new project, use that
+			setCards(projectData);
+		} else {
+			// otherwise, ignore it and save the new cards
+
+		}
+	}, [currentProject]);
 
 	// update storage on card change
 	useEffect(() => {
-		if (cards.length == 0) {
-			return;
+		function setProjectData(data: MTGCard[]) {
+			const savedData = localStorage.getItem("mtg-cards");
+			let parsedData = JSON.parse(savedData || "{}");
+			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
+				parsedData = {};
+			}
+
+			parsedData[currentProject || "UNSAVED"] = data;
+			localStorage.setItem("mtg-cards", JSON.stringify(parsedData));
 		}
-		setItem("mtg-cards", cards);
-	}, [cards]);
+		// setItem("mtg-cards", cards);
+		setProjectData(cards);
+	}, [cards, currentProject]);
 
 	useEffect(() => {
 		if (editingIndex !== null && editingIndex >= 0 && editingIndex < cards.length) {
@@ -210,6 +242,8 @@ export default function MTGEditorPage() {
 			<Link className="btn btn-secondary" href="/">Home</Link>
 			<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
 			<ImportMTG cards={cards} setCardsAction={setCards}/>
+			<ProjectsBox localStorageKey="mtg-cards" setProjectAction={setCurrentProject}
+						 selectedProject={currentProject}/>
 		</div>
 	</div>)
 }
