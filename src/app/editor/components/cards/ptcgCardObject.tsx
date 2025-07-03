@@ -30,7 +30,7 @@ export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 		}
 	}
 
-	return (<div className="card" id={id} key={id}>
+	return (<div className="card ptcg-card" id={id} key={id}>
 		<div className="card-title-container">
 			{
 				(card.card_type?.toLowerCase().indexOf("energy") || -1) >= 0 ? (<h2 className="card-title" dangerouslySetInnerHTML={{

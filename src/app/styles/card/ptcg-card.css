@@ -1,80 +1,82 @@
-.card-title-container {
-	display: flex;
-	flex-direction: row;
-	gap: 0.1in;
-	font-size: 0.125in;
-	align-items: center;
-}
+.ptcg-card {
+	.card-title-container {
+		display: flex;
+		flex-direction: row;
+		gap: 0.1in;
+		font-size: 0.125in;
+		align-items: center;
+	}
 
-.card-title {
-	margin-left: 0.05in;
-	flex-grow: 1;
-	font-weight: bold;
-	width: min-content;
-	flex-shrink: 0;
-}
-
-.card-type {
-	font-size: 0.1in;
-	margin-right: 0.05in;
-}
-
-.card-type {
-	font-size: 0.1in;
-}
-
-.card {
-	white-space: pre-line;
-}
-
-.card-divider-left {
-	border-left: 1px solid black;
-}
-
-.attack-ability-title {
-	font-weight: bold;
-	display: flex;
-	flex-direction: row;
-
-	.attack-ability-name {
+	.card-title {
+		margin-left: 0.05in;
 		flex-grow: 1;
+		font-weight: bold;
+		width: min-content;
+		flex-shrink: 0;
 	}
 
-	.attack-ability-cost {
-		min-width: 0.5in;
+	.card-type {
+		font-size: 0.1in;
+		margin-right: 0.05in;
 	}
-}
 
-.additional-rules {
-	font-size: 0.075in;
-}
+	.card-type {
+		font-size: 0.1in;
+	}
 
-
-.bottom-container {
-	font-size: 0.06in;
-	display: flex;
-	flex-direction: row;
-	gap: 0.1in;
-	padding-bottom: 0 !important;
+	.card {
+		white-space: pre-line;
+	}
 
 	.card-divider-left {
-		padding-left: 0.025in;
-		padding-right: 0.025in;
+		border-left: 1px solid black;
 	}
 
-	 * {
-		 width: max-content;
-	 }
-}
+	.attack-ability-title {
+		font-weight: bold;
+		display: flex;
+		flex-direction: row;
 
-.credit {
-	font-size: 0.075in;
-	font-family: monospace;
-	font-style: italic;
-	margin-bottom: 0 !important;
-	padding-bottom: 0 !important;
-}
+		.attack-ability-name {
+			flex-grow: 1;
+		}
 
-.credit:before {
-	content: "simplified-proxies.mm4096.com";
+		.attack-ability-cost {
+			min-width: 0.5in;
+		}
+	}
+
+	.additional-rules {
+		font-size: 0.075in;
+	}
+
+
+	.bottom-container {
+		font-size: 0.06in;
+		display: flex;
+		flex-direction: row;
+		gap: 0.1in;
+		padding-bottom: 0 !important;
+
+		.card-divider-left {
+			padding-left: 0.025in;
+			padding-right: 0.025in;
+		}
+
+		* {
+			width: max-content;
+		}
+	}
+
+	.credit {
+		font-size: 0.075in;
+		font-family: monospace;
+		font-style: italic;
+		margin-bottom: 0 !important;
+		padding-bottom: 0 !important;
+	}
+
+	.credit:before {
+		content: "simplified-proxies.mm4096.com";
+	}
 }

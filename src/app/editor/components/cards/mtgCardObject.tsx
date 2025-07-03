@@ -33,7 +33,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 	includeCredit?: boolean,
 }) {
 
-	return (<div className="card" id={id} key={id}>
+	return (<div className="card mtg-card" id={id} key={id}>
 		<div className="card-title-container">
 			<h2 className="card-title">{card.card_name}</h2>
 			<div className="mana-cost" dangerouslySetInnerHTML={{

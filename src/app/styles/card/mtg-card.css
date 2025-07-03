@@ -1,39 +1,41 @@
-.card-title-container {
-	display: flex;
-	flex-direction: row;
-	gap: 0.1in;
-	font-size: 0.125in;
-}
-
-.card-title {
-	flex-grow: 1;
-	font-weight: bold;
-	width: min-content;
-}
-
-.bottom-container {
-	display: flex;
-	flex-direction: row;
-	gap: 0.1in;
-
-	.credit {
-		font-size: 0.075in;
-		font-family: monospace;
-		font-style: italic;
+.mtg-card {
+	.card-title-container {
+		display: flex;
+		flex-direction: row;
+		gap: 0.1in;
+		font-size: 0.125in;
 	}
 
-	.credit:before {
-		content: "simplified-proxies.mm4096.com";
+	.card-title {
+		flex-grow: 1;
+		font-weight: bold;
+		width: min-content;
 	}
-}
 
-.power-toughness {
-	padding: 0.05in;
-	border: 1px solid black;
-	border-radius: 0.1in;
-}
+	.bottom-container {
+		display: flex;
+		flex-direction: row;
+		gap: 0.1in;
 
-.card-reverse {
-	height: 50%;
-	transform: rotate(180deg);
+		.credit {
+			font-size: 0.075in;
+			font-family: monospace;
+			font-style: italic;
+		}
+
+		.credit:before {
+			content: "simplified-proxies.mm4096.com";
+		}
+	}
+
+	.power-toughness {
+		padding: 0.05in;
+		border: 1px solid black;
+		border-radius: 0.1in;
+	}
+
+	.card-reverse {
+		height: 50%;
+		transform: rotate(180deg);
+	}
 }
