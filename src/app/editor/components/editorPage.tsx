@@ -117,7 +117,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		<div className="main-wrapper">
 
-			<div className={`input-container h-full overflow-y-auto ${activeTab === "input" ? "active-tab" : ""}`}>
+			<div className={`grow shrink-0 input-container h-full overflow-y-auto ${activeTab === "input" ? "active-tab" : ""}`}>
 				<h2 className="custom-divider">Details</h2>
 
 				<div className="flex flex-col gap-2 overflow-y-auto grow">
@@ -141,9 +141,9 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 			</div>
 
 			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex} setEditingIndex={setEditingIndex}
-					  className={`${activeTab === "list" ? "active-tab" : ""}`}/>
+					  className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`}/>
 
-			<div className={`card-preview ${activeTab === "preview" ? "active-tab" : ""}`}>
+			<div className={`card-preview ${activeTab === "preview" ? "active-tab" : ""} w-min`}>
 				<h2 className="custom-divider">Preview</h2>
 				<br/>
 				<div id="card-container" className="w-full h-full">

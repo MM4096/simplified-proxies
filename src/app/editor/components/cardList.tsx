@@ -18,6 +18,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 	)
 
 	return (<div className={`${className} card-list max-h-full overflow-y-auto`}>
+		<h2 className="custom-divider">Card List</h2>
 		{
 			cards.map((card, index) => {
 				return (<button className={`border border-black p-3 rounded-xl flex flex-row items-center text-left cursor-pointer ${index === editingIndex && "bg-gray-300"}`} key={index}
