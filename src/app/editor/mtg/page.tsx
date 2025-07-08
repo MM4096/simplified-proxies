@@ -4,6 +4,7 @@ import {Card} from "@/app/editor/components/cardList";
 import {EditorPage} from "@/app/editor/components/editorPage";
 import {MTGInput} from "@/app/editor/components/inputs";
 import {ReactNode} from "react";
+import {ImportMTG} from "@/app/editor/mtg/components/import";
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -22,6 +23,9 @@ export interface MTGCard extends Card {
 
 export default function MTGEditorPage() {
 	return (<EditorPage gameName="Magic: The Gathering" gameLocalStorageKey="mtg-cards" gameId="mtg"
+						importCardsAction={({setCards, cards}): ReactNode => {
+							return (<ImportMTG cards={cards} setCardsAction={setCards}/>)
+						}}
 						cardInputsAction={({onChange, card}): ReactNode => {
 							return (<>
 								<MTGInput card={card} valKey="card_name" setValue={onChange} title="Card Name"

@@ -4,7 +4,6 @@ import "../../styles/editor.css";
 import {Card, CardList} from "@/app/editor/components/cardList";
 import {ReactNode, useEffect, useState} from "react";
 import {MTGCard} from "@/app/editor/mtg/page";
-import {ImportMTG} from "@/app/editor/mtg/components/import";
 import Link from "next/link";
 import {ProjectsBox} from "@/app/editor/components/projectsBox";
 import {renderToStaticMarkup} from "react-dom/server";
@@ -20,11 +19,12 @@ import {PTCGCard} from "@/app/editor/ptcg/page";
  * @param cardInputs Inputs to fill in card information
  * @constructor
  */
-export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction}: {
+export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction}: {
 	gameName: string,
 	gameLocalStorageKey: string,
 	gameId: "mtg" | "ptcg",
 	cardInputsAction: (props: { onChange: (key: string, value: string) => void, card: Card }) => ReactNode,
+	importCardsAction: (props: { setCards: (cards: Card[]) => void, cards: Card[] }) => ReactNode,
 }) {
 	const [cards, setCards] = useState<Card[]>([]);
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -170,7 +170,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 				<div className="grow"/>
 
-				<ImportMTG cards={cards} setCardsAction={setCards}/>
+				{importCardsAction({setCards, cards})}
 				<Link className="btn btn-primary" href="/editor/mtg/print">Preview and Print Proxies</Link>
 				<Link className="btn btn-secondary" href="/">Home</Link>
 			</div>
@@ -187,7 +187,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		<div className="flex flex-row gap-2 w-full small-hidden">
 			<Link className="btn btn-secondary" href="/">Home</Link>
 			<Link className="btn btn-primary" href={`/editor/${gameId}/print`}>Preview and Print Proxies</Link>
-			<ImportMTG cards={cards} setCardsAction={setCards}/>
+			{importCardsAction({setCards, cards})}
 			<ProjectsBox localStorageKey={gameLocalStorageKey} setProjectAction={setCurrentProject}
 						 selectedProject={currentProject}/>
 		</div>
