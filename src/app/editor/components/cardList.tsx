@@ -13,6 +13,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 }) {
 	if (cards.length === 0) return (
 		<div className="card-list">
+			<h2 className="custom-divider">Card List</h2>
 			<p>No cards</p>
 		</div>
 	)
