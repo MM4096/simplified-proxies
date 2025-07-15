@@ -57,7 +57,7 @@ export default function PTCGEditorPage() {
 										   placeholder="Pokemon ex rule: When your Pokemon ex is Knocked Out, your opponent takes 2 Prize cards."
 										   isTextarea={true}/>
 
-								<div className="collapse bg-base-100 border flex-none">
+								<div className="collapse collapse-arrow bg-base-100 border flex-none">
 									<input type="checkbox"/>
 									<div className="collapse-title">Pokemon Options</div>
 									<div className="collapse-content">

@@ -55,7 +55,7 @@ export default function MTGEditorPage() {
 									filling
 									out &apos;Power&apos; will work.</p>
 
-								<div className="collapse bg-base-100 border flex-none">
+								<div className="collapse collapse-arrow bg-base-100 border flex-none">
 									<input type="checkbox"/>
 									<div className="collapse-title">Dual-Faced Cards</div>
 									<div className="collapse-content">

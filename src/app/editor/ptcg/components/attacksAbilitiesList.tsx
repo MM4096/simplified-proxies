@@ -11,14 +11,14 @@ export function AttacksAbilitiesList({attacksAndAbilities, setAttacksAndAbilitie
 		setAttacksAndAbilities(newAttacksAndAbilities);
 	}
 
-	return (<div className="collapse bg-base-100 border flex-none">
+	return (<div className="collapse collapse-arrow bg-base-100 border flex-none">
 		<input type="checkbox"/>
 		<div className="collapse-title">Attacks and Abilities</div>
 		<div className="collapse-content flex flex-col gap-2">
 			{
 				attacksAndAbilities.map((item, index) => {
 					return <div key={index} className="collapse bg-base-300 border flex-none">
-						<div className="collapse-title">{item.name || index}</div>
+						<div className="collapse-title">{item.name || `Item ${index}`}</div>
 						<input type="checkbox"/>
 						<div className="collapse-content">
 

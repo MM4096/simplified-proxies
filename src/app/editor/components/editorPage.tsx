@@ -10,6 +10,7 @@ import {renderToStaticMarkup} from "react-dom/server";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {PTCGCard} from "@/app/editor/ptcg/page";
+import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 
 /**
  * A generic template for all editor pages
@@ -47,6 +48,13 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		}
 		setTempCard({} as Card);
 		setEditingIndex(null);
+	}
+
+	function hasChanges() {
+		if (editingIndex !== null && editingIndex >= 0) {
+			return JSON.stringify(tempCard) !== JSON.stringify(cards[editingIndex]);
+		}
+		return JSON.stringify(tempCard) !== JSON.stringify({});
 	}
 
 	// get cards from storage
@@ -117,7 +125,8 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		<div className="main-wrapper">
 
-			<div className={`grow shrink-0 input-container h-full overflow-y-auto ${activeTab === "input" ? "active-tab" : ""}`}>
+			<div
+				className={`grow shrink-0 input-container h-full overflow-y-auto ${activeTab === "input" ? "active-tab" : ""}`}>
 				<h2 className="custom-divider">Details</h2>
 
 				<div className="flex flex-col gap-2 overflow-y-auto grow">
@@ -126,22 +135,36 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 				<div className="flex flex-row gap-2 w-full">
 					<button className="btn btn-primary" onClick={saveChanges}>{
-						editingIndex !== null ? "Update Card" : "Add Card"
+						editingIndex !== null ? "Save" : "Add Card"
 					}</button>
 					{
 						(editingIndex !== null) && (<>
 							<button className="btn btn-secondary" onClick={(e) => {
 								e.preventDefault();
 								setEditingIndex(null);
-							}}>Cancel Edits
+							}}>Discard Changes
 							</button>
 						</>)
 					}
 				</div>
 			</div>
 
-			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex} setEditingIndex={setEditingIndex}
-					  className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`}/>
+			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex} setEditingIndex={async (index: number | null) => {
+				if (hasChanges()) {
+					if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
+						return
+					}
+				}
+				setEditingIndex(index);
+			}}
+					  className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`} newCard={async () => {
+				if (hasChanges()) {
+					if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
+						return;
+					}
+				}
+				setEditingIndex(null);
+			}}/>
 
 			<div className={`card-preview ${activeTab === "preview" ? "active-tab" : ""} w-min`}>
 				<h2 className="custom-divider">Preview</h2>

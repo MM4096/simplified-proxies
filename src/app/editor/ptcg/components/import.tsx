@@ -271,14 +271,25 @@ export function ImportPTCG({cards, setCardsAction}: {
 		}
 
 		const tempCards: PTCGCard[] = [];
+		const notFoundCards: string[] = [];
 
 		for (let i = 0; i < importCards.length; i++) {
 			const thisCard = importCards[i];
 
 			setImportMessage(`Getting card ${i + 1} of ${importCards.length}...`);
 			const thisName = thisCard.isId ? "id:" + thisCard.name : thisCard.name;
-			const card = await getCard(thisName);
+			let card: PTCGCard | null;
+			try {
+				card = await getCard(thisName);
+			}
+			catch (e) {
+				setImportError(`Error getting card ${thisName}: ${e}`);
+				setLoading(false);
+				return;
+			}
 			if (!card) {
+				setImportError(`Card "${thisName}" not found (ignoring)`);
+				notFoundCards.push(thisName);
 				continue;
 			}
 			card.quantity = thisCard.quantity;
@@ -297,7 +308,14 @@ export function ImportPTCG({cards, setCardsAction}: {
 		}
 
 		setLoading(false);
-		dialogRef?.current?.close();
+
+		if (notFoundCards.length > 0) {
+			setImportError(`The following cards were not found: ${notFoundCards.join(", ")}. All other cards were imported.`);
+		}
+		else {
+			setImportError("");
+			dialogRef?.current?.close();
+		}
 	}
 
 	return (<>
@@ -311,7 +329,8 @@ export function ImportPTCG({cards, setCardsAction}: {
 				<h2>Import Cards</h2>
 				<br/>
 				<p>Paste a list of cards below. Card names must be exact (except symbols and capitalization) and must
-					match one of the following formats (OR pasted from Limitless):</p>
+					match one of the following formats (OR pasted from Limitless).</p>
+				<p className="text-xs">If only names are supplied, the latest card with the specified name is imported.</p>
 				<div className="flex flex-row w-full">
 					<div className="border p-2 w-max">
 						<p>4 TWM 128</p>
@@ -352,7 +371,8 @@ export function ImportPTCG({cards, setCardsAction}: {
 
 					<div className="label inline">PokemonTCG.io has a rate limit of one card every 2 seconds.
 						<br/>By entering an API key here, you can increase import speed drastically.<br/>
-						Get your API key <a href="https://dev.pokemontcg.io/" className="link" target="_blank">here</a>
+						Get your API key <a href="https://dev.pokemontcg.io/" className="link" target="_blank">here</a>.
+						<br/>(Your API key is only stored on your local device)
 					</div>
 				</fieldset>
 

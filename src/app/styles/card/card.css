@@ -32,7 +32,7 @@
 	}
 
 	.mana-symbol {
-		width: 1em;
+		/*width: 1em;*/
 		height: 1em;
 		vertical-align: sub;
 		display: inline-block;
