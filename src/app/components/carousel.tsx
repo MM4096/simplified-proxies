@@ -11,12 +11,20 @@ export function Carousel({standardPaths, time, className}: {
 	className?: string
 }) {
 	const [activeIndex, setActiveIndex] = useState<number>(0);
+	const [hasSetInterval, setHasSetInterval] = useState<boolean>(false);
 
 	useEffect(() => {
-		setInterval(() => {
-			setActiveIndex((activeIndex + 1) % standardPaths.paths.length);
-		}, time);
-	}, [activeIndex, standardPaths.paths.length, time]);
+		setHasSetInterval(true);
+	}, []);
+
+	useEffect(() => {
+		if (!hasSetInterval) {
+			setInterval(() => {
+				setActiveIndex((activeIndex + 1) % standardPaths.paths.length);
+			}, time);
+			setHasSetInterval(true);
+		}
+	}, [activeIndex, hasSetInterval, standardPaths.paths.length, time]);
 
 	return (
 		<div className={`${className || ""} carousel-container`}>
