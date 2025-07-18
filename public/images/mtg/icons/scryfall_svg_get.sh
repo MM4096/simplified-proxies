@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# check for dependencies (inkscape and curl)
-if ! command -v inkscape > /dev/null 2>&1; then
-  echo "Inkscape is not installed!"
-  exit 1
-fi
+# check for dependencies (curl)
 if ! command -v curl > /dev/null 2>&1; then
   echo "Curl is not installed!"
   exit 1
@@ -21,10 +17,5 @@ echo "$imageData" | jq -c '.data[]' | while read -r imageObj; do
 
   echo "Downloading icon: $symbol from $src"
   # download file
-  curl -o temp.svg "$src" -s
-  echo "Converting icon $symbol"
-  # convert image to png (100x100 to match b/w icons)
-  # Width is omitted because half mana symbols exist
-  inkscape -h 128 temp.svg -o "standard/$symbol.png"
-  rm temp.svg
+  curl -o temp.svg "standard/$symbol.svg" -s
 done
