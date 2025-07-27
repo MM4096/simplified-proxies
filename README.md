@@ -5,6 +5,10 @@ The application can be accessed at [simplified-proxies.mm4096.com](https://simpl
 
 Bugs and feature requests can be submitted [here](https://github.com/mm4096/simplified-proxies/issues).
 
+## Planned Features
+ - [ ] Convert PTCG icons to SVGs
+ - [ ] Yu-Gi-Oh proxying
+
 ## Contributing
 All contributions are welcome and appreciated.
 
