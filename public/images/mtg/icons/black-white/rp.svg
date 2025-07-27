@@ -21,7 +21,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:zoom="2.97"
-     inkscape:cx="35.858586"
+     inkscape:cx="35.690236"
      inkscape:cy="64.478114"
      inkscape:window-width="1078"
      inkscape:window-height="1028"
@@ -42,5 +42,12 @@
        fill="#0d0f0f"
        id="path1"
        style="stroke-width:0.409439" />
+    <circle
+       fill="#CAC5C0"
+       cx="50"
+       cy="50"
+       id="circle1"
+       style="fill:#cac5c0;fill-opacity:0;stroke:#000000;stroke-width:4;stroke-dasharray:none;stroke-opacity:1"
+       r="48" />
   </g>
 </svg>

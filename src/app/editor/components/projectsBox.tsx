@@ -110,7 +110,7 @@ export function ProjectsBox({localStorageKey, setProjectAction, selectedProject}
 		<dialog className="modal" ref={newProjectDialogRef}>
 			<div className="modal-box gap-3 flex flex-col">
 				<h3 className="font-bold text-xl custom-divider">New Project</h3>
-				<p>This duplicates your current cards to the created project.</p>
+				<p>This moves your current cards to the new project.</p>
 				<input type="text" className="input input-bordered w-full" placeholder="Project Name"
 					   value={newProjectName} onChange={(e) => {
 					setNewProjectName(e.target.value);
@@ -130,7 +130,7 @@ export function ProjectsBox({localStorageKey, setProjectAction, selectedProject}
 						}
 						setProjectAction(newProjectName);
 						newProjectDialogRef?.current?.close();
-					}}>Add Project
+					}}>Create Project
 					</button>
 				</div>
 

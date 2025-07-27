@@ -89,5 +89,37 @@ export default function PTCGEditorPage() {
 
 							</>)
 						}}
+						demoCard={{
+							card_name: "Demo Card",
+							card_type: "Unknown",
+							card_text: "This is a demo card. Symbols are as follows: \\{a}: {a}, \\{c}: {c}, \\{d}: {d}, \\{f}: {f}, \\{g}: {g}, \\{l}: {l}, \\{m}: {m}, \\{p}: {p}, \\{r}: {r}, \\{w}: {w}, \\{y}: {y}, \\{n}: {n}\nTo make a Pokemon, use \"Pokemon Options\".",
+							attacks_abilities: [
+								{
+									name: "Basics",
+									text: "All cards can have attacks/abilities. Just expand \"Attacks and Abilities\" to start!",
+									cost: "{n}"
+								},
+								{
+									name: "Sample Ability",
+									cost: "Ability",
+									text: "For abilities, write \"Ability\" in the Cost field and don't fill in \"Damage\"."
+								},
+								{
+									name: "Sample Attack",
+									cost: "{r}{a}{c}{d}",
+									damage: "300+",
+									text: "For attacks, the Cost field can be a list of symbols."
+								}
+							],
+							additional_rules: "Additional rules (such as ex or AceSpec rules) go here"
+
+							// Can't figure out whether to make it a Pokémon or not.
+							// pokemon_hp: "100",
+							// pokemon_evolution_level: "Stage 3",
+							// pokemon_evolves_from: "Demo",
+							// pokemon_weakness: "{r}x2",
+							// pokemon_resistance: "{w}-30",
+							// pokemon_retreat_cost: "3",
+						} as PTCGCard}
 	/>)
 }

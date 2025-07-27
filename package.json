@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "daisyui": "^5.0.43",
+    "isomorphic-dompurify": "^2.26.0",
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

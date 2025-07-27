@@ -14,13 +14,11 @@ export function Carousel({standardPaths, time, className}: {
 	const [hasSetInterval, setHasSetInterval] = useState<boolean>(false);
 
 	useEffect(() => {
-		setHasSetInterval(true);
-	}, []);
-
-	useEffect(() => {
 		if (!hasSetInterval) {
 			setInterval(() => {
-				setActiveIndex((activeIndex + 1) % standardPaths.paths.length);
+				setActiveIndex((prevState) => {
+					return (prevState + 1) % standardPaths.paths.length;
+				})
 			}, time);
 			setHasSetInterval(true);
 		}

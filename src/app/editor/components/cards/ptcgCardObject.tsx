@@ -2,6 +2,7 @@ import "../../../styles/card/card.css";
 import "../../../styles/card/ptcg-card.css";
 import {PTCGCard} from "@/app/editor/ptcg/page";
 import {convertStringToIconObject} from "@/app/editor/components/cards/iconDatabase";
+import DOMPurify from "isomorphic-dompurify";
 
 function isPokemon(card: PTCGCard): boolean {
 	function isEmpty(val: string | undefined): boolean {
@@ -34,14 +35,14 @@ export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 		<div className="card-title-container">
 			{
 				(card.card_type?.toLowerCase().indexOf("energy") || -1) >= 0 ? (<h2 className="card-title" dangerouslySetInnerHTML={{
-					__html: convertStringToIconObject(card.card_name || "", "ptcg", isBlackWhite)
+					__html: DOMPurify.sanitize(convertStringToIconObject(card.card_name || "", "ptcg", isBlackWhite))
 				}}/>): (<h2 className="card-title">{card.card_name}</h2>)
 			}
 			{
 				isPokemonCard ? (<div className="card-type">
 					<span>{card.pokemon_hp}HP</span>
 					<span dangerouslySetInnerHTML={{
-						__html: convertStringToIconObject(card.pokemon_type || "", "ptcg", isBlackWhite)
+						__html: DOMPurify.sanitize(convertStringToIconObject(card.pokemon_type || "", "ptcg", isBlackWhite))
 					}}/>
 				</div>) : (<p className="card-type">{card.card_type?.replaceAll("-", "—")}</p>)
 			}
@@ -64,7 +65,7 @@ export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 		}
 
 		{card.card_text && (<p className="card-text" dangerouslySetInnerHTML={{
-			__html: convertStringToIconObject(card.card_text, "ptcg", isBlackWhite)
+			__html: DOMPurify.sanitize(convertStringToIconObject(card.card_text, "ptcg", isBlackWhite))
 		}}/>)}
 
 		{
@@ -72,7 +73,7 @@ export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 				return (<div className="attack-ability-container" key={index}>
 					<div className="attack-ability-title">
 						<span className="attack-ability-cost"><i dangerouslySetInnerHTML={{
-							__html: convertStringToIconObject(item.cost || "", "ptcg", isBlackWhite)
+							__html: DOMPurify.sanitize(convertStringToIconObject(item.cost || "", "ptcg", isBlackWhite))
 						}}/></span>
 						<span className="card-divider-left ml-2 pr-2"/>
 						<span className="attack-ability-name">{item.name}</span>
@@ -85,7 +86,7 @@ export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 					</div>
 					<div className="attack-ability-text">
 						<span dangerouslySetInnerHTML={{
-							__html: convertStringToIconObject(item.text || "", "ptcg", isBlackWhite)
+							__html: DOMPurify.sanitize(convertStringToIconObject(item.text || "", "ptcg", isBlackWhite))
 						}}/>
 					</div>
 					{
@@ -112,17 +113,17 @@ export function PTCGCardObject({card, isBlackWhite, id, includeCredit=true}: {
 				<div className="card-divider"/>
 				<div className="bottom-container">
 					<span>Weakness: <span dangerouslySetInnerHTML={{
-						__html: convertStringToIconObject(card.pokemon_weakness || "", "ptcg", isBlackWhite)
+						__html: DOMPurify.sanitize(convertStringToIconObject(card.pokemon_weakness || "", "ptcg", isBlackWhite))
 					}}/></span>
 
 					<span className="card-divider-left">
 						Resistance: <span dangerouslySetInnerHTML={{
-						__html: convertStringToIconObject(card.pokemon_resistance || "", "ptcg", isBlackWhite)
+						__html: DOMPurify.sanitize(convertStringToIconObject(card.pokemon_resistance || "", "ptcg", isBlackWhite))
 					}}/></span>
 
 					<span className="card-divider-left">
 						Retreat Cost: <span dangerouslySetInnerHTML={{
-						__html: convertStringToIconObject(retreatCostText, "ptcg", isBlackWhite)
+						__html: DOMPurify.sanitize(convertStringToIconObject(retreatCostText, "ptcg", isBlackWhite))
 					}}/></span>
 				</div>
 			</>)

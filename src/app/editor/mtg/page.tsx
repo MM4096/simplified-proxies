@@ -87,11 +87,19 @@ export default function MTGEditorPage() {
 									</div>
 								</div>
 
-								{/*<input type="text" name="notes" placeholder=""*/}
-								{/*	   className="input"/>*/}
 								<MTGInput card={card} valKey="notes" setValue={onChange} title="Notes"
 										  placeholder="" isTextarea={true}/>
-
 							</>)
-						}}/>)
+						}}
+						demoCard={{
+							card_name: "Demo Card",
+							mana_cost: "{1}{w}{u}{b}{r}{g}",
+							type_line: "Mysterious {-} Card",
+							card_text: "Mess around with the different fields of this card! A list of all available symbols can be found on <a href='https://scryfall.com/docs/api/colors#mana-costs-and-other-symbology' class='link' target='_blank'>Scryfall</a>, all forward slashes (/) in mana symbols are optional (i.e. {wbp} is the same as {w/b/p}). This field supports HTML formatting! <b>Bold text</b> <i>Italic Text</i>\nPress \"Import Cards\" to import from a decklist, and \"Preview and Print Proxies\" to see and print your proxies.",
+							power: "1", toughness: "1",
+							reverse_card_name: "Reverse Cards",
+							reverse_type_line: "Mysterious {-} Card Two",
+							reverse_mana_cost: "{1}{w}{u}{b}{r}{g}",
+							reverse_text: "Can be created by expanding the \"<i>Dual-Faced Cards</i>\" panel"
+						} as MTGCard}/>)
 }

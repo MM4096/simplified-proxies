@@ -20,12 +20,13 @@ import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunc
  * @param cardInputs Inputs to fill in card information
  * @constructor
  */
-export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction}: {
+export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction, demoCard}: {
 	gameName: string,
 	gameLocalStorageKey: string,
 	gameId: "mtg" | "ptcg",
 	cardInputsAction: (props: { onChange: (key: string, value: string) => void, card: Card }) => ReactNode,
 	importCardsAction: (props: { setCards: (cards: Card[]) => void, cards: Card[] }) => ReactNode,
+	demoCard?: Card,
 }) {
 	const [cards, setCards] = useState<Card[]>([]);
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -149,14 +150,15 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 				</div>
 			</div>
 
-			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex} setEditingIndex={async (index: number | null) => {
-				if (hasChanges()) {
-					if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
-						return
-					}
-				}
-				setEditingIndex(index);
-			}}
+			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
+					  setEditingIndex={async (index: number | null) => {
+						  if (hasChanges()) {
+							  if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
+								  return
+							  }
+						  }
+						  setEditingIndex(index);
+					  }}
 					  className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`} newCard={async () => {
 				if (hasChanges()) {
 					if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
@@ -213,6 +215,20 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 			{importCardsAction({setCards, cards})}
 			<ProjectsBox localStorageKey={gameLocalStorageKey} setProjectAction={setCurrentProject}
 						 selectedProject={currentProject}/>
+			{
+				demoCard ? (<button className="btn btn-outline" onClick={() => {
+					if (cards.length == 0) {
+						setCards([...cards, demoCard]);
+						return;
+					}
+					confirmationPrompt("Demo Card", `Are you sure you want to add this demo card? This will add a new card.`,
+						"No", "Yes").then((result) => {
+						if (result) {
+							setCards([...cards, demoCard]);
+						}
+					})
+				}}>Insert Demo Card</button>) : ""
+			}
 		</div>
 
 	</div>)

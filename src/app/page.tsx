@@ -2,7 +2,7 @@ import "./styles/index.css"
 
 import Link from "next/link";
 import {Carousel} from "@/app/components/carousel";
-import {BiLogoGithub} from "react-icons/bi";
+import {BiBug, BiLogoGithub} from "react-icons/bi";
 import {CreditsBox} from "@/app/components/creditsBox";
 
 export default function Home() {
@@ -51,6 +51,7 @@ export default function Home() {
 
 		<div className="links-box">
 			<CreditsBox/>
+			<Link href="https://github.com/MM4096/simplified-proxies/issues" target="_blank" className="index-link"><BiBug/>Report Bugs</Link>
 			<Link href="https://github.com/mm4096/simplified-proxies" target="_blank" className="index-link github-link"><BiLogoGithub/>Github</Link>
 		</div>
 	</>);

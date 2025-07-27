@@ -1,13 +1,23 @@
 # Simplified Proxies
-## Description
 Make print-friendly proxies for MTG and PTCG.
-
-This application supports proxying existing cards through search features as well as custom cards by manually entering information.
 
 The application can be accessed at [simplified-proxies.mm4096.com](https://simplified-proxies.mm4096.com) and the license can be found [here](https://github.com/mm4096/simplified-proxies?tab=License-1-ov-file).
 
+Bugs and feature requests can be submitted [here](https://github.com/mm4096/simplified-proxies/issues).
 
-All contributions are welcome!
+## Contributing
+All contributions are welcome and appreciated.
 
-## Origins
-This project began because its creator couldn't afford colored printing or \[\[Deflecting Swat]].
+### Environment Setup
+```bash
+# Clone repo and install dependencies
+git clone https://github.com/MM4096/simplified-proxies.git
+cd simplified-proxies
+npm install
+
+# Start dev server
+npm run dev
+
+# Validate code
+npm run lint
+```

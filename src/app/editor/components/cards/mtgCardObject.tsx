@@ -2,6 +2,7 @@ import "../../../styles/card/card.css";
 import "../../../styles/card/mtg-card.css";
 import {MTGCard} from "@/app/editor/mtg/page";
 import {convertStringToIconObject} from "@/app/editor/components/cards/iconDatabase";
+import DOMPurify from "isomorphic-dompurify";
 
 function getPowerToughnessText(power?: string, toughness?: string): string | null {
 
@@ -37,7 +38,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 		<div className="card-title-container">
 			<h2 className="card-title">{card.card_name}</h2>
 			<div className="mana-cost" dangerouslySetInnerHTML={{
-				__html: convertStringToIconObject(card.mana_cost || "", "mtg", isBlackWhite)
+				__html: DOMPurify.sanitize(convertStringToIconObject(card.mana_cost || "", "mtg", isBlackWhite))
 			}}/>
 		</div>
 
@@ -46,7 +47,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 		<div className="card-divider"/>
 
 		<div className="card-text" dangerouslySetInnerHTML={{
-			__html: convertStringToIconObject(card.card_text || "", "mtg", isBlackWhite)
+			__html: DOMPurify.sanitize(convertStringToIconObject(card.card_text || "", "mtg", isBlackWhite))
 		}}/>
 
 		{
@@ -54,7 +55,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 				<div className="mb-3"/>
 
 				<div className="flavor-text" dangerouslySetInnerHTML={{
-					__html: `<i>${convertStringToIconObject(card.flavor_text || "", "mtg", isBlackWhite)}</i>`
+					__html: `<i>${DOMPurify.sanitize(convertStringToIconObject(card.flavor_text || "", "mtg", isBlackWhite))}</i>`
 				}}/>
 			</>)
 		}
@@ -82,7 +83,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 				<div className="card-title-container">
 					<h2 className="card-title">{card.reverse_card_name}</h2>
 					<div className="mana-cost" dangerouslySetInnerHTML={{
-						__html: convertStringToIconObject(card.reverse_mana_cost || "", "mtg", isBlackWhite)
+						__html: DOMPurify.sanitize(convertStringToIconObject(card.reverse_mana_cost || "", "mtg", isBlackWhite))
 					}}/>
 				</div>
 				<div className="card-divider"/>
@@ -90,7 +91,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 				<div className="card-divider"/>
 
 				<div className="card-text" dangerouslySetInnerHTML={{
-					__html: convertStringToIconObject(card.reverse_text || "", "mtg", isBlackWhite)
+					__html: DOMPurify.sanitize(convertStringToIconObject(card.reverse_text || "", "mtg", isBlackWhite))
 				}}/>
 				<div className="mb-3"/>
 

@@ -26,7 +26,7 @@ export function CreditsBox() {
 					<input type="checkbox"/>
 					<div className="collapse-title font-bold text-xl">Magic: The Gathering</div>
 					<div className="collapse-content">
-						All mana symbols are under the copyright of Wizards of the Coast and are used under the <Link
+						All mana symbols and MTG cards are under the copyright of Wizards of the Coast and are used under the <Link
 						href="https://company.wizards.com/en/legal/fancontentpolicy" className="link">Fan Art
 						Policy</Link>.
 						<br/><br/>
@@ -52,10 +52,11 @@ export function CreditsBox() {
 						The &quot;<i>Free</i>&quot; (<Image src="/images/ptcg/icons/standard/n.png" width={32}
 															height={32} alt="{n}" className="symbol"/>) Energy symbol is
 						created by mm4096.
-						<br/><br/>
+						<br/>
 						The &quot;Import Cards&quot; feature uses the Pokemon TCG API. (<Link
 						href="https://pokemontcg.io/" className="link">pokemontcg.io/</Link>).
-						<br/><br/>
+						<br/>
+						All Pokemon cards are under the copyright of The Pokemon Company.
 						<small>Pokemon TCG API, The Pokemon Company and Nintendo do not produce or endorse Simplified
 							Proxies in any
 							way.</small>
