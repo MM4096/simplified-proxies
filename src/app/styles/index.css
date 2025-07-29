@@ -25,7 +25,7 @@ body:has(.ptcg-editor:hover) .ptcg-panel {
 }
 
 .mtg-panel, .ptcg-panel {
-	opacity: 0.3;
+	opacity: 0.75;
 	transition: opacity 0.25s ease-in-out;
 }
 
