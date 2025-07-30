@@ -60,7 +60,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit=true, id}: {
 			</>)
 		}
 
-		<div className="grow"/>
+		<div className="grow !p-0"/>
 
 		<div className="bottom-container">
 			<div className="flex flex-col grow">

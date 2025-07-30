@@ -1,6 +1,11 @@
+:root {
+	--card-width: 2.5in;
+	--card-height: 3.5in;
+}
+
 .card {
-	width: 2.5in;
-	height: 3.5in;
+	width: var(--card-width);
+	height: var(--card-height);
 	max-width: 2.5in;
 	max-height: 3.5in;
 	border-radius: 0.125in;

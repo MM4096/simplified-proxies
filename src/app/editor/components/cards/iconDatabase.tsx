@@ -4,6 +4,7 @@ const BLACK_WHITE_PATH = "black-white";
 const IMAGE_BASE_PATH = "/images"
 
 export function getIconPath(code: string, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
+	code = code.replaceAll(" ", "").replaceAll("/", "").replaceAll("..", "").replaceAll("\\", "");
 	if (game === "mtg") {
 		return `${IMAGE_BASE_PATH}/${game}/icons/${isBlackWhite ? BLACK_WHITE_PATH : STANDARD_PATH}/${code}.svg`
 	} else {

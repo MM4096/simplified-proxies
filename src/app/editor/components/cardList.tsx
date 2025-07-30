@@ -34,21 +34,24 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 						}}>
 						<button className="flex flex-row items-center text-left grow">
 							<span className="grow">{card.card_name}</span>
-							<span className="text-xs mr-2">QTY:</span>
-							<input className="input input-sm w-[15ch]" type="number" value={card.quantity || 1}
-								   onChange={(e) => {
-									   const value = parseInt(e.target.value);
-
-									   if (value <= 0) {
-										   setCards(cards.filter((_, i) => i !== index));
-									   } else {
-										   setCards([...cards.slice(0, index), {
-											   ...card,
-											   quantity: value
-										   }, ...cards.slice(index + 1)]);
-									   }
-								   }}/>
 						</button>
+
+
+						<span className="text-xs mr-2">QTY:</span>
+						<input className="input input-sm w-[15ch]" type="number" value={card.quantity || 1}
+							   onChange={(e) => {
+								   const value = parseInt(e.target.value);
+
+								   if (value <= 0) {
+									   setCards(cards.filter((_, i) => i !== index));
+								   } else {
+									   setCards([...cards.slice(0, index), {
+										   ...card,
+										   quantity: value
+									   }, ...cards.slice(index + 1)]);
+								   }
+							   }}/>
+
 						<button className="btn btn-sm hover:btn-error" onClick={async () => {
 							if (await confirmationPrompt("Are you sure?", "Are you sure you want to delete this card? This action is irreversible.", "No", "Yes"))
 								setCards(cards.filter((_, i) => i !== index));

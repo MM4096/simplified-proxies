@@ -38,4 +38,14 @@
 		height: 50%;
 		transform: rotate(180deg);
 	}
+
+	.card-text {
+		overflow-y: hidden;
+	}
+}
+
+.mtg-card.horizontal-card {
+	width: var(--card-height) !important;
+	min-width: var(--card-height) !important;
+	height: var(--card-width) !important;
 }
