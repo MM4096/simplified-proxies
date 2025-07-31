@@ -35,7 +35,7 @@
 	}
 
 	.card-reverse {
-		height: 50%;
+		/*height: 50%;*/
 		transform: rotate(180deg);
 	}
 
