@@ -20,6 +20,8 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [allCards, setAllCards] = useState<Card[]>([]);
 	const [project, setProject] = useState<string | null>(null);
 
+	const [useGap, setUseGap] = useState<boolean>(true);
+
 	function getProjectNames() {
 		let retProjects: string[] = [];
 		try {
@@ -84,10 +86,15 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 					}
 				</div>
 				<HideCreditBox showCredit={showCredit} setShowCreditAction={setShowCredit}/>
+				<div className="divider divider-horizontal"/>
+				<label className="label">
+					<input type="checkbox" className="checkbox" checked={useGap} onChange={(e) => setUseGap(e.target.checked)}/>
+					Gap between cards
+				</label>
 			</div>
 		</div>
 		<div className="custom-divider"/>
-		<div className="card-print">
+		<div className={`card-print ${useGap ? "gap" : ""}`}>
 			{
 				allCards.map((card, index) => {
 					switch (gameId) {

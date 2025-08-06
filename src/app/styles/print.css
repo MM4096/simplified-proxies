@@ -18,5 +18,8 @@ body .card {
 	margin: 0;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 2.5in);
+}
+
+.card-print.gap {
 	grid-gap: 0.1in;
 }
