@@ -1,8 +1,8 @@
 import "../../../styles/card/card.css";
 import "../../../styles/card/ptcg-card.css";
-import {PTCGCard} from "@/app/editor/ptcg/page";
 import {convertStringToIconObject} from "@/app/editor/components/cards/iconDatabase";
 import DOMPurify from "isomorphic-dompurify";
+import {PTCGCard} from "@/lib/card";
 
 function isPokemon(card: PTCGCard): boolean {
 	function isEmpty(val: string | undefined): boolean {

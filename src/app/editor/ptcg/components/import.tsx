@@ -1,8 +1,8 @@
 "use client";
 
-import {AttackOrAbility, PTCGCard} from "@/app/editor/ptcg/page";
 import {useEffect, useRef, useState} from "react";
 import {timeout} from "@/lib/timer"
+import {AttackOrAbility, PTCGCard} from "@/lib/card";
 
 export function ImportPTCG({cards, setCardsAction}: {
 	cards: PTCGCard[],

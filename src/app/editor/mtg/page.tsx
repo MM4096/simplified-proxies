@@ -1,6 +1,5 @@
 "use client";
 
-import {Card} from "@/app/editor/components/cardList";
 import {EditorPage} from "@/app/editor/components/editorPage";
 import {MTGInput} from "@/app/editor/components/inputs";
 import {ReactNode} from "react";
@@ -8,28 +7,7 @@ import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {getEnumKeys} from "@/lib/enum";
 import {BiInfoCircle} from "react-icons/bi";
 import {ExperimentalBadge} from "@/app/components/experimental";
-
-export enum MTGCardTemplate {
-	NONE = "None",
-	MANA_COUNTER = "Mana Counter",
-	TOKEN_1 = "Tokens",
-}
-
-export interface MTGCard extends Card {
-	mana_cost?: string;
-	type_line?: string;
-	flavor_text?: string;
-	power?: string;
-	toughness?: string;
-	reverse_card_name?: string;
-	reverse_mana_cost?: string;
-	reverse_type_line?: string;
-	reverse_text?: string;
-	reverse_power?: string;
-	reverse_toughness?: string;
-	notes?: string;
-	card_template?: MTGCardTemplate;
-}
+import {MTGCard, MTGCardTemplate} from "@/lib/card";
 
 export default function MTGEditorPage() {
 	return (<EditorPage gameName="Magic: The Gathering" gameLocalStorageKey="mtg-cards" gameId="mtg"

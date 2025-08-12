@@ -1,4 +1,4 @@
-import {AttackOrAbility} from "@/app/editor/ptcg/page";
+import {AttackOrAbility} from "@/lib/card";
 
 export function AttacksAbilitiesList({attacksAndAbilities, setAttacksAndAbilities}: {
 	attacksAndAbilities: AttackOrAbility[],

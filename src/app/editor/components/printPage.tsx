@@ -1,11 +1,11 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import {Card} from "@/app/editor/components/cardList";
 import Link from "next/link";
 import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
+import {Card} from "@/lib/card";
 
 /**
  * A generic template for all editor pages

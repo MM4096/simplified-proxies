@@ -1,7 +1,7 @@
 "use client";
 
-import {MTGCard} from "@/app/editor/mtg/page";
 import {useRef, useState} from "react";
+import {MTGCard} from "@/lib/card";
 
 function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>) {
 	const thisCard: MTGCard = {};

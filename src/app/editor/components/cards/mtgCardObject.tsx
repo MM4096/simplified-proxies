@@ -1,9 +1,9 @@
 import "../../../styles/card/card.css";
 import "../../../styles/card/mtg-card.css";
-import {MTGCard, MTGCardTemplate} from "@/app/editor/mtg/page";
 import {convertStringToIconObject} from "@/app/editor/components/cards/iconDatabase";
 import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
+import {MTGCard, MTGCardTemplate} from "@/lib/card";
 
 function getPowerToughnessText(power?: string, toughness?: string): string | null {
 

@@ -1,10 +1,5 @@
 import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
-
-export interface Card {
-	card_name?: string;
-	card_text?: string;
-	quantity?: number
-}
+import {Card} from "@/lib/card";
 
 export function CardList({cards, setCards, editingIndex, setEditingIndex, className, newCard}: {
 	cards: Card[];

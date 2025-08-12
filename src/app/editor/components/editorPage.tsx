@@ -1,16 +1,15 @@
 "use client";
 
 import "../../styles/editor.css";
-import {Card, CardList} from "@/app/editor/components/cardList";
+import {CardList} from "@/app/editor/components/cardList";
 import {ReactNode, useEffect, useState} from "react";
-import {MTGCard} from "@/app/editor/mtg/page";
 import Link from "next/link";
 import {ProjectsBox} from "@/app/editor/components/projectsBox";
 import {renderToStaticMarkup} from "react-dom/server";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
-import {PTCGCard} from "@/app/editor/ptcg/page";
 import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
+import {Card, MTGCard, PTCGCard} from "@/lib/card";
 
 /**
  * A generic template for all editor pages

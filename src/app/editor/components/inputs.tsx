@@ -1,5 +1,6 @@
-import {PTCGCard} from "@/app/editor/ptcg/page";
-import {MTGCard} from "@/app/editor/mtg/page";
+
+
+import {MTGCard, PTCGCard} from "@/lib/card";
 
 export function PTCGInput({card, valKey, setValue, title, placeholder, isTextarea = false}: {
 	card: PTCGCard,

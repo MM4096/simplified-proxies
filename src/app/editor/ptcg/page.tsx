@@ -1,32 +1,11 @@
 "use client";
 
-import {Card} from "@/app/editor/components/cardList";
 import {EditorPage} from "@/app/editor/components/editorPage";
 import {PTCGInput} from "@/app/editor/components/inputs";
 import {AttacksAbilitiesList} from "@/app/editor/ptcg/components/attacksAbilitiesList";
 import {ReactNode} from "react";
 import {ImportPTCG} from "@/app/editor/ptcg/components/import";
-
-export interface PTCGCard extends Card {
-	card_type?: string,
-	additional_rules?: string,
-	attacks_abilities?: AttackOrAbility[],
-
-	pokemon_hp?: string,
-	pokemon_evolution_level?: string,
-	pokemon_evolves_from?: string,
-	pokemon_weakness?: string,
-	pokemon_resistance?: string,
-	pokemon_retreat_cost?: string,
-	pokemon_type?: string,
-}
-
-export interface AttackOrAbility {
-	name?: string,
-	text?: string,
-	cost?: string,
-	damage?: string,
-}
+import {PTCGCard} from "@/lib/card";
 
 export default function PTCGEditorPage() {
 	return (<EditorPage gameName="Pokemon Trading Card Game" gameLocalStorageKey="ptcg-cards" gameId="ptcg"
