@@ -23,7 +23,8 @@ export interface MTGCard extends Card {
 export enum MTGCardTemplate {
 	NONE = "None",
 	MANA_COUNTER = "Mana Counter",
-	TOKEN_1 = "Tokens",
+	TOKEN_COUNTER = "Token Counter",
+	HALF_SIZE = "Half Size",
 }
 
 export interface PTCGCard extends Card {

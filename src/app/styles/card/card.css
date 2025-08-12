@@ -1,6 +1,7 @@
 :root {
 	--card-width: 2.5in;
 	--card-height: 3.5in;
+	--card-radius: 0.125in;
 }
 
 .card {
@@ -8,7 +9,7 @@
 	height: var(--card-height);
 	max-width: 2.5in;
 	max-height: 3.5in;
-	border-radius: 0.125in;
+	border-radius: var(--card-radius);
 	border: 1px solid black;
 	font-size: 0.1in;
 	break-inside: avoid;

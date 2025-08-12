@@ -63,23 +63,59 @@
 	}
 }
 
-.mtg-card.mana-counter {
-	padding: 0 !important;
-	border-radius: 0 !important;
+.mtg-card:has(.mana-counter) {
+	padding: 0.05in;
+}
+
+.mtg-card .mana-counter {
+	padding: 0;
+	/*border-radius: 0 !important;*/
 	display: grid;
 	grid-template-rows: repeat(2, 1fr);
 	grid-template-columns: repeat(3, 1fr);
+	background-color: black;
+	height: 100%;
+	grid-gap: 0.01in;
+
 	> * {
-		border: 1px solid black;
+		padding: 0.05in;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background-color: white;
 
 		> img {
 			transform: rotate(90deg);
 			width: 100%;
 		}
 	}
+}
+
+.double-card {
+	display: flex;
+	flex-direction: column;
+
+	height: var(--card-height);
+
+	gap: 0.1in;
+	.mtg-card {
+		/*height: calc((var(--card-height) - 0.1in) / 2);*/
+		height: 0;
+		flex-grow: 1;
+		writing-mode: vertical-rl;
+
+		.power-toughness {
+			flex-shrink: 0;
+		}
+
+		.card-divider {
+			border-left: 1px solid black;
+		}
+	}
+}
+
+.card-print:not(.gap) > .double-card {
+	gap: 0;
 }
 
 .mtg-card.horizontal-card {

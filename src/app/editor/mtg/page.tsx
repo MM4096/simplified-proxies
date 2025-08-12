@@ -87,7 +87,8 @@ export default function MTGEditorPage() {
 													<ul>
 														<li><b>None</b>: No additional templating.</li>
 														<li><b>Mana Counter</b>: Replaces all content of the card with a mana counter.</li>
-														<li><b>Tokens</b>: Adds a table to track tokens in different states.</li>
+														<li><b>Token Counter</b>: Adds a table to track tokens in different states.</li>
+														<li><b>Half Size</b>: Puts 2 copies of this card in the space of one card.</li>
 													</ul>
 												</div>
 												<BiInfoCircle/>

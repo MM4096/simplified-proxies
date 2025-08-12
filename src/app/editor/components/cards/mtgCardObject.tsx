@@ -36,29 +36,31 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 }) {
 
 	if (card.card_template === MTGCardTemplate.MANA_COUNTER) {
-		return <div className="card mtg-card mana-counter" id={id} key={id}>
-			<div>
-				<Image src="/images/mtg/icons/black-white/w.svg" width={300} height={300} alt="White"/>
-			</div>
-			<div>
-				<Image src="/images/mtg/icons/black-white/u.svg" width={300} height={300} alt="Blue"/>
-			</div>
-			<div>
-				<Image src="/images/mtg/icons/black-white/b.svg" width={300} height={300} alt="Black"/>
-			</div>
-			<div>
-				<Image src="/images/mtg/icons/black-white/r.svg" width={300} height={300} alt="Red"/>
-			</div>
-			<div>
-				<Image src="/images/mtg/icons/black-white/g.svg" width={300} height={300} alt="Green"/>
-			</div>
-			<div>
-				<Image src="/images/mtg/icons/black-white/c.svg" width={300} height={300} alt="Colorless"/>
+		return <div className="card mtg-card" id={id} key={id}>
+			<div className="mana-counter">
+				<div>
+					<Image src="/images/mtg/icons/black-white/w.svg" width={300} height={300} alt="White"/>
+				</div>
+				<div>
+					<Image src="/images/mtg/icons/black-white/u.svg" width={300} height={300} alt="Blue"/>
+				</div>
+				<div>
+					<Image src="/images/mtg/icons/black-white/b.svg" width={300} height={300} alt="Black"/>
+				</div>
+				<div>
+					<Image src="/images/mtg/icons/black-white/r.svg" width={300} height={300} alt="Red"/>
+				</div>
+				<div>
+					<Image src="/images/mtg/icons/black-white/g.svg" width={300} height={300} alt="Green"/>
+				</div>
+				<div>
+					<Image src="/images/mtg/icons/black-white/c.svg" width={300} height={300} alt="Colorless"/>
+				</div>
 			</div>
 		</div>
 	}
 
-	return (<div className="card mtg-card" id={id} key={id}>
+	const this_card = (<div className="card mtg-card" id={id} key={id}>
 		<div className="card-title-container">
 			<h2 className="card-title">{card.card_name}</h2>
 			<div className="mana-cost" dangerouslySetInnerHTML={{
@@ -101,7 +103,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 		</div>
 
 		{
-			card.card_template == MTGCardTemplate.TOKEN_1 && (<table className="token-1-box">
+			card.card_template == MTGCardTemplate.TOKEN_COUNTER && (<table className="token-1-box">
 				<thead>
 				<tr>
 					<td></td>
@@ -159,4 +161,13 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 		}
 
 	</div>)
+
+	if (card.card_template === MTGCardTemplate.HALF_SIZE) {
+		return (<div className="double-card">
+			{this_card}
+			{this_card}
+		</div>)
+	}
+
+	return this_card;
 }
