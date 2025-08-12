@@ -35,12 +35,50 @@
 	}
 
 	.card-reverse {
-		/*height: 50%;*/
 		transform: rotate(180deg);
 	}
 
 	.card-text {
 		overflow-y: hidden;
+	}
+
+	.token-1-box {
+		flex-grow: 2;
+		max-height: var(--card-width);
+
+
+		td {
+			border: 1px solid black;
+			text-align: center;
+		}
+
+		.left-label {
+			transform: rotate(180deg);
+			writing-mode: vertical-rl;
+			align-items: center;
+			justify-content: center;
+			width: min-content;
+			padding: 0.02in;
+		}
+	}
+}
+
+.mtg-card.mana-counter {
+	padding: 0 !important;
+	border-radius: 0 !important;
+	display: grid;
+	grid-template-rows: repeat(2, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+	> * {
+		border: 1px solid black;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		> img {
+			transform: rotate(90deg);
+			width: 100%;
+		}
 	}
 }
 

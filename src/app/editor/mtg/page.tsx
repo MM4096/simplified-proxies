@@ -5,6 +5,15 @@ import {EditorPage} from "@/app/editor/components/editorPage";
 import {MTGInput} from "@/app/editor/components/inputs";
 import {ReactNode} from "react";
 import {ImportMTG} from "@/app/editor/mtg/components/import";
+import {getEnumKeys} from "@/lib/enum";
+import {BiInfoCircle} from "react-icons/bi";
+import {ExperimentalBadge} from "@/app/components/experimental";
+
+export enum MTGCardTemplate {
+	NONE = "None",
+	MANA_COUNTER = "Mana Counter",
+	TOKEN_1 = "Tokens",
+}
 
 export interface MTGCard extends Card {
 	mana_cost?: string;
@@ -19,6 +28,7 @@ export interface MTGCard extends Card {
 	reverse_power?: string;
 	reverse_toughness?: string;
 	notes?: string;
+	card_template?: MTGCardTemplate;
 }
 
 export default function MTGEditorPage() {
@@ -87,8 +97,40 @@ export default function MTGEditorPage() {
 									</div>
 								</div>
 
-								<MTGInput card={card} valKey="notes" setValue={onChange} title="Notes"
-										  placeholder="" isTextarea={true}/>
+								<div className="flex flex-row gap-2 w-full">
+									<MTGInput card={card} valKey="notes" setValue={onChange} title="Notes"
+											  placeholder="" isTextarea={true}/>
+									<fieldset className="fieldset">
+										<div className="flex flex-row gap-2 items-center">
+											<legend className="fieldset-legend">Card Template</legend>
+											<div className="tooltip">
+												<div className="tooltip tooltip-content w-max">Modify the layout of this card.
+													<br/><br/><b>OPTIONS:</b><br/>
+													<ul>
+														<li><b>None</b>: No additional templating.</li>
+														<li><b>Mana Counter</b>: Replaces all content of the card with a mana counter.</li>
+														<li><b>Tokens</b>: Adds a table to track tokens in different states.</li>
+													</ul>
+												</div>
+												<BiInfoCircle/>
+											</div>
+											<ExperimentalBadge/>
+										</div>
+										<select className="select"
+												value={(card as MTGCard).card_template || MTGCardTemplate.NONE}
+												onChange={(e) => {
+													onChange("card_template", e.target.value)
+												}}>
+											{
+												getEnumKeys(MTGCardTemplate).map((key, idx) => {
+													return (<option key={idx} value={MTGCardTemplate[key]}>
+														{MTGCardTemplate[key]}
+													</option>)
+												})
+											}
+										</select>
+									</fieldset>
+								</div>
 							</>)
 						}}
 						demoCard={{
