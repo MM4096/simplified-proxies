@@ -96,6 +96,7 @@
 	flex-direction: column;
 
 	height: var(--card-height);
+	max-height: var(--card-height);
 
 	gap: 0.1in;
 	.mtg-card {

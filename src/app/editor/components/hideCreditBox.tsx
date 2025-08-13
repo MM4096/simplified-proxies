@@ -17,29 +17,29 @@ export function HideCreditBox({showCredit, setShowCreditAction}: {
 					setShowCreditAction(!showCredit);
 				}
 			}}/>
-			<label className="label">Hide Credit</label>
+			<label className="label">Hide Watermark</label>
 		</fieldset>
 
 		<dialog className="modal" ref={dialogRef}>
 			<div className="modal-box flex flex-col gap-2">
-				<h2>Hide Credit?</h2>
+				<h2>Hide Watermark?</h2>
 				<p>
-					This will hide the credit at the bottom of each card.
+					This will hide the watermark (<i>simplified-proxies.mm4096.com</i>) at the bottom of each card.
 					<br/><br/>
 					This action is discouraged, as it doesn&apos;t give Simplified Proxies any credit for your proxies,
-					but you can choose to hide credit this time anyways.
+					but you can choose to hide the watermark this time anyways.
 					<br/>
-					Showing credit signifies your support for Simplified Proxies, and it is very appreciated!
+					Showing the watermark signifies your support for Simplified Proxies, and is very appreciated!
 				</p>
 				<div className="flex flex-row gap-2">
 					<button className="btn btn-outline grow" onClick={() => {
 						dialogRef.current?.close();
-					}}>Keep Credit
+					}}>Keep Watermark
 					</button>
 					<button className="btn btn-error btn-outline grow" onClick={() => {
 						setShowCreditAction(!showCredit);
 						dialogRef.current?.close();
-					}}>Hide Credit Anyways
+					}}>Hide Watermark Anyways
 					</button>
 				</div>
 			</div>
