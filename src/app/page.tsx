@@ -4,6 +4,7 @@ import Link from "next/link";
 import {Carousel} from "@/app/components/carousel";
 import {BiBug, BiLogoGithub} from "react-icons/bi";
 import {CreditsBox} from "@/app/components/creditsBox";
+import {ChangelogComponent} from "@/app/components/changelogComponent";
 
 export default function Home() {
 	return (<>
@@ -50,6 +51,7 @@ export default function Home() {
 		</div>
 
 		<div className="links-box">
+			<ChangelogComponent/>
 			<CreditsBox/>
 			<Link href="https://github.com/MM4096/simplified-proxies/issues" target="_blank" className="index-link"><BiBug/>Report Bugs</Link>
 			<Link href="https://github.com/mm4096/simplified-proxies" target="_blank" className="index-link github-link"><BiLogoGithub/>Github</Link>
