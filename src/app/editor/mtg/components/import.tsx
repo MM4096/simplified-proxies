@@ -2,6 +2,7 @@
 
 import {useRef, useState} from "react";
 import {MTGCard} from "@/lib/card";
+import {ReminderTextBehavior} from "@/lib/mtg";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -15,6 +16,9 @@ export function ImportMTG({cards, setCardsAction}: {
 
 	const [disableButtons, setDisableButtons] = useState<boolean>(false);
 
+	const [importBasicLands, setImportBasicLands] = useState<boolean>(true);
+	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.NORMAL);
+
 	async function importCards() {
 		setDisableButtons(true);
 		setImportMessage("Fetching Cards...");
@@ -27,11 +31,13 @@ export function ImportMTG({cards, setCardsAction}: {
 			},
 			body: JSON.stringify({
 				cards: importText,
+				importBasicLands: importBasicLands,
+				reminderTextBehavior: importReminderTextBehavior,
 			}),
 		}).then(async (response) => {
 			if (response.ok) {
 				const json = await response.json();
-				const retCards: MTGCard[] = json["cards"]
+				const retCards: MTGCard[] = json["cards"];
 
 				if (overwrite) {
 					setCardsAction(retCards);
@@ -115,8 +121,36 @@ export function ImportMTG({cards, setCardsAction}: {
 				</fieldset>
 				<br/>
 
+				<div className="collapse collapse-arrow bg-base-100 border-gray-500 border">
+					<input type="checkbox" />
+					<div className="collapse-title font-semibold">Additional Settings</div>
+					<div className="collapse-content flex flex-row">
+						<label className="label text-sm">
+							<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands} onChange={(e) => {
+								setImportBasicLands(e.target.checked);
+							}}/>
+							Import basic lands
+						</label>
+
+						<div className="divider divider-horizontal"/>
+
+						<label className="label text-sm">
+							Reminder Text Behavior:
+							<select className="select select-sm" value={importReminderTextBehavior} onChange={(e) => {
+								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
+							}}>
+								<option value={ReminderTextBehavior.NORMAL}>Render as normal text</option>
+								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
+								<option value={ReminderTextBehavior.HIDDEN}>Don&apos;t show</option>
+							</select>
+						</label>
+
+					</div>
+				</div>
+				<br/>
+
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={overwrite} onChange={(e) => {
+					<input type="checkbox" className="checkbox checkbox-error" checked={overwrite} onChange={(e) => {
 						setOverwrite(e.target.checked);
 					}}/>
 					Overwrite existing cards

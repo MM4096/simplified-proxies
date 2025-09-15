@@ -21,6 +21,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [project, setProject] = useState<string | null>(null);
 
 	const [useGap, setUseGap] = useState<boolean>(true);
+	const [roundCorners, setRoundCorners] = useState<boolean>(true);
 
 	function getProjectNames() {
 		let retProjects: string[] = [];
@@ -91,10 +92,15 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 					<input type="checkbox" className="checkbox" checked={useGap} onChange={(e) => setUseGap(e.target.checked)}/>
 					Gap between cards
 				</label>
+				<div className="divider divider-horizontal"/>
+				<label className="label">
+					<input type="checkbox" className="checkbox" checked={roundCorners} onChange={(e) => setRoundCorners(e.target.checked)}/>
+					Rounded Corners
+				</label>
 			</div>
 		</div>
 		<div className="custom-divider"/>
-		<div className={`card-print ${useGap ? "gap" : ""}`}>
+		<div className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} transform`}>
 			{
 				allCards.map((card, index) => {
 					switch (gameId) {

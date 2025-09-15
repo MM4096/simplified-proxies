@@ -1,8 +1,27 @@
 import {MTGCard} from "@/lib/card";
+import {ReminderTextBehavior} from "@/lib/mtg";
 
 export const maxDuration = 60;
 
-function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>) {
+function handleReminderText(text: string, reminderTextBehavior: ReminderTextBehavior): string {
+	// regex gets all bracketed groups
+	const regex = /\([^(]+\)/g;
+	if (reminderTextBehavior === ReminderTextBehavior.HIDDEN) {
+		// remove all text between brackets
+		return text.replace(regex, "").trim();
+	}
+
+	if (reminderTextBehavior === ReminderTextBehavior.ITALIC) {
+		// wrap all text between brackets in italics
+		return text.replace(regex, (match) => {
+			return `<i>${match}</i>`;
+		});
+	}
+
+	return text;
+}
+
+function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL) {
 	const thisCard: MTGCard = {};
 	let faceData = [scryfallResult as Record<string, string | object>];
 	if (scryfallResult.hasOwnProperty("card_faces")) {
@@ -16,7 +35,7 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>)
 			thisCard.reverse_card_name = thisData["name"]?.toString() || "";
 			thisCard.reverse_mana_cost = thisData["mana_cost"]?.toString() || "";
 			thisCard.reverse_type_line = thisData["type_line"]?.toString() || "";
-			thisCard.reverse_text = thisData["oracle_text"]?.toString() || "";
+			thisCard.reverse_text = handleReminderText(thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
 			thisCard.reverse_power = thisData["power"]?.toString() || "";
 			thisCard.reverse_toughness = thisData["toughness"]?.toString() || "";
 
@@ -31,7 +50,7 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>)
 			thisCard.card_name = thisData["name"]?.toString() || "";
 			thisCard.mana_cost = thisData["mana_cost"]?.toString() || "";
 			thisCard.type_line = thisData["type_line"]?.toString() || "";
-			thisCard.card_text = thisData["oracle_text"]?.toString() || "";
+			thisCard.card_text = handleReminderText(thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
 			thisCard.power = thisData["power"]?.toString() || "";
 			thisCard.toughness = thisData["toughness"]?.toString() || "";
 
@@ -58,6 +77,9 @@ export async function POST(request: Request) {
 			status: 400,
 		});
 	}
+
+	const importBasicLands = body["importBasicLands"] || false;
+	const reminderTextBehavior: ReminderTextBehavior = body["reminderTextBehavior"] || ReminderTextBehavior.NORMAL;
 
 	let lines = body["cards"].split("\n");
 	const importCards: Array<{ name: string, quantity: number }> = [];
@@ -104,6 +126,15 @@ export async function POST(request: Request) {
 		const dfcParts = line.split("//");
 		if (dfcParts.length > 1) {
 			line = dfcParts[0];
+		}
+
+		// check for a basic land
+		if (!importBasicLands) {
+			const lowercase = line.toLowerCase();
+			if (lowercase === "plains" || lowercase === "island" || lowercase === "swamp" || lowercase === "mountain" || lowercase === "forest") {
+				// ignore
+				continue;
+			}
 		}
 
 		importCards.push({name: line, quantity: quantity});
@@ -154,7 +185,7 @@ export async function POST(request: Request) {
 			const thisChunkOriginalNames = originalNames[i];
 			for (let i = 0; i < json.data.length; i++) {
 				const thisCard = json.data[i];
-				const thisCardObject = convertScryfallResultToMtgCard(thisCard);
+				const thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior);
 				thisCardObject.quantity = thisChunkOriginalNames[i].quantity;
 				returnedCards.push(thisCardObject);
 			}

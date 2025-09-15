@@ -39,3 +39,7 @@ body .double-card {
 .card-print.gap {
 	grid-gap: 0.1in;
 }
+
+.card-print.no-rounded-corners > .card {
+	border-radius: 0;
+}

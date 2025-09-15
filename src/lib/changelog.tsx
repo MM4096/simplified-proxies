@@ -10,6 +10,27 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-09-15",
+		version: "v1.3",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) Added options to style reminder text from imported cards</li>
+				<li>(MTG) Added options to not import basic lands from the provided list</li>
+				<li>Added options to unround corners while printing proxies</li>
+				<li>Added an automatic linebreak between paragraphs</li>
+			</ul>
+		</>)
+	},
+	{
+		date: "2025-08-22",
+		version: "v1.2.1",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) &quot;Mana Counter&quot; template now properly displays borders while printing</li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2025-08-15",
 		version: "v1.2",
 		changes: (<>

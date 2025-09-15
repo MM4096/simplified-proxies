@@ -39,11 +39,11 @@ export function convertStringToIconObject(inputString: string | null, game: "mtg
 		inputString = inputString.replaceAll("okemon", "okémon")
 	}
 
-	// const matches = inputString.match(/(?<!\\)\{.*?}/g);
-
 	let matches: RegExpMatchArray | string[] | null = inputString?.match(/\{.*?}/g);
 
 	let codes: string = inputString;
+	// add custom paragraph breaks
+	codes = codes.split("\n").join("<br><span class='paragraph-break'></span>");
 
 	// make all items unique
 	const set = new Set(matches);

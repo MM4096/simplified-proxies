@@ -45,4 +45,9 @@
 		margin-left: 0.01in;
 		margin-right: 0.01in;
 	}
+
+	.paragraph-break {
+		display: block;
+		height: 0.075in;
+	}
 }

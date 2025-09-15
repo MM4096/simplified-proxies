@@ -75,7 +75,7 @@
 	grid-template-columns: repeat(3, 1fr);
 	background-color: black;
 	height: 100%;
-	grid-gap: 0.01in;
+	grid-gap: 0.02in;
 
 	> * {
 		padding: 0.05in;
