@@ -10,6 +10,15 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-09-16",
+		version: "v1.3.1",
+		changes: (<>
+			<ul className="list-disc">
+				<li>Added options to shrink cards while printing</li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2025-09-15",
 		version: "v1.3",
 		changes: (<>

@@ -22,6 +22,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 
 	const [useGap, setUseGap] = useState<boolean>(true);
 	const [roundCorners, setRoundCorners] = useState<boolean>(true);
+	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
 
 	function getProjectNames() {
 		let retProjects: string[] = [];
@@ -97,10 +98,15 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 					<input type="checkbox" className="checkbox" checked={roundCorners} onChange={(e) => setRoundCorners(e.target.checked)}/>
 					Rounded Corners
 				</label>
+				<div className="divider divider-horizontal"/>
+				<label className="label">
+					<input type="checkbox" className="checkbox" checked={shrinkCards} onChange={(e) => setShrinkCards(e.target.checked)}/>
+					Shrink Cards by 10%
+				</label>
 			</div>
 		</div>
 		<div className="custom-divider"/>
-		<div className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} transform`}>
+		<div className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
 			{
 				allCards.map((card, index) => {
 					switch (gameId) {

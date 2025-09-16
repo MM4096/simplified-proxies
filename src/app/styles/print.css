@@ -43,3 +43,12 @@ body .double-card {
 .card-print.no-rounded-corners > .card {
 	border-radius: 0;
 }
+
+.card-print.shrink-cards > .card {
+	transform: scale(0.9);
+}
+
+.card-print.shrink-cards {
+	grid-template-columns: repeat(auto-fill, calc(var(--card-width) * 0.9));
+	grid-auto-rows: calc(var(--card-height) * 0.9);
+}
