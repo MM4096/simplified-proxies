@@ -1,7 +1,9 @@
 const STANDARD_PATH = "standard";
 const BLACK_WHITE_PATH = "black-white";
 
-const IMAGE_BASE_PATH = "/images"
+const IMAGE_BASE_PATH = "/images";
+
+export const LINEBREAK = `<span class="paragraph-break"></span>`
 
 export function getIconPath(code: string, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
 	code = code.replaceAll(" ", "").replaceAll("/", "").replaceAll("..", "").replaceAll("\\", "");
@@ -43,7 +45,7 @@ export function convertStringToIconObject(inputString: string | null, game: "mtg
 
 	let codes: string = inputString;
 	// add custom paragraph breaks
-	codes = codes.split("\n").join("<br><span class='paragraph-break'></span>");
+	codes = codes.split("\n").join(LINEBREAK);
 
 	// make all items unique
 	const set = new Set(matches);

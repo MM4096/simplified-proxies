@@ -1,9 +1,10 @@
 import "../../../styles/card/card.css";
 import "../../../styles/card/mtg-card.css";
-import {convertStringToIconObject} from "@/app/editor/components/cards/iconDatabase";
+import {convertStringToIconObject, LINEBREAK} from "@/app/editor/components/cards/iconDatabase";
 import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import {MTGCard, MTGCardTemplate} from "@/lib/card";
+import {TbCaretUpDownFilled, TbCaretUpFilled} from "react-icons/tb";
 
 function getPowerToughnessText(power?: string, toughness?: string): string | null {
 
@@ -26,6 +27,71 @@ function hasReverseFace(card: MTGCard): boolean {
 		return true;
 	}
 	return false;
+}
+
+function applyTemplatingStyles(text: string, template: MTGCardTemplate): string {
+	const parts: string[] = text.split(LINEBREAK);
+	const sections: string[] = [];
+	switch (template) {
+		case MTGCardTemplate.PLANESWALKER:
+			for (let i = 0; i < parts.length; i++) {
+				const this_part: string = parts[i];
+				// include both − and -, first is from scryfall, second is a generic negative symbol
+				if (this_part.startsWith("+") || this_part.startsWith("-") || this_part.startsWith("−") || this_part.startsWith("0")) {
+					const colon_split: string[] = this_part.split(": ");
+					colon_split[0] = `<span class="number-badge">${colon_split[0]}</span>`;
+					const first_elem = colon_split.shift();
+					parts[i] = `<span class="flex flex-row">${first_elem}<p>${colon_split.join(": ")}</p></span>`
+				}
+			}
+
+			return parts.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
+
+		case MTGCardTemplate.SPACECRAFT:
+
+			// keep track for next section
+			let station_count: string = "";
+			for (let i = 0; i < parts.length; i++) {
+				const this_part: string = parts[i];
+				if (this_part.startsWith("STATION")) {
+					station_count = this_part.replaceAll("STATION", "").trim();
+					continue;
+				}
+
+				if (station_count !== "") {
+					let extra = "";
+					let first_elem = true;
+					// look ahead for other parts and merge into this one
+					while (i < parts.length) {
+						if (parts[i].startsWith("STATION")) {
+							break;
+						}
+						if (first_elem) {
+							first_elem = false;
+						} else {
+							extra += "<span class='paragraph-break'></span>";
+						}
+						extra += `${parts[i]}`;
+						i++;
+					}
+					i--;
+					sections.push(`<span class="flex flex-row"><span class="number-badge">${station_count}</span><p>${extra}</p></span>`);
+					station_count = "";
+					continue;
+				}
+
+				if (sections.length == 0) {
+					sections.push(this_part);
+				} else {
+					sections[sections.length - 1] += `<span class="paragraph-break"></span>${this_part}`
+				}
+			}
+
+			return sections.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
+
+		default:
+			return text;
+	}
 }
 
 export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
@@ -62,7 +128,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 
 	const this_card = (<div className="card mtg-card" id={id} key={id}>
 		<div className="card-title-container">
-			<h2 className="card-title">{card.card_name}</h2>
+			<h2 className="card-title">{hasReverseFace(card) ? (<TbCaretUpFilled/>) : null}{card.card_name}</h2>
 			<div className="mana-cost" dangerouslySetInnerHTML={{
 				__html: DOMPurify.sanitize(convertStringToIconObject(card.mana_cost || "", "mtg", isBlackWhite))
 			}}/>
@@ -73,7 +139,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 		<div className="card-divider"/>
 
 		<div className="card-text" dangerouslySetInnerHTML={{
-			__html: DOMPurify.sanitize(convertStringToIconObject(card.card_text || "", "mtg", isBlackWhite))
+			__html: DOMPurify.sanitize(applyTemplatingStyles(convertStringToIconObject(card.card_text || "", "mtg", isBlackWhite), card.card_template || MTGCardTemplate.NONE))
 		}}/>
 
 		{
@@ -132,7 +198,7 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 				<div className="card-divider"/>
 				<div className="card-reverse">
 					<div className="card-title-container">
-						<h2 className="card-title">{card.reverse_card_name}</h2>
+						<h2 className="card-title"><TbCaretUpDownFilled/>{card.reverse_card_name}</h2>
 						<div className="mana-cost" dangerouslySetInnerHTML={{
 							__html: DOMPurify.sanitize(convertStringToIconObject(card.reverse_mana_cost || "", "mtg", isBlackWhite))
 						}}/>

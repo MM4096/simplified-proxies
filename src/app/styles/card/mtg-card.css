@@ -91,6 +91,20 @@
 	}
 }
 
+.mtg-card .number-badge {
+	border: 1px solid black;
+	border-radius: 0.1in;
+
+	padding-top: 0.01in;
+	padding-bottom: 0.01in;
+
+	margin-right: 0.05in;
+	height: min-content;
+	flex-shrink: 0;
+	text-align: center;
+	width: 5ch;
+}
+
 .double-card {
 	display: flex;
 	flex-direction: column;

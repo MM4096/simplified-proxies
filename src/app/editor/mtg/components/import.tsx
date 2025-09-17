@@ -3,6 +3,7 @@
 import {useRef, useState} from "react";
 import {MTGCard} from "@/lib/card";
 import {ReminderTextBehavior} from "@/lib/mtg";
+import {ExperimentalBadge} from "@/app/components/experimental";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -18,6 +19,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 	const [importBasicLands, setImportBasicLands] = useState<boolean>(true);
 	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.NORMAL);
+	const [importTemplates, setImportTemplates] = useState<boolean>(false);
 
 	async function importCards() {
 		setDisableButtons(true);
@@ -33,6 +35,7 @@ export function ImportMTG({cards, setCardsAction}: {
 				cards: importText,
 				importBasicLands: importBasicLands,
 				reminderTextBehavior: importReminderTextBehavior,
+				importTemplates: importTemplates,
 			}),
 		}).then(async (response) => {
 			if (response.ok) {
@@ -143,6 +146,15 @@ export function ImportMTG({cards, setCardsAction}: {
 								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
 								<option value={ReminderTextBehavior.HIDDEN}>Don&apos;t show</option>
 							</select>
+						</label>
+
+						<div className="divider divider-horizontal"/>
+
+						<label className="label text-sm">
+							<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates} onChange={(e) => {
+								setImportTemplates(e.target.checked);
+							}}/>
+							Automatically apply templates <ExperimentalBadge/>
 						</label>
 
 					</div>

@@ -10,6 +10,16 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-09-18",
+		version: "v1.4",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) Added Planeswalker template</li>
+				<li>(MTG) Added Spacecraft template</li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2025-09-16",
 		version: "v1.3.1",
 		changes: (<>

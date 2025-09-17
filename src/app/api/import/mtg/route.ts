@@ -1,4 +1,4 @@
-import {MTGCard} from "@/lib/card";
+import {MTGCard, MTGCardTemplate} from "@/lib/card";
 import {ReminderTextBehavior} from "@/lib/mtg";
 
 export const maxDuration = 60;
@@ -21,7 +21,7 @@ function handleReminderText(text: string, reminderTextBehavior: ReminderTextBeha
 	return text;
 }
 
-function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL) {
+function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL, applyTemplates: boolean = true) {
 	const thisCard: MTGCard = {};
 	let faceData = [scryfallResult as Record<string, string | object>];
 	if (scryfallResult.hasOwnProperty("card_faces")) {
@@ -63,6 +63,16 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 		}
 	}
 
+	if (applyTemplates) {
+		const type_line = (faceData[0]["type_line"] || "").toString();
+		if (type_line.includes("Planeswalker")) {
+			thisCard.card_template = MTGCardTemplate.PLANESWALKER;
+		}
+		if (type_line.includes("Spacecraft")) {
+			thisCard.card_template = MTGCardTemplate.SPACECRAFT;
+		}
+	}
+
 	return thisCard;
 }
 
@@ -80,6 +90,7 @@ export async function POST(request: Request) {
 
 	const importBasicLands = body["importBasicLands"] || false;
 	const reminderTextBehavior: ReminderTextBehavior = body["reminderTextBehavior"] || ReminderTextBehavior.NORMAL;
+	const importTemplates = body["importTemplates"] || false;
 
 	let lines = body["cards"].split("\n");
 	const importCards: Array<{ name: string, quantity: number }> = [];
@@ -185,7 +196,7 @@ export async function POST(request: Request) {
 			const thisChunkOriginalNames = originalNames[i];
 			for (let i = 0; i < json.data.length; i++) {
 				const thisCard = json.data[i];
-				const thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior);
+				const thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
 				thisCardObject.quantity = thisChunkOriginalNames[i].quantity;
 				returnedCards.push(thisCardObject);
 			}

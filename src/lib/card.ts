@@ -25,6 +25,8 @@ export enum MTGCardTemplate {
 	MANA_COUNTER = "Mana Counter",
 	TOKEN_COUNTER = "Token Counter",
 	HALF_SIZE = "Half Size",
+	PLANESWALKER = "Planeswalker",
+	SPACECRAFT = "Spacecraft",
 }
 
 export interface PTCGCard extends Card {

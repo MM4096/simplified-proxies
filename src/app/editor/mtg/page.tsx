@@ -89,6 +89,8 @@ export default function MTGEditorPage() {
 														<li><b>Mana Counter</b>: Replaces all content of the card with a mana counter.</li>
 														<li><b>Token Counter</b>: Adds a table to track tokens in different states.</li>
 														<li><b>Half Size</b>: Puts 2 copies of this card in the space of one card.</li>
+														<li><b>Planeswalker</b>: Styles loyalty abilities.</li>
+														<li><b>Spacecraft</b>: Styles charge counter indicators</li>
 													</ul>
 												</div>
 												<BiInfoCircle/>
