@@ -21,7 +21,7 @@ function handleReminderText(text: string, reminderTextBehavior: ReminderTextBeha
 	return text;
 }
 
-function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL, applyTemplates: boolean = true) {
+function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL) {
 	const thisCard: MTGCard = {};
 	let faceData = [scryfallResult as Record<string, string | object>];
 	if (scryfallResult.hasOwnProperty("card_faces")) {
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
 	const importBasicLands = body["importBasicLands"] || false;
 	const reminderTextBehavior: ReminderTextBehavior = body["reminderTextBehavior"] || ReminderTextBehavior.NORMAL;
 	const importTemplates = body["importTemplates"] || false;
-	const includeTokens = body["includeTokens"] || false;
+	// const includeTokens = body["includeTokens"] || false;
 	const splitDFCs = body["splitDFCs"] || false;
 
 	let lines = body["cards"].split("\n");
@@ -188,7 +188,7 @@ export async function POST(request: Request) {
 			const thisChunkOriginalNames = originalNames[i];
 			for (let i = 0; i < json.data.length; i++) {
 				const thisCard = json.data[i];
-				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
+				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior);
 				if (splitDFCs && hasReverseFace(thisCardObject)) {
 					let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);
 					frontFace.quantity = thisChunkOriginalNames[i].quantity;
