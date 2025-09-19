@@ -36,18 +36,14 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
 
 	function changeVal(key: string, value: string) {
-		setTempCard({...tempCard, [key as keyof Card]: value});
-	}
-
-	function saveChanges() {
-		const tempCardCopy = {...tempCard};
+		const tempCardCopy = {...tempCard, [key as keyof Card]: value};
 		if (editingIndex !== null) {
 			setCards([...cards.slice(0, editingIndex), tempCardCopy, ...cards.slice(editingIndex + 1)]);
 		} else {
 			setCards([...cards, tempCardCopy]);
+			setEditingIndex(cards.length);
 		}
-		setTempCard({} as Card);
-		setEditingIndex(null);
+		setTempCard(tempCardCopy);
 	}
 
 	function hasChanges() {
@@ -132,21 +128,6 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 				<div className="flex flex-col gap-2 overflow-y-auto grow">
 					{cardInputsAction({onChange: changeVal, card: tempCard})}
 				</div>
-
-				<div className="flex flex-row gap-2 w-full">
-					<button className="btn btn-primary" onClick={saveChanges}>{
-						editingIndex !== null ? "Save" : "Add Card"
-					}</button>
-					{
-						(editingIndex !== null) && (<>
-							<button className="btn btn-secondary" onClick={(e) => {
-								e.preventDefault();
-								setEditingIndex(null);
-							}}>Discard Changes
-							</button>
-						</>)
-					}
-				</div>
 			</div>
 
 			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
@@ -216,16 +197,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 						 selectedProject={currentProject}/>
 			{
 				demoCard ? (<button className="btn btn-outline" onClick={() => {
-					if (cards.length == 0) {
-						setCards([...cards, demoCard]);
-						return;
-					}
-					confirmationPrompt("Demo Card", `Are you sure you want to add this demo card? This will add a new card.`,
-						"No", "Yes").then((result) => {
-						if (result) {
-							setCards([...cards, demoCard]);
-						}
-					})
+					setCards([...cards, demoCard]);
 				}}>Insert Demo Card</button>) : ""
 			}
 		</div>

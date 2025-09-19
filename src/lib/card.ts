@@ -18,6 +18,7 @@ export interface MTGCard extends Card {
 	reverse_toughness?: string;
 	notes?: string;
 	card_template?: MTGCardTemplate;
+	face_type?: FaceType;
 }
 
 export enum MTGCardTemplate {
@@ -27,6 +28,15 @@ export enum MTGCardTemplate {
 	HALF_SIZE = "Half Size",
 	PLANESWALKER = "Planeswalker",
 	SPACECRAFT = "Spacecraft",
+	SAGA = "Saga",
+	LEVEL_UP = "Level Up",
+	ROOMS = "Rooms"
+}
+
+export enum FaceType {
+	NONE = "",
+	FRONT = "Front",
+	BACK = "Back",
 }
 
 export interface PTCGCard extends Card {

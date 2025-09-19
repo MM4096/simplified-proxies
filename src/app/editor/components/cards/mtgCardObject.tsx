@@ -1,13 +1,15 @@
+"use client";
+
 import "../../../styles/card/card.css";
 import "../../../styles/card/mtg-card.css";
 import {convertStringToIconObject, LINEBREAK} from "@/app/editor/components/cards/iconDatabase";
 import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
-import {MTGCard, MTGCardTemplate} from "@/lib/card";
+import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
 import {TbCaretUpDownFilled, TbCaretUpFilled} from "react-icons/tb";
+import {hasReverseFace, isolateFrontAndBackFaces} from "@/lib/mtg";
 
 function getPowerToughnessText(power?: string, toughness?: string): string | null {
-
 	if ((power === undefined || power === "") && (toughness === undefined || toughness === "")) {
 		return null;
 	}
@@ -20,13 +22,6 @@ function getPowerToughnessText(power?: string, toughness?: string): string | nul
 		parts.push(toughness);
 	}
 	return parts.join(" / ");
-}
-
-function hasReverseFace(card: MTGCard): boolean {
-	if (card.reverse_card_name || card.reverse_mana_cost || card.reverse_type_line || card.reverse_text) {
-		return true;
-	}
-	return false;
 }
 
 function applyTemplatingStyles(text: string, template: MTGCardTemplate): string {
@@ -48,7 +43,6 @@ function applyTemplatingStyles(text: string, template: MTGCardTemplate): string 
 			return parts.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
 
 		case MTGCardTemplate.SPACECRAFT:
-
 			// keep track for next section
 			let station_count: string = "";
 			for (let i = 0; i < parts.length; i++) {
@@ -89,6 +83,74 @@ function applyTemplatingStyles(text: string, template: MTGCardTemplate): string 
 
 			return sections.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
 
+		case MTGCardTemplate.LEVEL_UP:
+			// keep track for next section
+			let levels: string = "";
+			for (let i = 0; i < parts.length; i++) {
+				const this_part: string = parts[i];
+				if (this_part.startsWith("LEVEL")) {
+					levels = this_part.replaceAll("LEVEL", "").trim();
+					continue;
+				}
+
+				if (levels !== "") {
+					let extra = "";
+					let first_elem = true;
+					let level_p_t: string = "";
+					// look ahead for other parts and merge into this one
+					while (i < parts.length) {
+						if (parts[i].startsWith("LEVEL")) {
+							break;
+						}
+						if (first_elem) {
+							first_elem = false;
+							// first line is power/toughness
+							level_p_t = parts[i].replaceAll("/", " / ");
+						} else {
+							extra += "<span class='paragraph-break'></span>";
+							extra += `${parts[i]}`;
+						}
+						i++;
+					}
+					i--;
+
+					sections.push(`<span class="flex flex-row"><span class="number-badge"><span class="small">LEVEL</span><br>${levels}</span><p class="grow">${extra}</p><span class="power-toughness h-min shrink-0">${level_p_t}</span></span>`);
+					levels = "";
+					continue;
+				}
+
+				if (sections.length == 0) {
+					sections.push(this_part);
+				} else {
+					sections[sections.length - 1] += `<span class="paragraph-break"></span>${this_part}`
+				}
+			}
+
+			return sections.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
+
+		case MTGCardTemplate.SAGA:
+			for (let i = 0; i < parts.length; i++) {
+				const this_part: string = parts[i];
+				const matches = this_part.match(/[IXV, ]+ —/g)
+				if (matches !== null) {
+					const match = matches[0];
+
+					const saga_chapter = match.replaceAll("—", "").trim()
+					const saga_portions = saga_chapter.replaceAll(" ", "").split(",")
+
+					const saga_content = this_part.replaceAll(match, "").trim()
+					parts[i] = `<span class="flex flex-row">
+									<span class="flex flex-col">
+										${saga_portions.map((portion) => {
+						return `<span class="number-badge">${portion}</span>`
+					}).join("<span class='paragraph-break'></span>")}
+									</span>
+									<p>${saga_content}</p>
+								</span>`
+				}
+			}
+
+			return parts.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
 		default:
 			return text;
 	}
@@ -100,7 +162,6 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 	id?: string,
 	includeCredit?: boolean,
 }) {
-
 	if (card.card_template === MTGCardTemplate.MANA_COUNTER) {
 		return <div className="card mtg-card" id={id} key={id}>
 			<div className="mana-counter">
@@ -128,7 +189,10 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 
 	const this_card = (<div className="card mtg-card" id={id} key={id}>
 		<div className="card-title-container">
-			<h2 className="card-title">{hasReverseFace(card) ? (<TbCaretUpFilled/>) : null}{card.card_name}</h2>
+			<h2 className="card-title">
+				{(hasReverseFace(card) || card.face_type == FaceType.FRONT) ? (<TbCaretUpFilled/>) : null}
+				{(card.face_type == FaceType.BACK) ? (<TbCaretUpDownFilled/>) : null}
+				{card.card_name}</h2>
 			<div className="mana-cost" dangerouslySetInnerHTML={{
 				__html: DOMPurify.sanitize(convertStringToIconObject(card.mana_cost || "", "mtg", isBlackWhite))
 			}}/>
@@ -232,6 +296,16 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, id}: {
 		return (<div className="double-card">
 			{this_card}
 			{this_card}
+		</div>)
+	}
+
+	if (card.card_template === MTGCardTemplate.ROOMS) {
+		const [front_room, back_room] = isolateFrontAndBackFaces(card);
+		front_room.card_template = MTGCardTemplate.NONE;
+		back_room.card_template = MTGCardTemplate.NONE;
+		return (<div className="double-card no-gap">
+			<MTGCardObject card={front_room} isBlackWhite={true} includeCredit={includeCredit} id={id}/>
+			<MTGCardObject card={back_room} isBlackWhite={true} includeCredit={includeCredit} id={id}/>
 		</div>)
 	}
 

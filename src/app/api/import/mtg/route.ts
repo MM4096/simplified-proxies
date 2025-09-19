@@ -1,5 +1,5 @@
-import {MTGCard, MTGCardTemplate} from "@/lib/card";
-import {ReminderTextBehavior} from "@/lib/mtg";
+import {FaceType, MTGCard} from "@/lib/card";
+import {applyTemplates, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg";
 
 export const maxDuration = 60;
 
@@ -40,10 +40,10 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 			thisCard.reverse_toughness = thisData["toughness"]?.toString() || "";
 
 			if (thisData.hasOwnProperty("loyalty")) {
-				thisCard.power = thisData["loyalty"].toString() || "";
+				thisCard.reverse_power = thisData["loyalty"].toString() || "";
 			}
 			if (thisData.hasOwnProperty("defense")) {
-				thisCard.power = thisData["defense"].toString() || "";
+				thisCard.reverse_power = thisData["defense"].toString() || "";
 			}
 		} else {
 			isReverseFace = true;
@@ -60,16 +60,6 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 			if (thisData.hasOwnProperty("defense")) {
 				thisCard.power = thisData["defense"].toString() || "";
 			}
-		}
-	}
-
-	if (applyTemplates) {
-		const type_line = (faceData[0]["type_line"] || "").toString();
-		if (type_line.includes("Planeswalker")) {
-			thisCard.card_template = MTGCardTemplate.PLANESWALKER;
-		}
-		if (type_line.includes("Spacecraft")) {
-			thisCard.card_template = MTGCardTemplate.SPACECRAFT;
 		}
 	}
 
@@ -91,6 +81,8 @@ export async function POST(request: Request) {
 	const importBasicLands = body["importBasicLands"] || false;
 	const reminderTextBehavior: ReminderTextBehavior = body["reminderTextBehavior"] || ReminderTextBehavior.NORMAL;
 	const importTemplates = body["importTemplates"] || false;
+	const includeTokens = body["includeTokens"] || false;
+	const splitDFCs = body["splitDFCs"] || false;
 
 	let lines = body["cards"].split("\n");
 	const importCards: Array<{ name: string, quantity: number }> = [];
@@ -196,7 +188,30 @@ export async function POST(request: Request) {
 			const thisChunkOriginalNames = originalNames[i];
 			for (let i = 0; i < json.data.length; i++) {
 				const thisCard = json.data[i];
-				const thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
+				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
+				if (splitDFCs && hasReverseFace(thisCardObject)) {
+					let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);
+					frontFace.quantity = thisChunkOriginalNames[i].quantity;
+					frontFace.notes = `Front Face, flips into ${thisCardObject.reverse_card_name}`;
+					frontFace.face_type = FaceType.FRONT;
+
+					backFace.quantity = thisChunkOriginalNames[i].quantity;
+					backFace.notes = `Back Face, flips into ${thisCardObject.card_name}`;
+					backFace.face_type = FaceType.BACK;
+
+					if (importTemplates) {
+						frontFace = applyTemplates(frontFace);
+						backFace = applyTemplates(backFace);
+					}
+
+					returnedCards.push(frontFace);
+					returnedCards.push(backFace);
+					continue;
+				}
+
+				if (importTemplates) {
+					thisCardObject = applyTemplates(thisCardObject)
+				}
 				thisCardObject.quantity = thisChunkOriginalNames[i].quantity;
 				returnedCards.push(thisCardObject);
 			}

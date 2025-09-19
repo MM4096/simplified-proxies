@@ -1,4 +1,8 @@
 .mtg-card {
+	.mana-cost {
+		flex-shrink: 0;
+	}
+
 	.card-title-container {
 		display: flex;
 		flex-direction: row;
@@ -32,6 +36,7 @@
 		padding: 0.05in;
 		border: 1px solid black;
 		border-radius: 0.1in;
+		height: min-content;
 	}
 
 	.card-reverse {
@@ -133,6 +138,16 @@
 		.credit {
 			font-size: 0.05in;
 		}
+	}
+}
+
+.double-card.no-gap {
+	gap: 0;
+	.mtg-card:first-child {
+		border-radius: 0.1in 0.1in 0 0;
+	}
+	.mtg-card:last-child {
+		border-radius: 0 0 0.1in 0.1in;
 	}
 }
 

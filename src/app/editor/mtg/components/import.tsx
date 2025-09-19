@@ -4,6 +4,7 @@ import {useRef, useState} from "react";
 import {MTGCard} from "@/lib/card";
 import {ReminderTextBehavior} from "@/lib/mtg";
 import {ExperimentalBadge} from "@/app/components/experimental";
+import {BiInfoCircle} from "react-icons/bi";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -18,8 +19,10 @@ export function ImportMTG({cards, setCardsAction}: {
 	const [disableButtons, setDisableButtons] = useState<boolean>(false);
 
 	const [importBasicLands, setImportBasicLands] = useState<boolean>(true);
-	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.NORMAL);
+	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.ITALIC);
 	const [importTemplates, setImportTemplates] = useState<boolean>(false);
+	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
+	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
 
 	async function importCards() {
 		setDisableButtons(true);
@@ -36,6 +39,8 @@ export function ImportMTG({cards, setCardsAction}: {
 				importBasicLands: importBasicLands,
 				reminderTextBehavior: importReminderTextBehavior,
 				importTemplates: importTemplates,
+				includeTokens: importIncludeTokens,
+				splitDFCs: importSplitDFCs,
 			}),
 		}).then(async (response) => {
 			if (response.ok) {
@@ -133,6 +138,10 @@ export function ImportMTG({cards, setCardsAction}: {
 								setImportBasicLands(e.target.checked);
 							}}/>
 							Import basic lands
+							<span className="tooltip tooltip-right">
+								<span className="tooltip-content">If unchecked, any card who&apos;s name is exactly &quot;Plains&quot;, &quot;Mountain&quot;, &quot;Swamp&quot;, &quot;Forest&quot;, or &quot;Island&quot; will be skipped.</span>
+								<BiInfoCircle/>
+							</span>
 						</label>
 
 						<div className="divider divider-horizontal"/>
@@ -146,6 +155,23 @@ export function ImportMTG({cards, setCardsAction}: {
 								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
 								<option value={ReminderTextBehavior.HIDDEN}>Don&apos;t show</option>
 							</select>
+							<span className="tooltip">
+								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets).</span>
+								<BiInfoCircle/>
+							</span>
+						</label>
+
+						<div className="divider divider-horizontal"/>
+
+						<label className="label text-sm">
+							<input type="checkbox" className="checkbox checkbox-sm" checked={importSplitDFCs} onChange={(e) => {
+								setImportSplitDFCs(e.target.checked);
+							}}/>
+							Split DFCs into separate cards
+							<span className="tooltip tooltip-right">
+								<span className="tooltip-content">If checked, all DFCs will be imported as two cards instead of one.</span>
+								<BiInfoCircle/>
+							</span>
 						</label>
 
 						<div className="divider divider-horizontal"/>
@@ -155,6 +181,10 @@ export function ImportMTG({cards, setCardsAction}: {
 								setImportTemplates(e.target.checked);
 							}}/>
 							Automatically apply templates <ExperimentalBadge/>
+							<span className="tooltip tooltip-left">
+								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
+								<BiInfoCircle/>
+							</span>
 						</label>
 
 					</div>
