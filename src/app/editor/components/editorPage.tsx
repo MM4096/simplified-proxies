@@ -8,7 +8,6 @@ import {ProjectsBox} from "@/app/editor/components/projectsBox";
 import {renderToStaticMarkup} from "react-dom/server";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
-import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 import {Card, MTGCard, PTCGCard} from "@/lib/card";
 
 /**
@@ -132,19 +131,9 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
 					  setEditingIndex={async (index: number | null) => {
-						  if (hasChanges()) {
-							  if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
-								  return
-							  }
-						  }
 						  setEditingIndex(index);
 					  }}
 					  className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`} newCard={async () => {
-				if (hasChanges()) {
-					if (!await confirmationPrompt("Unsaved Changes", "You have unsaved changes. Would you like to delete those changes?", "No", "Yes")) {
-						return;
-					}
-				}
 				setEditingIndex(null);
 			}}/>
 

@@ -50,5 +50,8 @@ export function applyTemplates(card: MTGCard): MTGCard {
 	if (card.card_text?.includes("Level up")) {
 		card.card_template = MTGCardTemplate.LEVEL_UP;
 	}
+	if (card.type_line?.includes("Room")) {
+		card.card_template = MTGCardTemplate.ROOMS;
+	}
 	return card;
 }
