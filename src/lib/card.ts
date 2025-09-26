@@ -26,11 +26,14 @@ export enum MTGCardTemplate {
 	MANA_COUNTER = "Mana Counter",
 	TOKEN_COUNTER = "Token Counter",
 	HALF_SIZE = "Half Size",
+	SPLIT_STANDARD = "Standard Split",
+	SPLIT_AFTERMATH = "Aftermath Split",
+
 	PLANESWALKER = "Planeswalker",
 	SPACECRAFT = "Spacecraft",
 	SAGA = "Saga",
 	LEVEL_UP = "Level Up",
-	ROOMS = "Rooms"
+	ROOMS = "Rooms",
 }
 
 export enum FaceType {

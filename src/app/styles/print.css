@@ -41,7 +41,7 @@ body .double-card {
 }
 
 .card-print.no-rounded-corners > .card {
-	border-radius: 0;
+	border-radius: 0 !important;
 }
 
 .card-print.shrink-cards > .card {

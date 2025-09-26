@@ -53,5 +53,8 @@ export function applyTemplates(card: MTGCard): MTGCard {
 	if (card.type_line?.includes("Room")) {
 		card.card_template = MTGCardTemplate.ROOMS;
 	}
+	if (card.reverse_text?.includes("Aftermath")) {
+		card.card_template = MTGCardTemplate.SPLIT_AFTERMATH;
+	}
 	return card;
 }
