@@ -1,4 +1,4 @@
-import {FaceType, MTGCard} from "@/lib/card";
+import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
 import {applyTemplates, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg";
 
 export const maxDuration = 60;
@@ -21,7 +21,7 @@ function handleReminderText(text: string, reminderTextBehavior: ReminderTextBeha
 	return text;
 }
 
-function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL) {
+function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL, importTemplates: boolean = false) {
 	const thisCard: MTGCard = {};
 	let faceData = [scryfallResult as Record<string, string | object>];
 	if (scryfallResult.hasOwnProperty("card_faces")) {
@@ -60,6 +60,12 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 			if (thisData.hasOwnProperty("defense")) {
 				thisCard.power = thisData["defense"].toString() || "";
 			}
+		}
+	}
+
+	if (importTemplates) {
+		if (scryfallResult["layout"] == "split") {
+			thisCard.card_template = MTGCardTemplate.SPLIT_STANDARD;
 		}
 	}
 
@@ -188,7 +194,7 @@ export async function POST(request: Request) {
 			const thisChunkOriginalNames = originalNames[i];
 			for (let i = 0; i < json.data.length; i++) {
 				const thisCard = json.data[i];
-				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior);
+				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
 				if (splitDFCs && hasReverseFace(thisCardObject)) {
 					let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);
 					frontFace.quantity = thisChunkOriginalNames[i].quantity;
