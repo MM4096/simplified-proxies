@@ -1,5 +1,5 @@
 import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
-import {applyTemplates, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg";
+import {applyTemplates, DUNGEONS, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg";
 
 export const maxDuration = 60;
 
@@ -217,7 +217,12 @@ export async function POST(request: Request) {
 
 				if (importTemplates) {
 					thisCardObject = applyTemplates(thisCardObject)
+
+					if (thisCardObject.card_name?.toLowerCase().includes("undercity")) {
+						returnedCards.push(DUNGEONS["initiative"]);
+					}
 				}
+
 				thisCardObject.quantity = thisChunkOriginalNames[i].quantity;
 				returnedCards.push(thisCardObject);
 			}

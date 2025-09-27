@@ -163,6 +163,49 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 	includeCredit?: boolean,
 	className?: string,
 }) {
+	const [front_face, back_face] = isolateFrontAndBackFaces(card);
+	if (card.card_template === MTGCardTemplate.ROOMS) {
+		front_face.card_template = MTGCardTemplate.NONE;
+		back_face.card_template = MTGCardTemplate.NONE;
+		return (<div className="double-card no-gap">
+			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+		</div>)
+	}
+
+	if (card.card_template === MTGCardTemplate.SPLIT_STANDARD) {
+		front_face.card_template = MTGCardTemplate.NONE;
+		return (<div className="double-card no-gap">
+			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+		</div>)
+	}
+
+	if (card.card_template === MTGCardTemplate.SPLIT_AFTERMATH) {
+		front_face.card_template = MTGCardTemplate.NONE;
+		return (<div className="double-card no-gap">
+			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id}/>
+			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+		</div>)
+	}
+
+	if (card.card_template === MTGCardTemplate.ADVENTURE) {
+		front_face.card_template = MTGCardTemplate.NONE;
+		back_face.card_template = MTGCardTemplate.NONE;
+		return <div className="double-card no-gap">
+			<MTGCardObject card={front_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}/>
+			<MTGCardObject card={back_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}/>
+		</div>
+	}
+
+	if (hasReverseFace(card)) {
+		return (<div className="double-card no-gap">
+			<MTGCardObject card={front_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}/>
+			<MTGCardObject card={back_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id} className="rotate-card-180"/>
+		</div>)
+	}
+
+
 	if (card.card_template === MTGCardTemplate.MANA_COUNTER) {
 		return <div className="card mtg-card" id={id} key={id}>
 			<div className="mana-counter">
@@ -263,42 +306,6 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 		return (<div className="double-card rotate-card-90">
 			{this_card}
 			{this_card}
-		</div>)
-	}
-
-
-	const [front_face, back_face] = isolateFrontAndBackFaces(card);
-	if (card.card_template === MTGCardTemplate.ROOMS) {
-		front_face.card_template = MTGCardTemplate.NONE;
-		back_face.card_template = MTGCardTemplate.NONE;
-		return (<div className="double-card no-gap">
-			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-		</div>)
-	}
-
-	if (card.card_template === MTGCardTemplate.SPLIT_STANDARD) {
-		front_face.card_template = MTGCardTemplate.NONE;
-		return (<div className="double-card no-gap">
-			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-		</div>)
-	}
-
-	if (card.card_template === MTGCardTemplate.SPLIT_AFTERMATH) {
-		front_face.card_template = MTGCardTemplate.NONE;
-		return (<div className="double-card no-gap">
-			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id}/>
-			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-		</div>)
-	}
-
-
-	if (hasReverseFace(card)) {
-
-		return (<div className="double-card no-gap">
-			<MTGCardObject card={front_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}/>
-			<MTGCardObject card={back_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id} className="rotate-card-180"/>
 		</div>)
 	}
 

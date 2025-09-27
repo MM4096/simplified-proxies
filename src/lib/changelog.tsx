@@ -10,6 +10,24 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-09-27",
+		version: "v1.6",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) Added Dungeons. These can only be imported by entering their respective names during import and enabling <i>Automatically apply templates</i>.</li>
+			</ul>
+		</>)
+	},
+	{
+		date: "2025-09-27",
+		version: "v1.5",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) Added several DFC templates such as <i>Aftermath</i>, <i>Fuse</i>, and <i>Rooms</i></li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2025-09-18",
 		version: "v1.4",
 		changes: (<>

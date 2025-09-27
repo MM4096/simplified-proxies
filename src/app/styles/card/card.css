@@ -46,6 +46,12 @@
 		margin-right: 0.01in;
 	}
 
+	.no-paragraph-break {
+		.paragraph-break {
+			display: none !important;
+		}
+	}
+
 	.paragraph-break {
 		display: block;
 		height: 0.05in;

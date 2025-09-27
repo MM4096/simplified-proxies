@@ -34,6 +34,7 @@ export enum MTGCardTemplate {
 	SAGA = "Saga",
 	LEVEL_UP = "Level Up",
 	ROOMS = "Rooms",
+	ADVENTURE = "Adventure / Omen"
 }
 
 export enum FaceType {
