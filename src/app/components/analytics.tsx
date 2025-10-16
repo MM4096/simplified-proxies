@@ -3,7 +3,7 @@
 import Script from "next/script";
 import {useCallback} from "react";
 
-export async function Analytics() {
+export function Analytics() {
 	return (<>
 		{
 			process.env.NODE_ENV === "production" && (

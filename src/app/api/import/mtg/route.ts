@@ -200,11 +200,10 @@ export async function POST(request: Request) {
 			const cardData = json["data"];
 
 			if (json["not_found"] && json["not_found"].length > 0) {
-				// TODO: make fuzzy calls to /cards/named to find the correct card
 				for (let i = 0; i < json["not_found"].length; i++) {
 					const thisName: string = json["not_found"][i]["name"];
 
-					// wait 100ms between requests to honor Scryfall's "rate limit"
+					// wait 100ms between requests to honor Scryfall's soft rate limit
 					await setTimeout(100)
 
 					const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;

@@ -30,7 +30,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [tempCard, setTempCard] = useState<Card>({});
 
-	const [activeTab, setActiveTab] = useState<"input" | "list" | "preview" | "options">("input");
+	const [activeTab, setActiveTab] = useState<"input" | "list" | "preview" | "options">("list");
 
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
 

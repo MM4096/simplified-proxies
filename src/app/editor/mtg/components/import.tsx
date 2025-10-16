@@ -84,15 +84,15 @@ export function ImportMTG({cards, setCardsAction}: {
 		}}>Import Cards
 		</button>
 		<dialog className="modal w-full" ref={dialogRef}>
-			<div className="modal-box min-w-[50vw] max-w-[75vw]">
+			<div className="modal-box min-w-[50vw] max-w-[100vw] md:max-w-[75vw] max-h-[90vh] overflow-y-auto">
 				<h3 className="font-bold text-xl">Import Cards</h3>
 
 				<div className="custom-divider"/>
 
 				<p>Paste a list of cards below. Card names must be exact (except symbols and capitalization) and must
 					match one of the following formats:</p>
-				<div className="flex flex-row w-full">
-					<div className="border p-2 w-max">
+				<div className="flex flex-col md:flex-row w-full">
+					<div className="border p-2 grow md:w-max">
 						<p>Plains</p>
 						<p>Deflecting Swat</p>
 						<p>Deflecting Swat</p>
@@ -100,14 +100,14 @@ export function ImportMTG({cards, setCardsAction}: {
 						<p>chandra flames fury</p>
 						<p>commit // memory</p>
 					</div>
-					<div className="border p-2 w-max">
+					<div className="border p-2 grow md:w-max">
 						<p>2 Plains</p>
 						<p>2 Deflecting Swat</p>
 						<p>4 sakura tribe elder</p>
 						<p>10 chandra flames fury</p>
 						<p>1 Commit</p>
 					</div>
-					<div className="border p-2 w-max">
+					<div className="border p-2 grow md:w-max">
 						<p>2x Plains</p>
 						<p>2x Deflecting Swat</p>
 						<p>4x sakura tribe elder</p>
@@ -133,59 +133,58 @@ export function ImportMTG({cards, setCardsAction}: {
 				</fieldset>
 				<br/>
 
-				<div className="collapse collapse-arrow bg-base-100 border-gray-500 border">
+				<div className="collapse collapse-arrow bg-base-100 border-gray-500 border h-max">
 					<input type="checkbox" />
 					<div className="collapse-title font-semibold">Additional Settings</div>
-					<div className="collapse-content flex flex-row">
+					<div className="collapse-content flex flex-col md:flex-row overflow-x-none">
 						<label className="label text-sm">
 							<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands} onChange={(e) => {
 								setImportBasicLands(e.target.checked);
 							}}/>
 							Import basic lands
-							<span className="tooltip tooltip-right">
+							<span className="tooltip tooltip-right invisible md:visible">
 								<span className="tooltip-content">If unchecked, any card who&apos;s name is exactly &quot;Plains&quot;, &quot;Mountain&quot;, &quot;Swamp&quot;, &quot;Forest&quot;, or &quot;Island&quot; will be skipped.</span>
 								<BiInfoCircle/>
 							</span>
 						</label>
 
-						<div className="divider divider-horizontal"/>
+						<div className="divider md:divider-horizontal"/>
 
 						<label className="label text-sm">
-							Reminder Text Behavior:
-							<select className="select select-sm" value={importReminderTextBehavior} onChange={(e) => {
+							<select className="select select-sm w-min" value={importReminderTextBehavior} onChange={(e) => {
 								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
 							}}>
-								<option value={ReminderTextBehavior.NORMAL}>Render as normal text</option>
+								<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
 								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
-								<option value={ReminderTextBehavior.HIDDEN}>Don&apos;t show</option>
+								<option value={ReminderTextBehavior.HIDDEN}>Don&apos;t import reminder text</option>
 							</select>
-							<span className="tooltip">
-								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets).</span>
+							<span className="tooltip invisible md:visible">
+								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets, like this).</span>
 								<BiInfoCircle/>
 							</span>
 						</label>
 
-						<div className="divider divider-horizontal"/>
+						<div className="divider md:divider-horizontal"/>
 
 						<label className="label text-sm">
 							<input type="checkbox" className="checkbox checkbox-sm" checked={importSplitDFCs} onChange={(e) => {
 								setImportSplitDFCs(e.target.checked);
 							}}/>
 							Split DFCs into separate cards
-							<span className="tooltip tooltip-right">
+							<span className="tooltip tooltip-right invisible md:visible">
 								<span className="tooltip-content">If checked, all DFCs will be imported as two cards instead of one.</span>
 								<BiInfoCircle/>
 							</span>
 						</label>
 
-						<div className="divider divider-horizontal"/>
+						<div className="divider md:divider-horizontal"/>
 
 						<label className="label text-sm">
 							<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates} onChange={(e) => {
 								setImportTemplates(e.target.checked);
 							}}/>
 							Automatically apply templates <ExperimentalBadge/>
-							<span className="tooltip tooltip-left">
+							<span className="tooltip tooltip-left invisible md:visible">
 								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
 								<BiInfoCircle/>
 							</span>

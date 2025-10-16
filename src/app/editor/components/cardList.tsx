@@ -1,5 +1,6 @@
 import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 import {Card} from "@/lib/card";
+import {BiTrash} from "react-icons/bi";
 
 export function CardList({cards, setCards, editingIndex, setEditingIndex, className, newCard}: {
 	cards: Card[];
@@ -16,7 +17,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 		</div>
 	)
 
-	return (<div className={`${className} card-list max-h-full overflow-y-auto`}>
+	return (<div className={`${className} card-list max-h-full h-full overflow-y-auto`}>
 		<h2 className="custom-divider">Card List</h2>
 		<div className="flex flex-col gap-2 overflow-y-auto">
 			{
@@ -33,7 +34,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 
 
 						<span className="text-xs mr-2">QTY:</span>
-						<input className="input input-sm w-[15ch]" type="number" value={card.quantity || 1}
+						<input className="input input-sm shrink !max-w-[10ch]" type="number" value={card.quantity || 1}
 							   onChange={(e) => {
 								   const value = parseInt(e.target.value);
 
@@ -47,10 +48,11 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 								   }
 							   }}/>
 
-						<button className="btn btn-sm hover:btn-error" onClick={async () => {
+						<button className="btn btn-sm m-0 hover:btn-error" onClick={async () => {
 							if (await confirmationPrompt("Are you sure?", "Are you sure you want to delete this card? This action is irreversible.", "No", "Yes"))
 								setCards(cards.filter((_, i) => i !== index));
-						}}>Remove
+						}}>
+							<BiTrash/>
 						</button>
 					</div>)
 				})
@@ -59,6 +61,11 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 				className={`border border-black rounded-xl btn ${(editingIndex === null || editingIndex < 0) && "bg-gray-300"}`}
 				onClick={newCard}>New Card
 			</button>
+
+			<div className="grow"/>
+			<i className="block md:hidden text-sm">
+				Looking to import cards? Press Menu then Import Cards.
+			</i>
 		</div>
 	</div>)
 }

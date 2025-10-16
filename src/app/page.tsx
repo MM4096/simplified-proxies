@@ -50,11 +50,14 @@ export default function Home() {
 
 		</div>
 
-		<div className="links-box">
+		<div className="links-box invisible md:visible">
 			<ChangelogComponent/>
 			<CreditsBox/>
 			<Link href="https://github.com/MM4096/simplified-proxies/issues" target="_blank" className="index-link"><BiBug/>Report Bugs</Link>
 			<Link href="https://github.com/mm4096/simplified-proxies" target="_blank" className="index-link github-link"><BiLogoGithub/>Github</Link>
+		</div>
+		<div className="links-box visible md:invisible">
+			<CreditsBox/>
 		</div>
 	</>);
 }
