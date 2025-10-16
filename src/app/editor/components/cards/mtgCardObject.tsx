@@ -199,6 +199,8 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 	}
 
 	if (hasReverseFace(card)) {
+		front_face.face_type = FaceType.FRONT;
+		back_face.face_type = FaceType.BACK;
 		return (<div className="double-card no-gap">
 			<MTGCardObject card={front_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}/>
 			<MTGCardObject card={back_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id} className="rotate-card-180"/>

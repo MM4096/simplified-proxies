@@ -1,7 +1,15 @@
 import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
 import {applyTemplates, DUNGEONS, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg";
+import {setTimeout} from "timers/promises";
 
 export const maxDuration = 60;
+
+const SCRYFALL_HEADERS = {
+	"Content-Type": "application/json",
+	"User-Agent": "SimplifiedProxies/1.0",
+	// "Accept": "application/json",
+};
+const QUANTITY_MESSAGE = "Make sure that no headers are included, and that quantities are consistent (all cards need to have a quantity, or NO cards have a quantity)"
 
 function handleReminderText(text: string, reminderTextBehavior: ReminderTextBehavior): string {
 	// regex gets all bracketed groups
@@ -72,10 +80,24 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 	return thisCard;
 }
 
+function collapseCardName(cardName: string): string {
+	return cardName.toLowerCase().replace(/[^a-zA-Z0-9_]/g, "");
+}
+
+async function fuzzyScryfall(cardName: string): Promise<unknown> {
+	const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${cardName}`, {
+		headers: SCRYFALL_HEADERS,
+		method: "GET",
+	});
+
+	return await response.json();
+}
+
 /**
  * Gets MTG Card data
  */
 export async function POST(request: Request) {
+	//region Convert Data
 	const body = await request.json();
 
 	if (!body.hasOwnProperty("cards")) {
@@ -131,12 +153,6 @@ export async function POST(request: Request) {
 
 		}
 
-		// dfc
-		const dfcParts = line.split("//");
-		if (dfcParts.length > 1) {
-			line = dfcParts[0];
-		}
-
 		// check for a basic land
 		if (!importBasicLands) {
 			const lowercase = line.toLowerCase();
@@ -148,60 +164,92 @@ export async function POST(request: Request) {
 
 		importCards.push({name: line, quantity: quantity});
 	}
+	//endregion
 
+	//region Chunkify
 	const chunks: Array<{ identifiers: object }> = [];
-	const originalNames: Array<{ name: string, quantity: number }>[] = [];
+	const originalRequest: Array<{ name: string, quantity: number }>[] = [];
+	const nameMap: Record<string, string> = {};
 	for (let i = 0; i < importCards.length; i += 75) {
 		const theseCards = importCards.slice(i, i + 75);
 		chunks.push({
 			identifiers: theseCards.map((card) => {
+				const parsedName = collapseCardName(card.name);
+				nameMap[parsedName] = card.name;
 				return {
-					name: card.name,
+					name: parsedName,
 				}
 			})
 		});
-		originalNames.push(theseCards);
+		originalRequest.push(theseCards);
 	}
-
+	//endregion
 
 	const returnedCards: MTGCard[] = [];
 	for (let i = 0; i < chunks.length; i++) {
 		const thisChunk = chunks[i];
 
 		const response = await fetch("https://api.scryfall.com/cards/collection", {
-			headers: {
-				"Content-Type": "application/json",
-			},
+			headers: SCRYFALL_HEADERS,
 			method: "POST",
 			body: JSON.stringify(thisChunk),
 		});
 
 		if (response.ok) {
 			const json = await response.json();
+			const cardData = json["data"];
 
 			if (json["not_found"] && json["not_found"].length > 0) {
+				// TODO: make fuzzy calls to /cards/named to find the correct card
+				for (let i = 0; i < json["not_found"].length; i++) {
+					const thisName: string = json["not_found"][i]["name"];
 
-				return new Response(JSON.stringify({
-					message: `Chunk ${i + 1} failed: Couldn't find cards: ${json["not_found"].slice(0, 5).map((i: {
-						name: string
-					}) => i.name).join(", ")}\nMake sure that no headers are included, and that quantities are consistent (all cards need to have a quantity, or NO cards have a quantity)`
-				}), {
-					status: 400,
-				});
+					// wait 100ms between requests to honor Scryfall's "rate limit"
+					await setTimeout(100)
+
+					const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;
+					if (fuzzyResponse["object"] === "error") {
+						if (fuzzyResponse.hasOwnProperty("type") && fuzzyResponse.type === "ambiguous") {
+							return new Response(JSON.stringify({
+								message: `Could not find card: ${thisName} (ambiguous request)\n${QUANTITY_MESSAGE}`
+							}), {status: 400,})
+						}
+
+						return new Response(JSON.stringify({
+							message: `Could not find card: ${thisName} (card not found)\n${QUANTITY_MESSAGE}`
+						}), {status: 400,})
+					}
+					cardData.push(fuzzyResponse);
+				}
 
 			}
 
-			const thisChunkOriginalNames = originalNames[i];
-			for (let i = 0; i < json.data.length; i++) {
-				const thisCard = json.data[i];
+			const thisChunkOriginalNames = originalRequest[i];
+			for (let i = 0; i < cardData.length; i++) {
+				const thisCard = cardData[i];
+
+				// get original quantity
+				let originalQuantity = 1;
+				const thisCollapsedName = collapseCardName(thisCard["name"] as string);
+				if (nameMap.hasOwnProperty(thisCollapsedName)) {
+					const mappedName = nameMap[thisCollapsedName];
+					for (let j = 0; j < thisChunkOriginalNames.length; j++) {
+						if (thisChunkOriginalNames[j].name === mappedName) {
+							originalQuantity = thisChunkOriginalNames[j].quantity;
+							break;
+						}
+					}
+				}
+
 				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
+
 				if (splitDFCs && hasReverseFace(thisCardObject)) {
 					let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);
-					frontFace.quantity = thisChunkOriginalNames[i].quantity;
+					frontFace.quantity = originalQuantity;
 					frontFace.notes = `Front Face, flips into ${thisCardObject.reverse_card_name}`;
 					frontFace.face_type = FaceType.FRONT;
 
-					backFace.quantity = thisChunkOriginalNames[i].quantity;
+					backFace.quantity = originalQuantity;
 					backFace.notes = `Back Face, flips into ${thisCardObject.card_name}`;
 					backFace.face_type = FaceType.BACK;
 
@@ -223,7 +271,7 @@ export async function POST(request: Request) {
 					}
 				}
 
-				thisCardObject.quantity = thisChunkOriginalNames[i].quantity;
+				thisCardObject.quantity = originalQuantity;
 				returnedCards.push(thisCardObject);
 			}
 		} else {

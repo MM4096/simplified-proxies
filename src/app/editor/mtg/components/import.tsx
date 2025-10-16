@@ -5,6 +5,7 @@ import {MTGCard} from "@/lib/card";
 import {ReminderTextBehavior} from "@/lib/mtg";
 import {ExperimentalBadge} from "@/app/components/experimental";
 import {BiInfoCircle} from "react-icons/bi";
+import {useUmamiEvent} from "@/app/components/analytics";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -23,6 +24,8 @@ export function ImportMTG({cards, setCardsAction}: {
 	const [importTemplates, setImportTemplates] = useState<boolean>(false);
 	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
 	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
+
+	const umamiTracker = useUmamiEvent();
 
 	async function importCards() {
 		setDisableButtons(true);
@@ -62,6 +65,8 @@ export function ImportMTG({cards, setCardsAction}: {
 				const json = await response.json();
 				setImportError(json["message"]);
 			}
+
+			umamiTracker("mtg-CardsImported", {success: response.ok});
 
 		}).catch((e) => {
 			console.log(e);
@@ -110,8 +115,7 @@ export function ImportMTG({cards, setCardsAction}: {
 						<p>1x Memory</p>
 					</div>
 				</div>
-				<p className="text-xs">DFCs should either be entered with a double slash (//) or the name of one face (Commit//Memory as either Commit or Memory)<br/>
-				All cards must either have no quantity given, or all cards must have quantities.<br/>
+				<p className="text-xs">All cards must either have no quantity given, or all cards must have quantities.<br/>
 				Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
 
 				<fieldset className="fieldset">
