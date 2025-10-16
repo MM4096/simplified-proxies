@@ -10,6 +10,15 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-10-03",
+		version: "v1.6.1",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) DFCs no longer require a double slash between front and back faces.<br/><i>(i.e. typing <b>Commit memory</b> will import <b>Commit // Memory</b>)</i></li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2025-09-27",
 		version: "v1.6",
 		changes: (<>

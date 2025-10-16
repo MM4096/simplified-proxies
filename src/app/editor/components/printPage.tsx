@@ -6,6 +6,7 @@ import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card} from "@/lib/card";
+import {useUmamiEvent} from "@/app/components/analytics";
 
 /**
  * A generic template for all editor pages
@@ -23,6 +24,8 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [useGap, setUseGap] = useState<boolean>(true);
 	const [roundCorners, setRoundCorners] = useState<boolean>(true);
 	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
+
+	const umamiTracker = useUmamiEvent();
 
 	function getProjectNames() {
 		let retProjects: string[] = [];
@@ -70,6 +73,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 				<Link href={`/editor/${gameId}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
+					umamiTracker(`${gameId}-PrintCards`);
 				}}>Print
 				</button>
 				<div className="flex flex-row gap-2 items-center ml-3">
