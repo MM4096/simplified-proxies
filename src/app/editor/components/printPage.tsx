@@ -72,8 +72,8 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 			<div className="flex flex-row gap-2 items-center">
 				<Link href={`/editor/${gameId}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
-					window.print();
 					umamiTracker(`${gameId}-PrintCards`);
+					window.print();
 				}}>Print
 				</button>
 				<div className="flex flex-row gap-2 items-center ml-3">

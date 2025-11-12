@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tcgdex/sdk": "^2.7.1",
     "daisyui": "^5.0.43",
     "isomorphic-dompurify": "^2.26.0",
     "next": "^15.4.7",

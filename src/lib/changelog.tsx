@@ -10,6 +10,18 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-11-12",
+		version: "v1.7",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(PTCG) Importing is now handled on the server, reducing load for you!</li>
+				<li>(PTCG) Optimized import system so it no longer takes several minutes to import a deck.</li>
+			</ul>
+			<br/>
+			<p><b>KNOWN BUG: </b>Importing Technical Machines have some hilarious results.</p>
+		</>)
+	},
+	{
 		date: "2025-10-03",
 		version: "v1.6.1",
 		changes: (<>
