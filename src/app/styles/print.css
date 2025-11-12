@@ -44,11 +44,23 @@ body .double-card {
 	border-radius: 0 !important;
 }
 
-.card-print.shrink-cards > .card {
-	transform: scale(0.9);
+.card-print.shrink-cards > .card,
+.card-print.shrink-cards > .double-card
+{
+	transform-origin: top left;
+	scale: 0.9;
+	/*border: 1px solid black;*/
+}
+
+.card-print.shrink-cards > .double-card > .card {
+	width: calc(var(--card-width) * 1);
+	/*scale: 0.9;*/
+	/*padding: 0;*/
+	/*margin: 0;*/
 }
 
 .card-print.shrink-cards {
+	/*scale: 0.9;*/
 	grid-template-columns: repeat(auto-fill, calc(var(--card-width) * 0.9));
 	grid-auto-rows: calc(var(--card-height) * 0.9);
 }

@@ -39,21 +39,22 @@ export function ChangelogComponent() {
 
 		<dialog className="modal" ref={dialogRef}>
 			<div className="modal-box flex flex-col min-h-9/10 max-h-9/10">
-				<div className="flex flex-col gap-2 grow overflow-y-auto">
+				<div className="flex flex-col gap-2 flex-1 overflow-y-auto min-h-0">
 					{
 						changelog.map((item, index) => {
-							return (<div tabIndex={0}
-										 className={`collapse collapse-plus bg-base-100 border-base-300 border`}
-										 key={index}>
-								<div className="collapse-title font-bold flex flex-row gap-2 items-center">{item.version}
-									{
-										compareChangelogVersion(item.version, lastSavedVersion) >= 1 && (<span className="badge badge-xs badge-primary">New</span>)
-									}
-								</div>
-								<div className="collapse-content text-sm">
-									{item.changes}
-								</div>
-							</div>)
+							return (
+								<div tabIndex={0}
+									 className={`collapse collapse-plus bg-base-100 border-base-300 border shrink-0`}
+									 key={index}>
+									<div className="collapse-title font-bold flex flex-row gap-2 items-center">{item.version}
+										{
+											compareChangelogVersion(item.version, lastSavedVersion) >= 1 && (<span className="badge badge-xs badge-primary">New</span>)
+										}
+									</div>
+									<div className="collapse-content text-sm">
+										{item.changes}
+									</div>
+								</div>)
 						})
 					}
 				</div>
