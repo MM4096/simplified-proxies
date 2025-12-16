@@ -10,6 +10,15 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2025-12-16",
+		version: "v1.7.1",
+		changes: (<>
+			<ul className="list-disc">
+				<li>(MTG) Fixed a bug that causes DFCs to be cropped when shrinked while printing.</li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2025-11-12",
 		version: "v1.7",
 		changes: (<>

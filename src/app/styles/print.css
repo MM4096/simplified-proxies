@@ -49,14 +49,10 @@ body .double-card {
 {
 	transform-origin: top left;
 	scale: 0.9;
-	/*border: 1px solid black;*/
 }
 
-.card-print.shrink-cards > .double-card > .card {
-	width: calc(var(--card-width) * 1);
-	/*scale: 0.9;*/
-	/*padding: 0;*/
-	/*margin: 0;*/
+.card-print.shrink-cards > .double-card {
+	width: max-content;
 }
 
 .card-print.shrink-cards {
