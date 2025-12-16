@@ -21,7 +21,8 @@
 /*  }*/
 /*}*/
 
-.btn {
+.btn,
+.select {
 	@apply px-4 py-2 rounded-md;
 }
 

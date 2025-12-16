@@ -133,10 +133,10 @@ export function ImportMTG({cards, setCardsAction}: {
 				</fieldset>
 				<br/>
 
-				<div className="collapse collapse-arrow bg-base-100 border-gray-500 border h-max">
-					<input type="checkbox" />
-					<div className="collapse-title font-semibold">Additional Settings</div>
-					<div className="collapse-content flex flex-col md:flex-row overflow-x-none">
+				<div className="collapse bg-base-100 border-gray-500 border h-max">
+					<input type="checkbox" defaultChecked={true}/>
+					<div className="collapse-title font-semibold pr-8">Additional Settings</div>
+					<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap">
 						<label className="label text-sm">
 							<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands} onChange={(e) => {
 								setImportBasicLands(e.target.checked);
