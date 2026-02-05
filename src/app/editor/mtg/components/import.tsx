@@ -175,32 +175,32 @@ export function ImportMTG({cards, setCardsAction}: {
 							   }}/>
 					</div>
 
-					<label className="tab">
-						<input type="radio" name="mtg-import-type"
-							   id="moxfield-import"
-							   onChange={() => {
-								   setImportType("moxfield");
-							   }}/>
+					{/*<label className="tab">*/}
+					{/*	<input type="radio" name="mtg-import-type"*/}
+					{/*		   id="moxfield-import"*/}
+					{/*		   onChange={() => {*/}
+					{/*			   setImportType("moxfield");*/}
+					{/*		   }}/>*/}
 
-						<span>Import from Moxfield <NewBadge/></span>
-					</label>
-					<div className="tab-content border-black p-3">
-						<p>Paste in your Moxfield deck URL here:</p>
-						<input className="input w-full" type="url"
-							   placeholder="https://moxfield.com/decks/1234567890/my-first-deck" value={importText}
-							   onChange={(e) => {
-								   setImportText(e.target.value);
-							   }}/>
-						<br/><br/>
-						<label className="label label-sm text-sm">
-						<input type="checkbox" className="checkbox checkbox-sm" checked={moxfieldImportMaybeboard}
-							   onChange={(e) => {
-								   setMoxfieldImportMaybeboard(e.target.checked);
-							   }}
-						/>
-							<span>Import Considering/Maybeboard</span>
-						</label>
-					</div>
+					{/*	<span>Import from Moxfield <NewBadge/></span>*/}
+					{/*</label>*/}
+					{/*<div className="tab-content border-black p-3">*/}
+					{/*	<p>Paste in your Moxfield deck URL here:</p>*/}
+					{/*	<input className="input w-full" type="url"*/}
+					{/*		   placeholder="https://moxfield.com/decks/1234567890/my-first-deck" value={importText}*/}
+					{/*		   onChange={(e) => {*/}
+					{/*			   setImportText(e.target.value);*/}
+					{/*		   }}/>*/}
+					{/*	<br/><br/>*/}
+					{/*	<label className="label label-sm text-sm">*/}
+					{/*	<input type="checkbox" className="checkbox checkbox-sm" checked={moxfieldImportMaybeboard}*/}
+					{/*		   onChange={(e) => {*/}
+					{/*			   setMoxfieldImportMaybeboard(e.target.checked);*/}
+					{/*		   }}*/}
+					{/*	/>*/}
+					{/*		<span>Import Considering/Maybeboard</span>*/}
+					{/*	</label>*/}
+					{/*</div>*/}
 
 				</div>
 

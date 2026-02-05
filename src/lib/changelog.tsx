@@ -15,7 +15,7 @@ export const changelog: Changelog = [
 		version: "v1.8",
 		changes: (<>
 			<ul className="list-disc">
-				<li><MTGBadge/> Added options for importing directly from Archidekt and Moxfield!</li>
+				<li><MTGBadge/> Added options for importing directly from Archidekt!</li>
 			</ul>
 		</>)
 	},
