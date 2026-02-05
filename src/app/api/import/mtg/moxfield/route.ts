@@ -1,0 +1,59 @@
+import {NextRequest} from "next/server";
+
+export async function POST(request: NextRequest) {
+	const body = await request.json();
+	const searchParams = request.nextUrl.searchParams;
+	if (!searchParams.has("url") || searchParams.get("url") == null) {
+		return new Response(JSON.stringify({
+			message: "Missing Moxfield URL.",
+		}), {status: 400})
+	}
+
+	const importMaybeboard = searchParams.get("importMaybeboard") == "true";
+
+	const moxfieldURL = searchParams.get("url")!;
+	const url: URL = new URL(moxfieldURL);
+	const deckId = url.pathname.split("/")[2];
+	if (deckId == null) {
+		return new Response(JSON.stringify({
+			message: "Invalid Moxfield URL.",
+		}), {status: 400})
+	}
+
+	console.log(`https://api2.moxfield.com/v3/decks/all/${deckId}`)
+	const moxfieldResponse = await fetch(`https://api2.moxfield.com/v3/decks/all/${deckId}`);
+	if (!moxfieldResponse.ok) {
+		if (moxfieldResponse.status === 404) {
+			return new Response(JSON.stringify({
+				message: "Deck not found. Please make sure your deck is set to \"Public\" or \"Unlisted\", and the URL is correct.",
+			}), {status: 404})
+		}
+		return new Response(JSON.stringify({
+			message: `Error fetching deck: ${moxfieldResponse.statusText}`,
+		}), {status: 500});
+	}
+
+	const deck = await moxfieldResponse.json();
+	const boards = deck["boards"];
+
+	let import_cards: string[] = [];
+	for (const [key, value] of Object.entries(boards)) {
+		if (key == "maybeboard" && !importMaybeboard) {
+			continue;
+		}
+
+		for (const [_, card] of Object.entries((value as Record<string, unknown>)["cards"] as Record<string, any>)) {
+			const quantity = card["quantity"];
+			const name = (card["card"])["name"];
+			import_cards.push(`${quantity} ${name}`);
+		}
+	}
+	body["cards"] = import_cards.join("\n");
+
+
+	const origin = request.nextUrl.origin;
+	return fetch(`${origin}/api/import/mtg`, {
+		method: "POST",
+		body: JSON.stringify(body)
+	});
+}
