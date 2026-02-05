@@ -1,0 +1,48 @@
+[
+	{
+		"card_name": "Deflecting Swat",
+		"mana_cost": "{2}{R}",
+		"type_line": "Instant",
+		"card_text": "If you control a commander, you may cast this spell without paying its mana cost.\\nYou may choose new targets for target spell or ability.",
+		"power": "",
+		"toughness": "",
+		"quantity": 1
+	},
+	{
+		"card_name": "Explore",
+		"mana_cost": "{1}{G}",
+		"type_line": "Sorcery",
+		"card_text": "You may play an additional land this turn.\\nDraw a card.",
+		"power": "",
+		"toughness": "",
+		"quantity": 1
+	},
+	{
+		"card_name": "Jace, the Perfected Mind",
+		"mana_cost": "{2}{U}{U/P}",
+		"type_line": "Legendary Planeswalker — Jace",
+		"card_text": "Compleated <i>({U/P} can be paid with {U} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)</i>\\n+1: Until your next turn, up to one target creature gets -3/-0.\\n−2: Target player mills three cards. Then if a graveyard has twenty or more cards in it, you draw three cards. Otherwise, you draw a card.\\n−X: Target player mills three times X cards.",
+		"power": "5",
+		"toughness": "",
+		"card_template": "Planeswalker",
+		"quantity": 1
+	},
+	{
+		"card_name": "Sakura-Tribe Elder",
+		"mana_cost": "{1}{G}",
+		"type_line": "Creature — Snake Shaman",
+		"card_text": "Sacrifice this creature: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.",
+		"power": "1",
+		"toughness": "1",
+		"quantity": 1
+	},
+	{
+		"card_name": "Sol Ring",
+		"mana_cost": "{1}",
+		"type_line": "Artifact",
+		"card_text": "{T}: Add {C}{C}.",
+		"power": "",
+		"toughness": "",
+		"quantity": 1
+	}
+]

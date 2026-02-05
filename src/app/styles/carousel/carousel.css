@@ -1,7 +1,5 @@
 .carousel-container {
 	display: grid;
-	/*grid-template-columns: repeat(3, 1fr);*/
-	/*grid-template-rows: repeat(3, 1fr);*/
 	grid-row-gap: 0;
 	grid-column-gap: 0;
 	grid-template-columns: 1fr;
@@ -9,7 +7,9 @@
 }
 
 .carousel-item {
-	width: 100%;
+	width: 2.5in;
+	height: 3.5in;
+	min-width: 2.5in;
 	margin: auto;
 	display: block;
 	grid-area: 1/1/2/2;

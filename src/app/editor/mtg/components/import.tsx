@@ -3,9 +3,10 @@
 import {useRef, useState} from "react";
 import {MTGCard} from "@/lib/card";
 import {ReminderTextBehavior} from "@/lib/mtg";
-import {ExperimentalBadge} from "@/app/components/experimental";
+import {ExperimentalBadge} from "@/app/components/tags/experimental";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
+import {NewBadge} from "@/app/components/tags/new";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -21,7 +22,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 	const [importBasicLands, setImportBasicLands] = useState<boolean>(true);
 	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.ITALIC);
-	const [importTemplates, setImportTemplates] = useState<boolean>(false);
+	const [importTemplates, setImportTemplates] = useState<boolean>(true);
 	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
 	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
 
@@ -156,7 +157,7 @@ export function ImportMTG({cards, setCardsAction}: {
 							}}>
 								<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
 								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
-								<option value={ReminderTextBehavior.HIDDEN}>Don&apos;t import reminder text</option>
+								<option value={ReminderTextBehavior.HIDDEN}>Exclude reminder text</option>
 							</select>
 							<span className="tooltip ">
 								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets, like this).</span>
@@ -183,7 +184,7 @@ export function ImportMTG({cards, setCardsAction}: {
 							<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates} onChange={(e) => {
 								setImportTemplates(e.target.checked);
 							}}/>
-							Automatically apply templates <ExperimentalBadge/>
+							Automatically apply templates
 							<span className="tooltip tooltip-left ">
 								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
 								<BiInfoCircle/>

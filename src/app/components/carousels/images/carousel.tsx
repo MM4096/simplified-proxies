@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import "../styles/carousel/carousel.css"
+import "../../../styles/carousel/carousel.css"
 
 import Image from "next/image";
 

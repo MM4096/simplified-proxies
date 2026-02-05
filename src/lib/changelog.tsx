@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import {ExperimentalBadge} from "@/app/components/experimental";
+import {ExperimentalBadge} from "@/app/components/tags/experimental";
 
 export type ChangelogEntry = {
 	date: string,

@@ -6,7 +6,7 @@ import {ReactNode} from "react";
 import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {getEnumKeys} from "@/lib/enum";
 import {BiInfoCircle} from "react-icons/bi";
-import {ExperimentalBadge} from "@/app/components/experimental";
+import {ExperimentalBadge} from "@/app/components/tags/experimental";
 import {MTGCard, MTGCardTemplate} from "@/lib/card";
 
 export default function MTGEditorPage() {
@@ -43,9 +43,9 @@ export default function MTGEditorPage() {
 									filling
 									out &apos;Power&apos; will work.</p>
 
-								<div className="collapse bg-base-100 border flex-none">
+								<div className="collapse bg-base-100 border flex-none collapse-arrow">
 									<input type="checkbox"/>
-									<div className="collapse-title">Dual-Faced Cards <p className="text-xs">(click to expand)</p></div>
+									<div className="collapse-title">Dual-Faced Cards</div>
 									<div className="collapse-content">
 										<MTGInput card={card} valKey="reverse_card_name" setValue={onChange}
 												  title="Name"
@@ -94,7 +94,6 @@ export default function MTGEditorPage() {
 												</div>
 												<BiInfoCircle/>
 											</div>
-											<ExperimentalBadge/>
 										</div>
 										<select className="select"
 												value={(card as MTGCard).card_template || MTGCardTemplate.NONE}

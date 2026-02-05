@@ -45,8 +45,7 @@ export function convertStringToIconObject(inputString: string | null, game: "mtg
 
 	let codes: string = inputString;
 	// add custom paragraph breaks
-	codes = codes.split("\n").join(LINEBREAK);
-
+	codes = codes.replaceAll("\r\n", "\n").replaceAll("\\n", "\n").replaceAll("\n", LINEBREAK);
 	// make all items unique
 	const set = new Set(matches);
 	matches = [...set];
