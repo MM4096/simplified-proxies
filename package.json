@@ -11,6 +11,7 @@
   "dependencies": {
     "daisyui": "^5.5.14",
     "isomorphic-dompurify": "^2.26.0",
+    "moxfield-api": "^1.0.2",
     "next": "^16.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

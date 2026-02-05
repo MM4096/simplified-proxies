@@ -204,13 +204,6 @@ export function ImportMTG({cards, setCardsAction}: {
 
 				</div>
 
-
-				{
-					importMessage !== "" && (<label className="label">{importMessage}</label>)
-				}
-				{
-					importError !== "" && (<label className="label text-error whitespace-pre">{importError}</label>)
-				}
 				<br/>
 
 				<div className="collapse bg-base-100 border-gray-500 border h-max">
@@ -286,7 +279,14 @@ export function ImportMTG({cards, setCardsAction}: {
 					Overwrite existing cards
 				</label>
 
-				<br/><br/>
+				<br/>
+
+				{
+					importMessage !== "" && (<label className="label">{importMessage}</label>)
+				}
+				{
+					importError !== "" && (<label className="label text-error whitespace-pre">{importError}</label>)
+				}
 
 				<div className="flex flex-row gap-2 w-full">
 					<button className="btn btn-secondary grow" onClick={() => {

@@ -1,5 +1,6 @@
 import {ReactNode} from "react";
 import {ExperimentalBadge} from "@/app/components/tags/experimental";
+import {MTGBadge} from "@/app/components/tags/games/mtg";
 
 export type ChangelogEntry = {
 	date: string,
@@ -9,6 +10,15 @@ export type ChangelogEntry = {
 export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
+	{
+		date: "2026-02-06",
+		version: "v1.8",
+		changes: (<>
+			<ul className="list-disc">
+				<li><MTGBadge/> Added options for importing directly from Archidekt and Moxfield!</li>
+			</ul>
+		</>)
+	},
 	{
 		date: "2025-12-16",
 		version: "v1.7.1",
