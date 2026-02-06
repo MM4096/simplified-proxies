@@ -1,6 +1,7 @@
 import {ReactNode} from "react";
 import {ExperimentalBadge} from "@/app/components/tags/experimental";
 import {MTGBadge} from "@/app/components/tags/games/mtg";
+import {PTCGBadge} from "@/app/components/tags/games/ptcg";
 
 export type ChangelogEntry = {
 	date: string,
@@ -16,6 +17,7 @@ export const changelog: Changelog = [
 		changes: (<>
 			<ul className="list-disc">
 				<li><MTGBadge/> Added options for importing directly from Archidekt!</li>
+				<li><PTCGBadge/> Free costs now use the correct icon</li>
 			</ul>
 		</>)
 	},

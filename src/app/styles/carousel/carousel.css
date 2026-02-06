@@ -7,12 +7,19 @@
 }
 
 .carousel-item {
-	min-width: 2.5in;
 	margin: auto;
 	display: block;
-	grid-area: 1/1/2/2;
+	grid-column-start: 1;
+	grid-row-start: 1;
+	grid-column-end: 2;
+	grid-row-end: 2;
 	transition: opacity 0.5s ease-in-out;
 	opacity: 0;
+}
+
+.carousel-item > .mtg-card {
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .active {
