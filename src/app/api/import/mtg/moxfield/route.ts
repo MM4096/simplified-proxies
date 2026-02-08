@@ -1,5 +1,6 @@
 import {NextRequest} from "next/server";
 import {awaitCooldown} from "@/lib/redis";
+import {doScryfallSearch} from "@/lib/mtg/scryfallFetch";
 
 export const maxDuration = 60;
 
@@ -65,10 +66,5 @@ export async function POST(request: NextRequest) {
 	}
 	body["cards"] = import_cards.join("\n");
 
-
-	const origin = request.nextUrl.origin;
-	return fetch(`${origin}/api/import/mtg`, {
-		method: "POST",
-		body: JSON.stringify(body)
-	});
+	return await doScryfallSearch(body);
 }
