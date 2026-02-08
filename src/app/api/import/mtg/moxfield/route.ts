@@ -25,10 +25,14 @@ export async function POST(request: NextRequest) {
 	await awaitCooldown("moxfield-api-rate-limit", 2000);
 
 	const moxfieldResponse = await fetch(`https://api2.moxfield.com/v3/decks/all/${deckId}`, {
+		cache: "no-store",
 		headers: {
 			"User-Agent": process.env.MOXFIELD_USER_AGENT as string,
-		}
+		},
 	});
+
+	const raw_data = await moxfieldResponse.text();
+	console.log(raw_data);
 
 	if (!moxfieldResponse.ok) {
 		if (moxfieldResponse.status === 404) {
