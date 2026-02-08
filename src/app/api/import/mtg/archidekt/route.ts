@@ -1,5 +1,5 @@
 import {NextRequest} from "next/server";
-import {doScryfallSearch} from "@/lib/mtg/scryfallFetch";
+import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
 
 export async function POST(request: NextRequest) {
 	const body = await request.json();

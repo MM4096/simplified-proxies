@@ -1,4 +1,4 @@
-import {doScryfallSearch} from "@/lib/mtg/scryfallFetch";
+import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
 
 export const maxDuration = 60;
 

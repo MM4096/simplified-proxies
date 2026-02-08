@@ -1,6 +1,6 @@
 import {NextRequest} from "next/server";
 import {awaitCooldown} from "@/lib/redis";
-import {doScryfallSearch} from "@/lib/mtg/scryfallFetch";
+import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
 
 export const maxDuration = 60;
 
