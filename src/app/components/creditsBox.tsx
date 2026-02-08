@@ -33,9 +33,11 @@ export function CreditsBox() {
 						The &quot;Import Cards&quot; feature uses the Scryfall API, and the colored mana icons are from
 						Scryfall as well. (<Link href="https://scryfall.com" className="link">scryfall.com</Link>).
 						<br/><br/>
+						The &quot;Import Cards with Archidekt&quot; feature is powered by <Link href="https://archidekt.com" className="link" target="_blank">Archidekt</Link>.
+						<br/><br/>
 						The black and white mana icons are colored mana icons modified by mm4096.
 						<br/><br/>
-						<small>Scryfall and Wizards of the Coast do not produce or endorse Simplified Proxies in any
+						<small>Archidekt, Scryfall and Wizards of the Coast do not produce or endorse Simplified Proxies in any
 							way.</small>
 					</div>
 				</div>
@@ -53,11 +55,9 @@ export function CreditsBox() {
 															height={32} alt="{n}" className="symbol"/>) Energy symbol is
 						created by mm4096.
 						<br/>
-						The &quot;Import Cards&quot; feature uses the Pokemon TCG API. (<Link
-						href="https://pokemontcg.io/" className="link">pokemontcg.io/</Link>).
-						<br/>
 						All Pokemon cards are under the copyright of The Pokemon Company.
-						<small>Pokemon TCG API, The Pokemon Company and Nintendo do not produce or endorse Simplified
+						<br/><br/>
+						<small>The Pokemon Company and Nintendo do not produce or endorse Simplified
 							Proxies in any
 							way.</small>
 					</div>

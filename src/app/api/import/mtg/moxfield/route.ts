@@ -1,5 +1,5 @@
 import {NextRequest} from "next/server";
-import MoxfieldApi from "moxfield-api";
+import {awaitCooldown} from "@/lib/redis";
 
 export async function POST(request: NextRequest) {
 	const body = await request.json();
@@ -13,39 +13,37 @@ export async function POST(request: NextRequest) {
 	const importMaybeboard = searchParams.get("importMaybeboard") == "true";
 
 	const moxfieldURL = searchParams.get("url")!;
-	// const url: URL = new URL(moxfieldURL);
-	// const deckId = url.pathname.split("/")[2];
-	// if (deckId == null) {
-	// 	return new Response(JSON.stringify({
-	// 		message: "Invalid Moxfield URL.",
-	// 	}), {status: 400})
-	// }
-	//
-	// console.log(`https://api2.moxfield.com/v3/decks/all/${deckId}`)
-	// const moxfieldResponse = await fetch(`https://api2.moxfield.com/v3/decks/all/${deckId}`);
-	// if (!moxfieldResponse.ok) {
-	// 	if (moxfieldResponse.status === 404) {
-	// 		return new Response(JSON.stringify({
-	// 			message: "Deck not found. Please make sure your deck is set to \"Public\" or \"Unlisted\", and the URL is correct.",
-	// 		}), {status: 404})
-	// 	}
-	// 	return new Response(JSON.stringify({
-	// 		message: `Error fetching deck: ${moxfieldResponse.statusText}`,
-	// 	}), {status: 500});
-	// }
-
-	let decklist;
-	const moxfield = new MoxfieldApi();
-	try {
-		decklist = await moxfield.deckList.findById(moxfieldURL);
-	}
-	catch {
+	const url: URL = new URL(moxfieldURL);
+	const deckId = url.pathname.split("/")[2];
+	if (deckId == null) {
 		return new Response(JSON.stringify({
-			message: `Error fetching deck. If this error persists, please use \"Import from List\".`,
+			message: "Invalid Moxfield URL.",
+		}), {status: 400})
+	}
+
+	// honor Moxfield's one api call per second rate limit
+	await awaitCooldown("moxfield-api-rate-limit", 2000);
+
+	const moxfieldResponse = await fetch(`https://api2.moxfield.com/v3/decks/all/${deckId}`, {
+		headers: {
+			"User-Agent": process.env.MOXFIELD_USER_AGENT as string,
+		}
+	});
+
+	if (!moxfieldResponse.ok) {
+		if (moxfieldResponse.status === 404) {
+			return new Response(JSON.stringify({
+				message: "Deck not found. Please make sure your deck is set to \"Public\" or \"Unlisted\", and the URL is correct.",
+			}), {status: 404})
+		}
+		return new Response(JSON.stringify({
+			message: `Error fetching deck: ${moxfieldResponse.statusText}`,
 		}), {status: 500});
 	}
 
-	const boards = decklist.boards;
+	const decklist = await moxfieldResponse.json();
+
+	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
 	let import_cards: string[] = [];
 	for (const [key, value] of Object.entries(boards)) {
