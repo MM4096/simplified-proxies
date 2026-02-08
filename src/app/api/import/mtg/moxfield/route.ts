@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 		}), {status: 500});
 	}
 
-	const decklist = await moxfieldResponse.json();
+	const decklist = JSON.parse(raw_data) as Record<string, unknown>;
 
 	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
