@@ -1,6 +1,8 @@
 import {NextRequest} from "next/server";
 import {awaitCooldown} from "@/lib/redis";
 
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
 	const body = await request.json();
 	const searchParams = request.nextUrl.searchParams;
@@ -31,9 +33,6 @@ export async function POST(request: NextRequest) {
 		},
 	});
 
-	const raw_data = await moxfieldResponse.text();
-	console.log(raw_data);
-
 	if (!moxfieldResponse.ok) {
 		if (moxfieldResponse.status === 404) {
 			return new Response(JSON.stringify({
@@ -45,7 +44,7 @@ export async function POST(request: NextRequest) {
 		}), {status: 500});
 	}
 
-	const decklist = JSON.parse(raw_data) as Record<string, unknown>;
+	const decklist = await moxfieldResponse.json() as Record<string, unknown>;
 
 	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
