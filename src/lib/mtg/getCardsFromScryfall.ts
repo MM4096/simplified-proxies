@@ -1,6 +1,6 @@
 import {setTimeout} from "node:timers/promises";
 import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
-import {applyTemplates, DUNGEONS, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg/mtg";
+import {applyTemplates, DUNGEONS, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 
 //region Fetch cards from Scryfall
 const SCRYFALL_HEADERS = {
