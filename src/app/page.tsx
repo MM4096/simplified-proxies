@@ -18,13 +18,13 @@ export default function Home() {
 							  paths: ["deflecting-swat", "explore", "jace-the-perfected-mind", "sakura-tribe-elder", "sol-ring"],
 							  suffix: ".png",
 						  }} className="w-1/3"/>
-				<Carousel time={3000}
-						  standardPaths={{
-							  prefix: "/images/index/carousel/mtg/proxy",
-							  paths: ["deflecting-swat", "explore", "jace-the-perfected-mind", "sakura-tribe-elder", "sol-ring"],
-							  suffix: ".png",
-						  }} className="w-1/3"/>
-				{/*<CardCarousel jsonPath="public/data/index/mtg-carousel.json" time={3000} gameId="mtg" className="w-1/3"/>*/}
+				{/*<Carousel time={3000}*/}
+				{/*		  standardPaths={{*/}
+				{/*			  prefix: "/images/index/carousel/mtg/proxy",*/}
+				{/*			  paths: ["deflecting-swat", "explore", "jace-the-perfected-mind", "sakura-tribe-elder", "sol-ring"],*/}
+				{/*			  suffix: ".png",*/}
+				{/*		  }} className="w-1/3"/>*/}
+				<CardCarousel jsonPath="public/data/index/mtg-carousel.json" time={3000} gameId="mtg" className="w-1/3"/>
 			</div>
 
 			<div className="flex flex-col items-center h-full justify-center text-center child-w-full gap-2 index-contents">

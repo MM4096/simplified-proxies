@@ -64,10 +64,7 @@ export function convertStringToIconObject(inputString: string | null, game: "mtg
 			continue;
 		}
 
-		// console.log(matches[i])
-
 		codes = codes.replaceAll(`\\${matches[i]}`, "THISTEXTSHOULDNEVERBEPLACEDINTOATEXTBOX!~?");
-		// console.log(codes)
 			codes = codes.replaceAll(matches[i], getIcon(match, game, isBlackWhite))
 			.replaceAll("THISTEXTSHOULDNEVERBEPLACEDINTOATEXTBOX!~?", `{${match}}`);
 	}
