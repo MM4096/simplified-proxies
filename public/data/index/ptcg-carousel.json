@@ -1,0 +1,77 @@
+[
+	{
+		"card_type": "Supporter",
+		"card_name": "Arven",
+		"additional_rules": "You may play only 1 Supporter card during your turn.",
+		"attacks_abilities": [],
+		"card_text": "Search your deck for an Item card and a Pokémon Tool card, reveal them, and put them into your hand. Then, shuffle your deck.",
+		"quantity": 1
+	},
+	{
+		"card_type": "Pokemon",
+		"pokemon_hp": "30",
+		"pokemon_type": "Grass",
+		"pokemon_evolution_level": "Basic",
+		"pokemon_weakness": "Fire (x2)",
+		"pokemon_retreat_cost": "0",
+		"card_name": "Budew",
+		"attacks_abilities": [
+			{
+				"name": "Itchy Pollen",
+				"cost": "{0}",
+				"text": "During your opponent's next turn, they can't play any Item cards from their hand.",
+				"damage": "10"
+			}
+		],
+		"quantity": 1
+	},
+	{
+		"card_type": "Pokemon",
+		"pokemon_hp": "310",
+		"pokemon_type": "Psychic",
+		"pokemon_evolution_level": "Stage 2",
+		"pokemon_weakness": "Darkness (x2)",
+		"pokemon_resistance": "Fighting (-30)",
+		"pokemon_retreat_cost": "2",
+		"pokemon_evolves_from": "Kirlia",
+		"card_name": "Gardevoir ex",
+		"additional_rules": "When your Pokémon ex is Knocked Out, your opponent takes 2 Prize cards.",
+		"attacks_abilities": [
+			{
+				"name": "Psychic Embrace",
+				"cost": "ABILITY",
+				"text": "As often as you like during your turn, you may attach a Basic {P} Energy card from your discard pile to 1 of your {P} Pokémon. If you attached Energy to a Pokémon in this way, put 2 damage counters on that Pokémon. You can't use this Ability on a Pokémon that would be Knocked Out."
+			},
+			{
+				"name": "Miracle Force",
+				"cost": "{P}{P}{C}",
+				"text": "This Pokémon recovers from all Special Conditions.",
+				"damage": "190"
+			}
+		],
+		"quantity": 1
+	},
+	{
+		"card_type": "Special Energy",
+		"card_name": "Legacy Energy",
+		"additional_rules": "You can't have more than 1 ACE SPEC card in your deck.",
+		"attacks_abilities": [],
+		"card_text": "As long as this card is attached to a Pokémon, it provides every type of Energy but provides only 1 Energy at a time.If the Pokémon this card is attached to is Knocked Out by damage from an attack from your opponent's Pokémon, that player takes 1 fewer Prize card. This effect of your Legacy Energy can't be applied more than once per game.",
+		"quantity": 1
+	},
+	{
+		"card_type": "Tool",
+		"card_name": "Technical Machine: Fluorite",
+		"additional_rules": "You may attach any number of Pokémon Tools to your Pokémon during your turn.\\nYou may attach only 1 Pokémon Tool to each Pokémon, and it stays attached.",
+		"attacks_abilities": [
+			{
+				"name": "Fluorite",
+				"cost": "{G}{W}{P}",
+				"text": "Discard all Energy from this Pokémon, and heal all damage from each of your Tera Pokémon.",
+				"damage": ""
+			}
+		],
+		"card_text": "The Pokémon this card is attached to can use the attack on this card. (You still need the necessary Energy to use this attack.) If this card is attached to 1 of your Pokémon, discard it at the end of your turn.",
+		"quantity": 1
+	}
+]

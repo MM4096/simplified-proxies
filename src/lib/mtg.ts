@@ -259,6 +259,9 @@ export function applyTemplates(card: MTGCard): MTGCard {
 	if (card.type_line?.includes("Saga")) {
 		card.card_template = MTGCardTemplate.SAGA;
 	}
+	if (card.type_line?.includes("Class")) {
+		card.card_template = MTGCardTemplate.CLASS;
+	}
 	if (card.card_text?.includes("Level up")) {
 		card.card_template = MTGCardTemplate.LEVEL_UP;
 	}

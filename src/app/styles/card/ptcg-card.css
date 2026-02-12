@@ -18,6 +18,7 @@
 	.card-type {
 		font-size: 0.1in;
 		margin-right: 0.05in;
+		min-width: max-content;
 	}
 
 	.card-type {

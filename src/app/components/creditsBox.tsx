@@ -35,6 +35,8 @@ export function CreditsBox() {
 						<br/><br/>
 						The &quot;Import Cards with Archidekt&quot; feature is powered by <Link href="https://archidekt.com" className="link" target="_blank">Archidekt</Link>.
 						<br/><br/>
+						The &quot;Import Cards with Moxfield&quot; feature is powered by <Link href="https://moxfield.com" className="link" target="_blank">Moxfield</Link>.
+						<br/><br/>
 						The black and white mana icons are colored mana icons modified by mm4096.
 						<br/><br/>
 						<small>Archidekt, Scryfall and Wizards of the Coast do not produce or endorse Simplified Proxies in any
