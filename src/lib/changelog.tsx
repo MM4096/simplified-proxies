@@ -11,6 +11,15 @@ export type ChangelogEntry = {
 export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
+	// {
+	// 	date: "2026-02-12",
+	// 	version: "v1.9",
+	// 	changes: (<>
+	// 		<ul className="list-disc">
+	// 			<li><MTGBadge/> Added the <i>Class</i> template</li>
+	// 		</ul>
+	// 	</>)
+	// },
 	{
 		date: "2026-02-06",
 		version: "v1.8",

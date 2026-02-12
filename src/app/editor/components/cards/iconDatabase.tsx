@@ -19,8 +19,9 @@ export function getIcon(code: string, game: "mtg" | "ptcg", isBlackWhite: boolea
 	code = code.replaceAll(" ", "").replaceAll("/", "");
 
 	const basePath = getIconPath(code, game, isBlackWhite);
-	const fallbackPath = getIconPath(code, game, false);
-	return `<img src="${basePath}" alt="${code}" class="mana-symbol" onerror="if (this.src !== '${fallbackPath}' && !this.dataset.fallback) {  this.dataset.fallback='true'; this.src='${fallbackPath}';}" />`
+	// return `<object data="${basePath}" type="image/svg+xml" width="24" height="24"></object>`
+	// return `<svg class="mana-symbol" viewBox="0 0 24 24"><use xlink:href="${basePath}"></use></svg>`
+	return `<img src="${basePath}" alt="${code}" class="mana-symbol" />`
 }
 
 export function convertStringToIconObject(inputString: string | null, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
@@ -64,10 +65,7 @@ export function convertStringToIconObject(inputString: string | null, game: "mtg
 			continue;
 		}
 
-		// console.log(matches[i])
-
 		codes = codes.replaceAll(`\\${matches[i]}`, "THISTEXTSHOULDNEVERBEPLACEDINTOATEXTBOX!~?");
-		// console.log(codes)
 			codes = codes.replaceAll(matches[i], getIcon(match, game, isBlackWhite))
 			.replaceAll("THISTEXTSHOULDNEVERBEPLACEDINTOATEXTBOX!~?", `{${match}}`);
 	}

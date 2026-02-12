@@ -151,6 +151,21 @@ function applyTemplatingStyles(text: string, template: MTGCardTemplate): string 
 			}
 
 			return parts.join(LINEBREAK + `<div class="card-divider"></div>` + LINEBREAK);
+
+		case MTGCardTemplate.CLASS:
+			const return_parts: string[] = [];
+			for (let i = 0; i < parts.length; i++) {
+				const this_part: string = parts[i];
+				const is_header: boolean = this_part.match(/<.*>: Level \d+/g) != null;
+				if (is_header) {
+					return_parts.push(`<div class="card-divider"></div>${LINEBREAK}<span class="number-badge pl-1 pr-2">${this_part}</span>`);
+					continue;
+				}
+
+				return_parts.push(this_part);
+			}
+			return return_parts.join(LINEBREAK);
+
 		default:
 			return text;
 	}
