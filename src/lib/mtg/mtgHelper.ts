@@ -1,4 +1,4 @@
-import {MTGCard, MTGCardTemplate} from "@/lib/card";
+import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
 
 export enum ReminderTextBehavior {
 	NORMAL,

@@ -1,5 +1,8 @@
 import {NextRequest} from "next/server";
 import {awaitCooldown} from "@/lib/redis";
+import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
+
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
 	const body = await request.json();
@@ -25,9 +28,10 @@ export async function POST(request: NextRequest) {
 	await awaitCooldown("moxfield-api-rate-limit", 2000);
 
 	const moxfieldResponse = await fetch(`https://api2.moxfield.com/v3/decks/all/${deckId}`, {
+		cache: "no-store",
 		headers: {
 			"User-Agent": process.env.MOXFIELD_USER_AGENT as string,
-		}
+		},
 	});
 
 	if (!moxfieldResponse.ok) {
@@ -41,7 +45,7 @@ export async function POST(request: NextRequest) {
 		}), {status: 500});
 	}
 
-	const decklist = await moxfieldResponse.json();
+	const decklist = await moxfieldResponse.json() as Record<string, unknown>;
 
 	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
@@ -62,10 +66,5 @@ export async function POST(request: NextRequest) {
 	}
 	body["cards"] = import_cards.join("\n");
 
-
-	const origin = request.nextUrl.origin;
-	return fetch(`${origin}/api/import/mtg`, {
-		method: "POST",
-		body: JSON.stringify(body)
-	});
+	return await doScryfallSearch(body);
 }

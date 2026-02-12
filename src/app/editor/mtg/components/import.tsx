@@ -2,7 +2,7 @@
 
 import {useRef, useState} from "react";
 import {MTGCard} from "@/lib/card";
-import {ReminderTextBehavior} from "@/lib/mtg";
+import {ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
