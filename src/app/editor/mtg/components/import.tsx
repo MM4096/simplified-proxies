@@ -248,7 +248,6 @@ export function ImportMTG({cards, setCardsAction}: {
 							<select className="select select-sm w-min" value={importFlavorTextBehavior}
 									onChange={(e) => {
 										setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
-										console.log(parseInt(e.target.value) as FlavorTextBehavior);
 									}}>
 								<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
 								<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
