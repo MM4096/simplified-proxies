@@ -16,7 +16,7 @@ export default function Home() {
 						  standardPaths={{
 							  prefix: "/images/index/carousel/mtg/actual",
 							  paths: ["dismember", "urza-s-saga", "commit", "jared-carthalion", "virtue-of-persistence"],
-							  suffix: ".png",
+							  suffix: ".jpg",
 						  }} className="w-1/3"/>
 				<CardCarousel jsonPath="public/data/index/mtg-carousel.json" time={3000} gameId="mtg" className="w-1/3"/>
 			</div>

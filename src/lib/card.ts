@@ -17,6 +17,7 @@ export interface MTGCard extends Card {
 	reverse_text?: string;
 	reverse_power?: string;
 	reverse_toughness?: string;
+	reverse_flavor_text?: string;
 	notes?: string;
 	card_template?: MTGCardTemplate;
 	face_type?: FaceType;

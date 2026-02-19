@@ -250,6 +250,7 @@ export function isolateFrontAndBackFaces(card: MTGCard): [MTGCard, MTGCard] {
 		card_text: card.reverse_text,
 		power: card.reverse_power,
 		toughness: card.reverse_toughness,
+		flavor_text: card.reverse_flavor_text,
 	}
 
 	return [front, back];

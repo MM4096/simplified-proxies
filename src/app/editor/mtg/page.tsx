@@ -63,6 +63,9 @@ export default function MTGEditorPage() {
 										<MTGInput card={card} valKey="reverse_text" setValue={onChange}
 												  title="Card Text"
 												  placeholder="" isTextarea={true}/>
+										<MTGInput card={card} valKey="reverse_flavor_text" setValue={onChange}
+												  title="Flavor Text"
+												  placeholder="" isTextarea={true}/>
 
 										<div className="flex flex-row gap-2">
 											<MTGInput card={card} valKey="reverse_power" setValue={onChange}

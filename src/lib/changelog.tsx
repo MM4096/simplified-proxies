@@ -14,7 +14,18 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
-		date: "2026-02-12",
+		date: "2026-02-20",
+		version: "v1.9.1",
+		changes: (<>
+			<ul className="list-disc">
+				<li><FeatureBadge/> <MTGBadge/> Editor now has an option to edit the flavor text of any reverse faces</li>
+				<li><BugBadge/> <MTGBadge/> Editor now imports flavor text of reverse faces</li>
+				<li><BugBadge/> <MTGBadge/> Cards with too much flavor text no longer cut off the standard card text</li>
+			</ul>
+		</>)
+	},
+	{
+		date: "2026-02-19",
 		version: "v1.9",
 		changes: (<>
 			<ul className="list-disc">

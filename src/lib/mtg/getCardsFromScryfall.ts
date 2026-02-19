@@ -49,6 +49,9 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 			thisCard.reverse_mana_cost = thisData["mana_cost"]?.toString() || "";
 			thisCard.reverse_type_line = thisData["type_line"]?.toString() || "";
 			thisCard.reverse_text = handleReminderText(thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
+			if (thisData.hasOwnProperty("flavor_text") && flavorTextBehavior === FlavorTextBehavior.BOTH) {
+				thisCard.reverse_flavor_text = thisData["flavor_text"]?.toString() || "";
+			}
 			thisCard.reverse_power = thisData["power"]?.toString() || "";
 			thisCard.reverse_toughness = thisData["toughness"]?.toString() || "";
 

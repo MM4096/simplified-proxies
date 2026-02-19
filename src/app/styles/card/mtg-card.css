@@ -66,6 +66,8 @@
 			padding: 0.02in;
 		}
 	}
+
+	overflow-y: hidden;
 }
 
 .mtg-card:has(.mana-counter) {
@@ -74,7 +76,6 @@
 
 .mtg-card .mana-counter {
 	padding: 0;
-	/*border-radius: 0 !important;*/
 	display: grid;
 	grid-template-rows: repeat(2, 1fr);
 	grid-template-columns: repeat(3, 1fr);

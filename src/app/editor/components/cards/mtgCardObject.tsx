@@ -278,15 +278,13 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 		<p className="type-line">{card.type_line?.replaceAll("{-}", "—")}</p>
 		<div className="card-divider"/>
 
-		<div className="card-text" dangerouslySetInnerHTML={{
+		<div className="card-text shrink-0" dangerouslySetInnerHTML={{
 			__html: DOMPurify.sanitize(applyTemplatingStyles(convertStringToIconObject(card.card_text || "", "mtg", isBlackWhite), card.card_template || MTGCardTemplate.NONE))
 		}}/>
 
 		{
 			card.flavor_text && (<>
-				<div className="mb-3"/>
-
-				<div className="flavor-text" dangerouslySetInnerHTML={{
+				<div className="flavor-text mt-1" dangerouslySetInnerHTML={{
 					__html: `<i>${DOMPurify.sanitize(convertStringToIconObject(card.flavor_text || "", "mtg", isBlackWhite))}</i>`
 				}}/>
 			</>)
