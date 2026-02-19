@@ -15,7 +15,7 @@ export default function Home() {
 				<Carousel time={3000}
 						  standardPaths={{
 							  prefix: "/images/index/carousel/mtg/actual",
-							  paths: ["urza-s-saga", "commit", "jared-carthalion", "virtue-of-persistence", "sol-ring"],
+							  paths: ["dismember", "urza-s-saga", "commit", "jared-carthalion", "virtue-of-persistence"],
 							  suffix: ".png",
 						  }} className="w-1/3"/>
 				<CardCarousel jsonPath="public/data/index/mtg-carousel.json" time={3000} gameId="mtg" className="w-1/3"/>

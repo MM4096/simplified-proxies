@@ -71,12 +71,12 @@ export default function PTCGEditorPage() {
 						demoCard={{
 							card_name: "Demo Card",
 							card_type: "Unknown",
-							card_text: "This is a demo card. Symbols are as follows: \\{a}: {a}, \\{c}: {c}, \\{d}: {d}, \\{f}: {f}, \\{g}: {g}, \\{l}: {l}, \\{m}: {m}, \\{p}: {p}, \\{r}: {r}, \\{w}: {w}, \\{y}: {y}, \\{n}: {n}\nTo make a Pokemon, use \"Pokemon Options\".",
+							card_text: "This is a demo card. Symbols are as follows: \\{a}: {a}, \\{c}: {c}, \\{d}: {d}, \\{f}: {f}, \\{g}: {g}, \\{l}: {l}, \\{m}: {m}, \\{p}: {p}, \\{r}: {r}, \\{w}: {w}, \\{y}: {y}, \\{0}: {0}\nTo make a Pokemon, use \"Pokemon Options\".",
 							attacks_abilities: [
 								{
 									name: "Basics",
 									text: "All cards can have attacks/abilities. Just expand \"Attacks and Abilities\" to start!",
-									cost: "{n}"
+									cost: "{0}"
 								},
 								{
 									name: "Sample Ability",

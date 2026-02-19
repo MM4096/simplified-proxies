@@ -66,9 +66,10 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 
 	}, [cards]);
 
-	return (<div className="text-left w-full h-full flex flex-col gap-2">
-		<div className="no-print">
+	return (<div className="text-left w-full h-full flex flex-col flex-wrap gap-2">
+		<div className="no-print p-2">
 			<h1>Preview and Print Proxies</h1>
+			<br/>
 			<div className="flex flex-row gap-2 items-center">
 				<Link href={`/editor/${gameId}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
@@ -108,8 +109,9 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 					Shrink Cards by 10%
 				</label>
 			</div>
+			<br/>
+			<div className="custom-divider"/>
 		</div>
-		<div className="custom-divider"/>
 		<div className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
 			{
 				allCards.map((card, index) => {

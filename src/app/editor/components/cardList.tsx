@@ -29,7 +29,11 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 							setEditingIndex(index);
 						}}>
 						<button className="flex flex-row items-center text-left grow">
-							<span className="grow">{card.card_name}</span>
+							<span className="grow">{
+								((card as object).hasOwnProperty("flavor_name") && (card as Record<string, unknown>)["flavor_name"] !== "") ?
+									(<>{(card as Record<string, unknown>)["flavor_name"]} (<i>{card.card_name}</i>)</>) :
+									card.card_name
+							}</span>
 						</button>
 
 

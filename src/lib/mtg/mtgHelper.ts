@@ -6,6 +6,12 @@ export enum ReminderTextBehavior {
 	HIDDEN,
 }
 
+export enum FlavorTextBehavior {
+	NAME,
+	NONE,
+	BOTH,
+}
+
 export const DUNGEONS: Record<string, MTGCard> = {
 	"tomb of annihilation": {
 		card_name: "Tomb of Annihilation",

@@ -7,11 +7,7 @@ export const LINEBREAK = `<span class="paragraph-break"></span>`
 
 export function getIconPath(code: string, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
 	code = code.replaceAll(" ", "").replaceAll("/", "").replaceAll("..", "").replaceAll("\\", "");
-	if (game === "mtg") {
-		return `${IMAGE_BASE_PATH}/${game}/icons/${isBlackWhite ? BLACK_WHITE_PATH : STANDARD_PATH}/${code}.svg`
-	} else {
-		return `${IMAGE_BASE_PATH}/${game}/icons/${isBlackWhite ? BLACK_WHITE_PATH : STANDARD_PATH}/${code}.png`
-	}
+	return `${IMAGE_BASE_PATH}/${game}/icons/${isBlackWhite ? BLACK_WHITE_PATH : STANDARD_PATH}/${code}.svg`
 }
 
 export function getIcon(code: string, game: "mtg" | "ptcg", isBlackWhite: boolean = false): string {
@@ -19,8 +15,6 @@ export function getIcon(code: string, game: "mtg" | "ptcg", isBlackWhite: boolea
 	code = code.replaceAll(" ", "").replaceAll("/", "");
 
 	const basePath = getIconPath(code, game, isBlackWhite);
-	// return `<object data="${basePath}" type="image/svg+xml" width="24" height="24"></object>`
-	// return `<svg class="mana-symbol" viewBox="0 0 24 24"><use xlink:href="${basePath}"></use></svg>`
 	return `<img src="${basePath}" alt="${code}" class="mana-symbol" />`
 }
 
@@ -66,7 +60,7 @@ export function convertStringToIconObject(inputString: string | null, game: "mtg
 		}
 
 		codes = codes.replaceAll(`\\${matches[i]}`, "THISTEXTSHOULDNEVERBEPLACEDINTOATEXTBOX!~?");
-			codes = codes.replaceAll(matches[i], getIcon(match, game, isBlackWhite))
+		codes = codes.replaceAll(matches[i], getIcon(match, game, isBlackWhite))
 			.replaceAll("THISTEXTSHOULDNEVERBEPLACEDINTOATEXTBOX!~?", `{${match}}`);
 	}
 	codes = codes.replaceAll("\\{", "{").replaceAll("\\}", "}");

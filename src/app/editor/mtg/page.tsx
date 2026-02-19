@@ -6,7 +6,6 @@ import {ReactNode} from "react";
 import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {getEnumKeys} from "@/lib/enum";
 import {BiInfoCircle} from "react-icons/bi";
-import {ExperimentalBadge} from "@/app/components/tags/experimental";
 import {MTGCard, MTGCardTemplate} from "@/lib/card";
 
 export default function MTGEditorPage() {
@@ -33,13 +32,18 @@ export default function MTGEditorPage() {
 										  placeholder="There were no tombstones in orochi territory. Slain warriors were buried with a tree sapling, so they would become a part of the forest after death."
 										  isTextarea={true}/>
 
+								<MTGInput card={card} valKey="flavor_name" setValue={onChange} title="Flavor Name"
+										  placeholder="Steve, Elder of the Sakura Tribe"
+										  isTextarea={false}/>
+
 								<div className="flex flex-row gap-2">
 									<MTGInput card={card} valKey="power" setValue={onChange} title="Power"
 											  placeholder=""/>
 									<MTGInput card={card} valKey="toughness" setValue={onChange} title="Toughness"
 											  placeholder=""/>
 								</div>
-								<p className="label text-xs">If Planeswalker loyalty or Battle Defense is needed, just
+								<p className="opacity-0 md:opacity-100 label text-xs">If Planeswalker loyalty or Battle
+									Defense is needed, just
 									filling
 									out &apos;Power&apos; will work.</p>
 
@@ -82,13 +86,20 @@ export default function MTGEditorPage() {
 										<div className="flex flex-row gap-2 items-center">
 											<legend className="fieldset-legend">Card Template</legend>
 											<div className="tooltip">
-												<div className="tooltip tooltip-content w-max">Modify the layout of this card.
+												<div className="tooltip tooltip-content w-max">Modify the layout of this
+													card.
 													<br/><br/><b>OPTIONS:</b><br/>
 													<ul>
 														<li><b>None</b>: No additional templating.</li>
-														<li><b>Mana Counter</b>: Replaces all content of the card with a mana counter.</li>
-														<li><b>Token Counter</b>: Adds a table to track tokens in different states.</li>
-														<li><b>Half Size</b>: Puts 2 copies of this card in the space of one card.</li>
+														<li><b>Mana Counter</b>: Replaces all content of the card with a
+															mana counter.
+														</li>
+														<li><b>Token Counter</b>: Adds a table to track tokens in
+															different states.
+														</li>
+														<li><b>Half Size</b>: Puts 2 copies of this card in the space of
+															one card.
+														</li>
 														<li>All Others: Styles matching card types</li>
 													</ul>
 												</div>
@@ -114,13 +125,10 @@ export default function MTGEditorPage() {
 						}}
 						demoCard={{
 							card_name: "Demo Card",
+							flavor_name: "Demo Card V2",
 							mana_cost: "{1}{w}{u}{b}{r}{g}",
 							type_line: "Mysterious {-} Card",
 							card_text: "Mess around with the different fields of this card! A list of all available symbols can be found on <a href='https://scryfall.com/docs/api/colors#mana-costs-and-other-symbology' class='link' target='_blank'>Scryfall</a>, all forward slashes (/) in mana symbols are optional (i.e. {wbp} is the same as {w/b/p}). This field supports HTML formatting! <b>Bold text</b> <i>Italic Text</i>\nPress \"Import Cards\" to import from a decklist, and \"Preview and Print Proxies\" to see and print your proxies.",
 							power: "1", toughness: "1",
-							reverse_card_name: "Reverse Cards",
-							reverse_type_line: "Mysterious {-} Card Two",
-							reverse_mana_cost: "{1}{w}{u}{b}{r}{g}",
-							reverse_text: "Can be created by expanding the \"<i>Dual-Faced Cards</i>\" panel"
 						} as MTGCard}/>)
 }
