@@ -2,7 +2,7 @@
 
 import {useRef, useState} from "react";
 import {MTGCard} from "@/lib/card";
-import {ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
+import {FlavorTextBehavior, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
@@ -21,6 +21,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 	const [importBasicLands, setImportBasicLands] = useState<boolean>(true);
 	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.ITALIC);
+	const [importFlavorTextBehavior, setImportFlavorTextBehavior] = useState<FlavorTextBehavior>(FlavorTextBehavior.NAME);
 	const [importTemplates, setImportTemplates] = useState<boolean>(true);
 	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
 	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
@@ -57,6 +58,7 @@ export function ImportMTG({cards, setCardsAction}: {
 				cards: importText,
 				importBasicLands: importBasicLands,
 				reminderTextBehavior: importReminderTextBehavior,
+				flavorTextBehavior: importFlavorTextBehavior,
 				importTemplates: importTemplates,
 				includeTokens: importIncludeTokens,
 				splitDFCs: importSplitDFCs,
@@ -236,6 +238,23 @@ export function ImportMTG({cards, setCardsAction}: {
 							</select>
 							<span className="tooltip ">
 								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets, like this).</span>
+								<BiInfoCircle/>
+							</span>
+						</label>
+
+						<div className="divider md:divider-horizontal"/>
+
+						<label className="label text-sm">
+							<select className="select select-sm w-min" value={importFlavorTextBehavior}
+									onChange={(e) => {
+										setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
+									}}>
+								<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
+								<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
+								<option value={FlavorTextBehavior.NONE}>Exclude flavor</option>
+							</select>
+							<span className="tooltip ">
+								<span className="tooltip-content z-100">Flavor names are reprints with different names, e.g. Vivi&apos;s Thunder Magic is Lightning Bolt.</span>
 								<BiInfoCircle/>
 							</span>
 						</label>

@@ -1,5 +1,15 @@
 [
 	{
+		"card_name": "Dismember",
+		"flavor_name": "'Tis But a Scratch!",
+		"mana_cost": "{1}{B/P}{B/P}",
+		"type_line": "Instant",
+		"card_text": "<i>({B/P} can be paid with either {B} or 2 life.)</i>\\nTarget creature gets -5/-5 until end of turn.",
+		"power": "",
+		"toughness": "",
+		"quantity": 1
+	},
+	{
 		"card_name": "Urza's Saga",
 		"mana_cost": "",
 		"type_line": "Enchantment Land — Urza's Saga",
@@ -49,15 +59,6 @@
 		"reverse_power": "",
 		"reverse_toughness": "",
 		"card_template": "Adventure / Omen",
-		"quantity": 1
-	},
-	{
-		"card_name": "Sol Ring",
-		"mana_cost": "{1}",
-		"type_line": "Artifact",
-		"card_text": "{T}: Add {C}{C}.",
-		"power": "",
-		"toughness": "",
 		"quantity": 1
 	}
 ]

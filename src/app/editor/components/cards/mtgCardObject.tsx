@@ -183,16 +183,20 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 		front_face.card_template = MTGCardTemplate.NONE;
 		back_face.card_template = MTGCardTemplate.NONE;
 		return (<div className="double-card no-gap">
-			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id}
+						   className="rotate-card-90"/>
+			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id}
+						   className="rotate-card-90"/>
 		</div>)
 	}
 
 	if (card.card_template === MTGCardTemplate.SPLIT_STANDARD) {
 		front_face.card_template = MTGCardTemplate.NONE;
 		return (<div className="double-card no-gap">
-			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
-			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id}
+						   className="rotate-card-90"/>
+			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id}
+						   className="rotate-card-90"/>
 		</div>)
 	}
 
@@ -200,7 +204,8 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 		front_face.card_template = MTGCardTemplate.NONE;
 		return (<div className="double-card no-gap">
 			<MTGCardObject card={front_face} isBlackWhite={true} includeCredit={includeCredit} id={id}/>
-			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id} className="rotate-card-90"/>
+			<MTGCardObject card={back_face} isBlackWhite={true} includeCredit={includeCredit} id={id}
+						   className="rotate-card-90"/>
 		</div>)
 	}
 
@@ -218,7 +223,8 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 		back_face.face_type = FaceType.BACK;
 		return (<div className="double-card no-gap">
 			<MTGCardObject card={front_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}/>
-			<MTGCardObject card={back_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id} className="rotate-card-180"/>
+			<MTGCardObject card={back_face} isBlackWhite={isBlackWhite} includeCredit={includeCredit} id={id}
+						   className="rotate-card-180"/>
 		</div>)
 	}
 
@@ -250,16 +256,25 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 
 	const this_card = (<div className={`card mtg-card ${className || ""}`} id={id} key={id}>
 		<div className="card-title-container">
-			<h2 className="card-title">
+			<span className="card-title">
 				{(hasReverseFace(card) || card.face_type == FaceType.FRONT) ? (<TbCaretUpFilled/>) : null}
 				{(card.face_type == FaceType.BACK) ? (<TbCaretUpDownFilled/>) : null}
-				{card.card_name}</h2>
+				{card.flavor_name ? card.flavor_name : card.card_name}
+			</span>
 			<div className="mana-cost" dangerouslySetInnerHTML={{
 				__html: DOMPurify.sanitize(convertStringToIconObject(card.mana_cost || "", "mtg", isBlackWhite))
 			}}/>
 		</div>
+		{
+			card.flavor_name ? (<>
+				<div className="">
+					<span className="card-text italic">{card.card_name}</span>
+				</div>
+			</>) : null
+		}
 
 		<div className="card-divider"/>
+
 		<p className="type-line">{card.type_line?.replaceAll("{-}", "—")}</p>
 		<div className="card-divider"/>
 

@@ -8,6 +8,7 @@ export interface MTGCard extends Card {
 	mana_cost?: string;
 	type_line?: string;
 	flavor_text?: string;
+	flavor_name?: string;
 	power?: string;
 	toughness?: string;
 	reverse_card_name?: string;

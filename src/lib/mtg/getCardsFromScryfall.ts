@@ -1,6 +1,13 @@
 import {setTimeout} from "node:timers/promises";
 import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
-import {applyTemplates, DUNGEONS, hasReverseFace, isolateFrontAndBackFaces, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
+import {
+	applyTemplates,
+	DUNGEONS,
+	FlavorTextBehavior,
+	hasReverseFace,
+	isolateFrontAndBackFaces,
+	ReminderTextBehavior
+} from "@/lib/mtg/mtgHelper";
 
 //region Fetch cards from Scryfall
 const SCRYFALL_HEADERS = {
@@ -27,7 +34,7 @@ function handleReminderText(text: string, reminderTextBehavior: ReminderTextBeha
 	return text;
 }
 
-function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL, importTemplates: boolean = false) {
+function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL, flavorTextBehavior: FlavorTextBehavior = FlavorTextBehavior.NAME, importTemplates: boolean = false) {
 	const thisCard: MTGCard = {};
 	let faceData = [scryfallResult as Record<string, string | object>];
 	if (scryfallResult.hasOwnProperty("card_faces")) {
@@ -54,6 +61,14 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 		} else {
 			isReverseFace = true;
 			thisCard.card_name = thisData["name"]?.toString() || "";
+
+			if (thisData.hasOwnProperty("flavor_name") && flavorTextBehavior !== FlavorTextBehavior.NONE) {
+				thisCard.flavor_name = thisData["flavor_name"]?.toString() || "";
+			}
+			if (thisData.hasOwnProperty("flavor_text") && flavorTextBehavior === FlavorTextBehavior.BOTH) {
+				thisCard.flavor_text = thisData["flavor_text"]?.toString() || "";
+			}
+
 			thisCard.mana_cost = thisData["mana_cost"]?.toString() || "";
 			thisCard.type_line = thisData["type_line"]?.toString() || "";
 			thisCard.card_text = handleReminderText(thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
@@ -103,6 +118,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 	const importBasicLands = body["importBasicLands"] || false;
 	const reminderTextBehavior: ReminderTextBehavior = body["reminderTextBehavior"] || ReminderTextBehavior.NORMAL;
+	const flavorTextBehavior: FlavorTextBehavior = body["flavorTextBehavior"] || FlavorTextBehavior.NAME;
 	const importTemplates = body["importTemplates"] || false;
 	// const includeTokens = body["includeTokens"] || false;
 	const splitDFCs = body["splitDFCs"] || false;
@@ -235,7 +251,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 					}
 				}
 
-				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, importTemplates);
+				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, flavorTextBehavior, importTemplates);
 
 				if (splitDFCs && hasReverseFace(thisCardObject)) {
 					let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);

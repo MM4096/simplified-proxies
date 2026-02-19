@@ -2,6 +2,10 @@
 	.no-print, .no-print * {
 		display: none !important;
 	}
+
+	.card-print {
+		margin: 0 !important;
+	}
 }
 
 @page {
@@ -18,7 +22,7 @@ body .double-card {
 
 .card-print {
 	width: 100%;
-	margin: 0;
+	margin: 10px;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, var(--card-width));
 
