@@ -170,74 +170,73 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 								   setImportType("list");
 							   }}/>
 
-						<span>Import from List</span>
-					</label>
-					<div className="tab-content border-black p-3">
-						<p>Paste a list of cards below. Card names must be exact (except symbols and capitalization) and
-							must
-							match one of the following formats:</p>
-						<div className="flex flex-col md:flex-row w-full">
-							<div className="border p-2 grow md:w-max">
-								<p>Plains</p>
-								<p>Deflecting Swat</p>
-								<p>Deflecting Swat</p>
-								<p>sakura tribe elder</p>
-								<p>chandra flames fury</p>
-								<p>commit // memory</p>
+							<span>Import from List</span>
+						</label>
+						<div className="tab-content border-black p-3">
+							<p>Paste a list of cards below. Card names must be exact (except symbols and capitalization)
+								and must match one of the following formats:</p>
+							<div className="flex flex-col md:flex-row w-full">
+								<div className="border p-2 grow md:w-max">
+									<p>Plains</p>
+									<p>Deflecting Swat</p>
+									<p>Deflecting Swat</p>
+									<p>sakura tribe elder</p>
+									<p>chandra flames fury</p>
+									<p>commit // memory</p>
+								</div>
+								<div className="border p-2 grow md:w-max">
+									<p>2 Plains</p>
+									<p>2 Deflecting Swat</p>
+									<p>4 sakura tribe elder</p>
+									<p>10 chandra flames fury</p>
+									<p>1 Commit</p>
+								</div>
+								<div className="border p-2 grow md:w-max">
+									<p>2x Plains</p>
+									<p>2x Deflecting Swat</p>
+									<p>4x sakura tribe elder</p>
+									<p>10x chandra flames fury</p>
+									<p>1x Memory</p>
+								</div>
 							</div>
-							<div className="border p-2 grow md:w-max">
-								<p>2 Plains</p>
-								<p>2 Deflecting Swat</p>
-								<p>4 sakura tribe elder</p>
-								<p>10 chandra flames fury</p>
-								<p>1 Commit</p>
-							</div>
-							<div className="border p-2 grow md:w-max">
-								<p>2x Plains</p>
-								<p>2x Deflecting Swat</p>
-								<p>4x sakura tribe elder</p>
-								<p>10x chandra flames fury</p>
-								<p>1x Memory</p>
-							</div>
+							<p className="text-xs">All cards must either have no quantity given, or all cards must have
+								quantities.<br/>
+								Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
+							<fieldset className="fieldset">
+								<legend className="fieldset-legend"></legend>
+								<textarea className="textarea w-full" placeholder="Paste your card data here"
+										  value={importText}
+										  onChange={(e) => {
+											  setImportText(e.target.value);
+										  }}/>
+							</fieldset>
 						</div>
-						<p className="text-xs">All cards must either have no quantity given, or all cards must have
-							quantities.<br/>
-							Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
-						<fieldset className="fieldset">
-							<legend className="fieldset-legend"></legend>
-							<textarea className="textarea w-full" placeholder="Paste your card data here"
-									  value={importText}
-									  onChange={(e) => {
-										  setImportText(e.target.value);
-									  }}/>
-						</fieldset>
-					</div>
 
 
-					<label className="tab">
-						<input type="radio" name="mtg-import-type"
-							   id="archidekt-import"
-							   onChange={() => {
-								   setImportType("archidekt");
-							   }}/>
+						<label className="tab">
+							<input type="radio" name="mtg-import-type"
+								   id="archidekt-import"
+								   onChange={() => {
+									   setImportType("archidekt");
+								   }}/>
 
-						<span>Import from Archidekt <NewBadge/></span>
-					</label>
-					<div className="tab-content border-black p-3">
-						<p>Paste in your Archidekt deck URL here:</p>
-						<input className="input w-full" type="url"
-							   placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
-							   onChange={(e) => {
-								   setImportText(e.target.value);
-							   }}/>
-					</div>
+							<span>Import from Archidekt <NewBadge/></span>
+						</label>
+						<div className="tab-content border-black p-3">
+							<p>Paste in your Archidekt deck URL here:</p>
+							<input className="input w-full" type="url"
+								   placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
+								   onChange={(e) => {
+									   setImportText(e.target.value);
+								   }}/>
+						</div>
 
-					<label className="tab">
-						<input type="radio" name="mtg-import-type"
-							   id="moxfield-import"
-							   onChange={() => {
-								   setImportType("moxfield");
-							   }}/>
+						<label className="tab">
+							<input type="radio" name="mtg-import-type"
+								   id="moxfield-import"
+								   onChange={() => {
+									   setImportType("moxfield");
+								   }}/>
 
 						<span>Import from Moxfield <NewBadge/></span>
 					</label>
@@ -259,9 +258,9 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 						</label>
 					</div>
 
-				</div>
+					</div>
 
-				<br/>
+					<br/>
 
 		<div className="collapse bg-base-100 border-gray-500 border h-max">
 			<input type="checkbox" defaultChecked={true}/>
@@ -278,41 +277,41 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 									className="tooltip-content">If unchecked, any card who&apos;s name is exactly &quot;Plains&quot;, &quot;Mountain&quot;, &quot;Swamp&quot;, &quot;Forest&quot;, or &quot;Island&quot; will be skipped.</span>
 								<BiInfoCircle/>
 							</span>
-						</label>
+				</label>
 
 				<div className="divider md:divider-horizontal"/>
 
-				<label className="label text-sm">
-					<select className="select select-sm w-min" value={importReminderTextBehavior}
-							onChange={(e) => {
-								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
-							}}>
-						<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
-						<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
-						<option value={ReminderTextBehavior.HIDDEN}>Exclude reminder text</option>
-					</select>
-					<span className="tooltip ">
+						<label className="label text-sm">
+							<select className="select select-sm w-min" value={importReminderTextBehavior}
+									onChange={(e) => {
+										setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
+									}}>
+								<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
+								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
+								<option value={ReminderTextBehavior.HIDDEN}>Exclude reminder text</option>
+							</select>
+							<span className="tooltip ">
 								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets, like this).</span>
 								<BiInfoCircle/>
 							</span>
 						</label>
 
-				<div className="divider md:divider-horizontal"/>
+						<div className="divider md:divider-horizontal"/>
 
-				<label className="label text-sm">
-					<select className="select select-sm w-min" value={importFlavorTextBehavior}
-							onChange={(e) => {
-								setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
-							}}>
-						<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
-						<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
-						<option value={FlavorTextBehavior.NONE}>Exclude flavor</option>
-					</select>
-					<span className="tooltip ">
+						<label className="label text-sm">
+							<select className="select select-sm w-min" value={importFlavorTextBehavior}
+									onChange={(e) => {
+										setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
+									}}>
+								<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
+								<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
+								<option value={FlavorTextBehavior.NONE}>Exclude flavor</option>
+							</select>
+							<span className="tooltip ">
 								<span className="tooltip-content z-100">Flavor names are reprints with different names, e.g. Vivi&apos;s Thunder Magic is Lightning Bolt.</span>
 								<BiInfoCircle/>
 							</span>
-						</label>
+				</label>
 
 				<div className="divider md:divider-horizontal"/>
 
@@ -326,7 +325,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 								<span className="tooltip-content">If checked, all DFCs will be imported as two cards instead of one.</span>
 								<BiInfoCircle/>
 							</span>
-						</label>
+				</label>
 
 						<div className="divider md:divider-horizontal"/>
 
@@ -340,7 +339,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
 								<BiInfoCircle/>
 							</span>
-							</label>
+				</label>
 
 							<div className="divider md:divider-horizontal"/>
 

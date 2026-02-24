@@ -2,7 +2,7 @@
 
 import "../../styles/editor.css";
 import {CardList} from "@/app/editor/components/cardList";
-import {ReactNode, useEffect, useState} from "react";
+import {ReactNode, useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import {ProjectsBox} from "@/app/editor/components/projectsBox";
 import {renderToStaticMarkup} from "react-dom/server";
