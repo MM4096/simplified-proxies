@@ -15,7 +15,11 @@ export async function POST(request: NextRequest) {
 
 	const importMaybeboard = searchParams.get("importMaybeboard") == "true";
 
-	const moxfieldURL = searchParams.get("url")!;
+	let moxfieldURL = searchParams.get("url")!.trim();
+	if (!moxfieldURL.startsWith("https://") && !moxfieldURL.startsWith("http://")) {
+		moxfieldURL = "https://" + moxfieldURL;
+	}
+
 	const url: URL = new URL(moxfieldURL);
 	const deckId = url.pathname.split("/")[2];
 	if (deckId == null) {

@@ -14,6 +14,15 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2026-02-24",
+		version: "v1.9.2",
+		changes: (<>
+			<ul className="list-disc">
+				<li><BugBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin with <code>HTTPS</code>.</li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2026-02-20",
 		version: "v1.9.1",
 		changes: (<>

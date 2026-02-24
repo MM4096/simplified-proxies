@@ -10,7 +10,10 @@ export async function POST(request: NextRequest) {
 		}), {status: 400})
 	}
 
-	const archidektUrl = searchParams.get("url")!;
+	let archidektUrl = searchParams.get("url")!.trim();
+	if (!archidektUrl.startsWith("https://") && !archidektUrl.startsWith("http://")) {
+		archidektUrl = "https://" + archidektUrl;
+	}
 	const url: URL = new URL(archidektUrl);
 	const deckId = url.pathname.split("/")[2];
 	if (deckId == null || isNaN(parseInt(deckId))) {
@@ -41,7 +44,7 @@ export async function POST(request: NextRequest) {
 		import_cards.push(`${quantity} ${name}`);
 	}
 	const card_list = import_cards.join("\n");
-	console.log(card_list);
+	// console.log(card_list);
 	body["cards"] = card_list;
 
 	return await doScryfallSearch(body);
