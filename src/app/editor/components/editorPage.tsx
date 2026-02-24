@@ -2,7 +2,7 @@
 
 import "../../styles/editor.css";
 import {CardList} from "@/app/editor/components/cardList";
-import {ReactNode, useEffect, useState} from "react";
+import {ReactNode, useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import {ProjectsBox} from "@/app/editor/components/projectsBox";
 import {renderToStaticMarkup} from "react-dom/server";
@@ -33,6 +33,8 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [activeTab, setActiveTab] = useState<"input" | "list" | "preview" | "options">("list");
 
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
+
+	const dialogRef = useRef<HTMLDialogElement>(null);
 
 	function changeVal(key: string, value: string) {
 		const tempCardCopy = {...tempCard, [key as keyof Card]: value};
@@ -181,7 +183,22 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		<div className="flex flex-row gap-2 w-full small-hidden">
 			<Link className="btn btn-secondary" href="/">Home</Link>
 			<Link className="btn btn-primary" href={`/editor/${gameId}/print`}>Preview and Print Proxies</Link>
-			{importCardsAction({setCards, cards})}
+
+
+			<button className="btn btn-primary" onClick={() => {
+				dialogRef?.current?.showModal();
+			}}>Import Cards
+			</button>
+			<dialog className="modal w-full" ref={dialogRef}>
+				<div className="modal-box min-w-[50vw] max-w-[100vw] md:max-w-[75vw] max-h-[90vh] overflow-y-auto">
+					{importCardsAction({setCards, cards})}
+				</div>
+
+				<form method="dialog" className="modal-backdrop">
+					<button>close</button>
+				</form>
+			</dialog>
+
 			<ProjectsBox localStorageKey={gameLocalStorageKey} setProjectAction={setCurrentProject}
 						 selectedProject={currentProject}/>
 			{
