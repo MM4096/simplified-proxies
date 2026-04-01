@@ -52,8 +52,9 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 								   }
 							   }}/>
 
-						<button className="btn btn-sm m-0 hover:btn-error" onClick={async () => {
-							if (await confirmationPrompt("Are you sure?", "Are you sure you want to delete this card? This action is irreversible.", "No", "Yes"))
+						<button className="btn btn-sm m-0 hover:btn-error" onClick={async (e) => {
+							if (e.shiftKey ||
+									await confirmationPrompt("Are you sure?", "Are you sure you want to delete this card? This action is irreversible. (Holding down Shift while deleting a card bypasses this message)", "No", "Yes"))
 								setCards(cards.filter((_, i) => i !== index));
 						}}>
 							<BiTrash/>
