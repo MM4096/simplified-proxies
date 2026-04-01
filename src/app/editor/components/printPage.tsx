@@ -25,8 +25,6 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [roundCorners, setRoundCorners] = useState<boolean>(true);
 	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
 
-	const umamiTracker = useUmamiEvent();
-
 	function getProjectNames() {
 		let retProjects: string[] = [];
 		try {
@@ -73,7 +71,6 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 			<div className="flex flex-row gap-2 items-center">
 				<Link href={`/editor/${gameId}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
-					umamiTracker(`${gameId}-PrintCards`);
 					window.print();
 				}}>Print
 				</button>
