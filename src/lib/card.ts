@@ -36,7 +36,7 @@ export enum MTGCardTemplate {
 	SAGA = "Saga",
 	LEVEL_UP = "Level Up",
 	ROOMS = "Rooms",
-	ADVENTURE = "Adventure / Omen",
+	ADVENTURE = "Adventure / Omen / Prepare",
 	CLASS = "Class",
 }
 

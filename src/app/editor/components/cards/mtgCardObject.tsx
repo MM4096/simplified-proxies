@@ -228,7 +228,6 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 		</div>)
 	}
 
-
 	if (card.card_template === MTGCardTemplate.MANA_COUNTER) {
 		return <div className="card mtg-card" id={id} key={id}>
 			<div className="mana-counter">
