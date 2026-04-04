@@ -1,17 +1,17 @@
 "use client";
 
-import {useRef, useState} from "react";
+import {useState} from "react";
 import {MTGCard} from "@/lib/card";
 import {FlavorTextBehavior, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
 
-export function ImportMTG({cards, setCardsAction}: {
+export function ImportMTG({cards, setCardsAction, closeDialogAction}: {
 	cards: MTGCard[],
 	setCardsAction: (cards: MTGCard[]) => void,
+	closeDialogAction?: () => void,
 }) {
-	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [importMessage, setImportMessage] = useState<string>("");
 	const [importText, setImportText] = useState<string>("");
 	const [importError, setImportError] = useState<string>("");
@@ -77,7 +77,9 @@ export function ImportMTG({cards, setCardsAction}: {
 					setCardsAction(newCards);
 				}
 
-				dialogRef.current?.close();
+				if (closeDialogAction) {
+					closeDialogAction();
+				}
 			} else {
 				const json = await response.json();
 				setImportError(json["message"]);
@@ -303,7 +305,9 @@ export function ImportMTG({cards, setCardsAction}: {
 
 		<div className="flex flex-row gap-2 w-full">
 			<button className="btn btn-secondary grow" onClick={() => {
-				dialogRef?.current?.close();
+				if (closeDialogAction) {
+					closeDialogAction();
+				}
 			}} disabled={disableButtons}>Cancel
 			</button>
 			<button className="btn btn-primary grow" onClick={() => {

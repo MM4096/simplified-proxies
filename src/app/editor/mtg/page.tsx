@@ -7,11 +7,12 @@ import {ImportMTG} from "@/app/editor/mtg/components/import";
 import {getEnumKeys} from "@/lib/enum";
 import {BiInfoCircle} from "react-icons/bi";
 import {MTGCard, MTGCardTemplate} from "@/lib/card";
+import {ImportComponent} from "@/app/editor/components/importComponent";
 
 export default function MTGEditorPage() {
 	return (<EditorPage gameName="Magic: The Gathering" gameLocalStorageKey="mtg-cards" gameId="mtg"
 						importCardsAction={({setCards, cards}): ReactNode => {
-							return (<ImportMTG cards={cards} setCardsAction={setCards}/>)
+							return <ImportComponent cards={cards} setCardsAction={setCards} InnerComponent={ImportMTG}/>
 						}}
 						cardInputsAction={({onChange, card}): ReactNode => {
 							return (<>
