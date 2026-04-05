@@ -6,7 +6,6 @@ import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card} from "@/lib/card";
-import {useUmamiEvent} from "@/app/components/analytics";
 import {isSimplifiedEditor} from "@/lib/storage";
 
 /**
@@ -73,7 +72,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 				<Link href={`/editor/${gameId}${isSimplifiedEditor() ? "/simplified" : ""}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
-				}}>Print
+				}}>Print {allCards.length || "??"} Proxies
 				</button>
 				<div className="flex flex-row gap-2 items-center ml-3">
 					<span>Project:</span>
