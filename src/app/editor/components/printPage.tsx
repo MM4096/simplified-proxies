@@ -6,7 +6,6 @@ import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card} from "@/lib/card";
-import {useUmamiEvent} from "@/app/components/analytics";
 
 /**
  * A generic template for all editor pages
@@ -72,7 +71,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 				<Link href={`/editor/${gameId}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
-				}}>Print
+				}}>Print {allCards.length || "??"} Proxies
 				</button>
 				<div className="flex flex-row gap-2 items-center ml-3">
 					<span>Project:</span>
@@ -92,24 +91,28 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 				<HideCreditBox showCredit={showCredit} setShowCreditAction={setShowCredit}/>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={useGap} onChange={(e) => setUseGap(e.target.checked)}/>
+					<input type="checkbox" className="checkbox" checked={useGap}
+						   onChange={(e) => setUseGap(e.target.checked)}/>
 					Gap between cards
 				</label>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={roundCorners} onChange={(e) => setRoundCorners(e.target.checked)}/>
+					<input type="checkbox" className="checkbox" checked={roundCorners}
+						   onChange={(e) => setRoundCorners(e.target.checked)}/>
 					Rounded Corners
 				</label>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={shrinkCards} onChange={(e) => setShrinkCards(e.target.checked)}/>
+					<input type="checkbox" className="checkbox" checked={shrinkCards}
+						   onChange={(e) => setShrinkCards(e.target.checked)}/>
 					Shrink Cards by 10%
 				</label>
 			</div>
 			<br/>
 			<div className="custom-divider"/>
 		</div>
-		<div className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
+		<div
+			className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
 			{
 				allCards.map((card, index) => {
 					switch (gameId) {

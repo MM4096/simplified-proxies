@@ -15,6 +15,14 @@ export type Changelog = ChangelogEntry[];
 export const changelog: Changelog = [
 	{
 		date: "2026-04-05",
+		version: "v1.9.4",
+		changes: (<ul className="list-disc">
+			<li><BugBadge/> Proxies are no longer cut off by page breaks on Safari</li>
+			<li><FeatureBadge/> Print page now shows how many proxies you're printing</li>
+		</ul>)
+	},
+	{
+		date: "2026-04-05",
 		version: "v1.9.3",
 		changes: (<>
 			<ul className="list-disc">
