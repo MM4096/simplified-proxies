@@ -160,15 +160,15 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 		<h2>Import Cards</h2>
 		<div className="custom-divider"/>
 
-				<div className="tabs tabs-border">
+		<div className="tabs tabs-border">
 
-					<label className="tab">
-						<input type="radio" name="mtg-import-type"
-							   id="list-import"
-							   defaultChecked={true}
-							   onChange={() => {
-								   setImportType("list");
-							   }}/>
+			<label className="tab">
+				<input type="radio" name="mtg-import-type"
+					   id="list-import"
+					   defaultChecked={true}
+					   onChange={() => {
+						   setImportType("list");
+					   }}/>
 
 							<span>Import from List</span>
 						</label>
