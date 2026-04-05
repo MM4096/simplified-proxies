@@ -66,7 +66,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 
 	}, [cards]);
 
-	return (<div className="text-left w-full h-full flex flex-col flex-wrap gap-2">
+	return (<div className="text-left w-full h-full flex flex-row flex-wrap gap-2">
 		<div className="no-print p-2">
 			<h1>Preview and Print Proxies</h1>
 			<br/>
