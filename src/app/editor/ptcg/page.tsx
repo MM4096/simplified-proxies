@@ -6,11 +6,13 @@ import {AttacksAbilitiesList} from "@/app/editor/ptcg/components/attacksAbilitie
 import {ReactNode} from "react";
 import {ImportPTCG} from "@/app/editor/ptcg/components/import";
 import {PTCGCard} from "@/lib/card";
+import {ImportComponent} from "@/app/editor/components/importComponent";
 
 export default function PTCGEditorPage() {
 	return (<EditorPage gameName="Pokemon Trading Card Game" gameLocalStorageKey="ptcg-cards" gameId="ptcg"
 						importCardsAction={({setCards, cards}): ReactNode => {
-							return (<ImportPTCG cards={cards} setCardsAction={setCards}/>)
+							return <ImportComponent cards={cards} setCardsAction={setCards}
+													InnerComponent={ImportPTCG}/>
 						}}
 						cardInputsAction={({onChange, card}) => {
 							return (<>

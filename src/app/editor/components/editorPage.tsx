@@ -2,13 +2,22 @@
 
 import "../../styles/editor.css";
 import {CardList} from "@/app/editor/components/cardList";
-import {ReactNode, useEffect, useRef, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import Link from "next/link";
 import {ProjectsBox} from "@/app/editor/components/projectsBox";
 import {renderToStaticMarkup} from "react-dom/server";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card, MTGCard, PTCGCard} from "@/lib/card";
+
+export type EditorPageProps = {
+	gameName: string,
+	gameId: "mtg" | "ptcg",
+	gameLocalStorageKey: string,
+	cardInputsAction: (props: { onChange: (key: string, value: string) => void, card: Card }) => ReactNode,
+	importCardsAction: (props: { setCards: (cards: Card[]) => void, cards: Card[] }) => ReactNode,
+	demoCard?: Card,
+}
 
 /**
  * A generic template for all editor pages
@@ -18,14 +27,8 @@ import {Card, MTGCard, PTCGCard} from "@/lib/card";
  * @param cardInputs Inputs to fill in card information
  * @constructor
  */
-export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction, demoCard}: {
-	gameName: string,
-	gameLocalStorageKey: string,
-	gameId: "mtg" | "ptcg",
-	cardInputsAction: (props: { onChange: (key: string, value: string) => void, card: Card }) => ReactNode,
-	importCardsAction: (props: { setCards: (cards: Card[]) => void, cards: Card[] }) => ReactNode,
-	demoCard?: Card,
-}) {
+export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction, demoCard}:
+						   EditorPageProps) {
 	const [cards, setCards] = useState<Card[]>([]);
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [tempCard, setTempCard] = useState<Card>({});
@@ -33,8 +36,6 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [activeTab, setActiveTab] = useState<"input" | "list" | "preview" | "options">("list");
 
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
-
-	const dialogRef = useRef<HTMLDialogElement>(null);
 
 	function changeVal(key: string, value: string) {
 		const tempCardCopy = {...tempCard, [key as keyof Card]: value};
@@ -195,5 +196,60 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 			}
 		</div>
 
+	</div>)
+}
+
+export function SimplifiedEditorPage({
+										 gameName,
+										 gameId,
+										 gameLocalStorageKey,
+										 importCardsAction,
+									 }: EditorPageProps) {
+	const [cards, setCards] = useState<Card[]>([]);
+	// get cards from storage
+	useEffect(() => {
+		function getProjectData() {
+			const savedData = localStorage.getItem(gameLocalStorageKey);
+
+			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
+				return [];
+			}
+			const parsedData = JSON.parse(savedData);
+
+			return (parsedData["UNSAVED"] || []) as Card[];
+		}
+
+		const projectData = getProjectData();
+		if (projectData.length > 0) {
+			// if cards already exist in the new project, use that
+			setCards(projectData);
+		} else {
+			// otherwise, ignore it and save the new cards
+
+		}
+	}, [gameLocalStorageKey])
+
+	// write cards to storage
+	useEffect(() => {
+		function setProjectData(data: MTGCard[]) {
+			const savedData = localStorage.getItem(gameLocalStorageKey);
+			let parsedData = JSON.parse(savedData || "{}");
+			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
+				parsedData = {};
+			}
+
+			parsedData["UNSAVED"] = data;
+			localStorage.setItem(gameLocalStorageKey, JSON.stringify(parsedData));
+		}
+
+		setProjectData(cards);
+	}, [cards, gameLocalStorageKey]);
+
+	return (<div className="main-container">
+		<h1 className="small-hidden">Simplified Editors: <i>{gameName}</i></h1>
+
+		<div className="border p-2 h-full flex flex-col gap-2">
+			{importCardsAction({setCards, cards})}
+		</div>
 	</div>)
 }

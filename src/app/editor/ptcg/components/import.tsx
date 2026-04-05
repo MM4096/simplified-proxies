@@ -3,11 +3,11 @@
 import {useRef, useState} from "react";
 import {PTCGCard} from "@/lib/card";
 
-export function ImportPTCG({cards, setCardsAction}: {
+export function ImportPTCG({cards, setCardsAction, closeDialogAction}: {
 	cards: PTCGCard[],
 	setCardsAction: (cards: PTCGCard[]) => void,
+	closeDialogAction?: () => void,
 }) {
-	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [overwrite, setOverwrite] = useState(false);
 
 	const [inputText, setInputText] = useState("");
@@ -53,7 +53,9 @@ export function ImportPTCG({cards, setCardsAction}: {
 			setImportError(`The following cards were not found: ${notFoundCards.join(", ")}. All other cards were imported.`);
 		} else {
 			setImportError("");
-			dialogRef?.current?.close();
+			if (closeDialogAction) {
+				closeDialogAction()
+			}
 		}
 	}
 
@@ -103,7 +105,9 @@ export function ImportPTCG({cards, setCardsAction}: {
 		<br/><br/>
 		<div className="flex flex-row items-center justify-center gap-4 w-full">
 			<button className="btn btn-secondary grow" onClick={() => {
-				dialogRef?.current?.close();
+				if (closeDialogAction) {
+					closeDialogAction();
+				}
 			}} disabled={loading}>Cancel
 			</button>
 			<button className="btn btn-primary grow" onClick={() => {

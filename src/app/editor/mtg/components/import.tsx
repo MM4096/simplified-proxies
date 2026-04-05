@@ -7,10 +7,11 @@ import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
 
-export function ImportMTG({cards, setCardsAction, closeDialogAction}: {
+export function ImportMTG({cards, setCardsAction, closeDialogAction, hideCancelButton = false}: {
 	cards: MTGCard[],
 	setCardsAction: (cards: MTGCard[]) => void,
 	closeDialogAction?: () => void,
+	hideCancelButton?: boolean
 }) {
 	const [importMessage, setImportMessage] = useState<string>("");
 	const [importText, setImportText] = useState<string>("");
@@ -303,13 +304,15 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction}: {
 			importError !== "" && (<label className="label text-error whitespace-pre">{importError}</label>)
 		}
 
+		<div className="grow"/>
+
 		<div className="flex flex-row gap-2 w-full">
-			<button className="btn btn-secondary grow" onClick={() => {
+			{!hideCancelButton && (<button className="btn btn-secondary grow" onClick={() => {
 				if (closeDialogAction) {
 					closeDialogAction();
 				}
 			}} disabled={disableButtons}>Cancel
-			</button>
+			</button>)}
 			<button className="btn btn-primary grow" onClick={() => {
 				importCards().then();
 			}} disabled={disableButtons}>Import
