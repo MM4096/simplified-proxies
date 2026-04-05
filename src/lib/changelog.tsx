@@ -14,6 +14,15 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2026-04-05",
+		version: "v1.9.3",
+		changes: (<>
+			<ul className="list-disc">
+				<li><BugBadge/> Printing proxies page now displays as intended</li>
+			</ul>
+		</>)
+	},
+	{
 		date: "2026-02-24",
 		version: "v1.9.2",
 		changes: (<>
