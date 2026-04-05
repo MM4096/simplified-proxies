@@ -15,8 +15,8 @@
 	.card-print > * {
 		display: inline-flex !important;
 
-		max-width: calc(var(--card-width) * 0.9) !important;
-		max-height: calc(var(--card-height) * 0.9) !important;
+		max-width: calc(var(--card-width)) !important;
+		max-height: calc(var(--card-height)) !important;
 
 		/*vertical-align: top;*/
 
