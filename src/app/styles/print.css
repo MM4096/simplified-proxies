@@ -4,7 +4,24 @@
 	}
 
 	.card-print {
-		margin: 0 !important;
+		margin: 0.25in !important;
+		display: block !important;
+	}
+	.card-print.gap > * {
+		margin: 0.05in !important;
+	}
+
+
+	.card-print > * {
+		display: inline-flex !important;
+
+		max-width: calc(var(--card-width) * 0.9) !important;
+		max-height: calc(var(--card-height) * 0.9) !important;
+
+		/*vertical-align: top;*/
+
+		break-inside: avoid;
+		page-break-inside: avoid;
 	}
 }
 
@@ -35,6 +52,8 @@ body .double-card {
 }
 
 .card-print > * {
+	height: auto;
+
 	break-inside: avoid;
 	-webkit-column-break-inside: avoid;
 	page-break-inside: avoid;
@@ -49,8 +68,7 @@ body .double-card {
 }
 
 .card-print.shrink-cards > .card,
-.card-print.shrink-cards > .double-card
-{
+.card-print.shrink-cards > .double-card {
 	transform-origin: top left;
 	scale: 0.9;
 }
