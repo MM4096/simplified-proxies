@@ -327,7 +327,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 							</span>
 				</label>
 
-						<div className="divider md:divider-horizontal"/>
+				<div className="divider md:divider-horizontal"/>
 
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates}
@@ -353,9 +353,9 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 								</span>
 							</label>
 
+						</div>
 					</div>
-				</div>
-				<br/>
+					<br/>
 
 					<label className="label">
 						<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
