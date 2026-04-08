@@ -7,6 +7,7 @@ export type ImportProps = {
 	cards: Card[],
 	setCardsAction: (cards: Card[]) => void,
 	closeDialogAction: () => void,
+	onImportAction: () => void,
 }
 
 export function ImportComponent({cards, setCardsAction, InnerComponent}: {
@@ -31,6 +32,8 @@ export function ImportComponent({cards, setCardsAction, InnerComponent}: {
 			<div className="modal-box min-w-[50vw] max-w-[100vw] md:max-w-[75vw] max-h-[90vh] overflow-y-auto">
 				{/* TODO: Fix hydration warning */}
 				<InnerComponent cards={cards} setCardsAction={setCardsAction} closeDialogAction={() => {
+					dialogRef?.current?.close();
+				}} onImportAction={() => {
 					dialogRef?.current?.close();
 				}}/>
 			</div>

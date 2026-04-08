@@ -11,6 +11,10 @@ export function getItem(key: string, defaultValue: unknown): unknown {
 	return JSON.parse(value);
 }
 
+export function setSimplifiedEditor(value: boolean) {
+	setItem("simplified-editor", value);
+}
+
 export function isSimplifiedEditor(): boolean {
 	return getItem("simplified-editor", false) as boolean;
 }

@@ -7,11 +7,12 @@ import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
 
-export function ImportMTG({cards, setCardsAction, closeDialogAction, hideCancelButton = false}: {
+export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAction, cancelButtonText = "Cancel"}: {
 	cards: MTGCard[],
 	setCardsAction: (cards: MTGCard[]) => void,
 	closeDialogAction?: () => void,
-	hideCancelButton?: boolean
+	onImportAction?: () => void,
+	cancelButtonText?: string,
 }) {
 	const [importMessage, setImportMessage] = useState<string>("");
 	const [importText, setImportText] = useState<string>("");
@@ -78,8 +79,8 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, hideCancelB
 					setCardsAction(newCards);
 				}
 
-				if (closeDialogAction) {
-					closeDialogAction();
+				if (onImportAction) {
+					onImportAction();
 				}
 			} else {
 				const json = await response.json();
@@ -307,11 +308,11 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, hideCancelB
 		<div className="grow"/>
 
 		<div className="flex flex-row gap-2 w-full">
-			{!hideCancelButton && (<button className="btn btn-secondary grow" onClick={() => {
+			{cancelButtonText && (<button className="btn btn-secondary grow" onClick={() => {
 				if (closeDialogAction) {
 					closeDialogAction();
 				}
-			}} disabled={disableButtons}>Cancel
+			}} disabled={disableButtons}>{cancelButtonText}
 			</button>)}
 			<button className="btn btn-primary grow" onClick={() => {
 				importCards().then();

@@ -3,10 +3,11 @@
 import {useRef, useState} from "react";
 import {PTCGCard} from "@/lib/card";
 
-export function ImportPTCG({cards, setCardsAction, closeDialogAction}: {
+export function ImportPTCG({cards, setCardsAction, closeDialogAction, onImportAction}: {
 	cards: PTCGCard[],
 	setCardsAction: (cards: PTCGCard[]) => void,
 	closeDialogAction?: () => void,
+	onImportAction?: () => void,
 }) {
 	const [overwrite, setOverwrite] = useState(false);
 
@@ -53,8 +54,8 @@ export function ImportPTCG({cards, setCardsAction, closeDialogAction}: {
 			setImportError(`The following cards were not found: ${notFoundCards.join(", ")}. All other cards were imported.`);
 		} else {
 			setImportError("");
-			if (closeDialogAction) {
-				closeDialogAction()
+			if (onImportAction) {
+				onImportAction();
 			}
 		}
 	}

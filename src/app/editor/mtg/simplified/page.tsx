@@ -13,7 +13,9 @@ export default function SimplifiedMTGEditor() {
 		gameName="Magic: The Gathering" gameId="mtg" gameLocalStorageKey="mtg-cards"
 
 		importCardsAction={({setCards, cards}): ReactNode => {
-			return <ImportMTG cards={cards} setCardsAction={setCards} hideCancelButton={true} closeDialogAction={() => {
+			return <ImportMTG cards={cards} setCardsAction={setCards} cancelButtonText="Home" closeDialogAction={() => {
+				router.push("/");
+			}} onImportAction={() => {
 				router.push("/editor/mtg/print");
 			}}/>
 		}}

@@ -1,5 +1,5 @@
 import "./styles/index.css"
-
+3
 import Link from "next/link";
 import {Carousel} from "@/app/components/carousels/images/carousel";
 import {BiBug, BiLogoGithub} from "react-icons/bi";

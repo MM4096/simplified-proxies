@@ -7,6 +7,7 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card} from "@/lib/card";
 import {useUmamiEvent} from "@/app/components/analytics";
+import {isSimplifiedEditor} from "@/lib/storage";
 
 /**
  * A generic template for all editor pages
@@ -71,7 +72,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 			<h1>Preview and Print Proxies</h1>
 			<br/>
 			<div className="flex flex-row gap-2 items-center">
-				<Link href={`/editor/${gameId}`} className="btn btn-secondary">Back to Editor</Link>
+				<Link href={`/editor/${gameId}${isSimplifiedEditor() ? "/simplified" : ""}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					umamiTracker(`${gameId}-PrintCards`);
 					window.print();

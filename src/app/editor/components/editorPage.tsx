@@ -9,6 +9,7 @@ import {renderToStaticMarkup} from "react-dom/server";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card, MTGCard, PTCGCard} from "@/lib/card";
+import {setSimplifiedEditor} from "@/lib/storage";
 
 export type EditorPageProps = {
 	gameName: string,
@@ -54,6 +55,10 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		}
 		return JSON.stringify(tempCard) !== JSON.stringify({});
 	}
+
+	useEffect(() => {
+		setSimplifiedEditor(false);
+	}, []);
 
 	// get cards from storage
 	useEffect(() => {
@@ -206,6 +211,11 @@ export function SimplifiedEditorPage({
 										 importCardsAction,
 									 }: EditorPageProps) {
 	const [cards, setCards] = useState<Card[]>([]);
+
+	useEffect(() => {
+		setSimplifiedEditor(true);
+	}, []);
+
 	// get cards from storage
 	useEffect(() => {
 		function getProjectData() {
