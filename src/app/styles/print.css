@@ -4,11 +4,11 @@
 	}
 
 	.card-print {
-		margin: 0.25in !important;
+		margin: 0.15in !important;
 		display: block !important;
 	}
 	.card-print.gap > * {
-		margin: 0.05in !important;
+		margin: 0.03in !important;
 	}
 
 
