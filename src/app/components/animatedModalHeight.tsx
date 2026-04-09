@@ -13,7 +13,7 @@ export default function AnimatedModalHeight({children}: {children: ReactNode}) {
 	}, [children]);
 
 	return (
-		<div style={{height: height + "px"}} className="overflow-hidden transition-all duration-250 ease-in-out">
+		<div style={{height: height + "px"}} className="overflow-hidden transition-all duration-200 ease-out">
 			<div ref={divRef}>
 				{children}
 			</div>

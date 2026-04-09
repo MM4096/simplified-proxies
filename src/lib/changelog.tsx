@@ -14,6 +14,16 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2026-04-09",
+		version: "v1.9.5",
+		changes: (<ul className="list-disc">
+			<li><BugBadge/> Printing proxies should now display standard-sized proxies</li>
+			<li><FeatureBadge/> <MTGBadge/> <b>Adventure</b> template gets automatically applied to "<i>Prepare</i>"
+				cards from Secrets of Strixhaven.
+			</li>
+		</ul>)
+	},
+	{
 		date: "2026-04-05",
 		version: "v1.9.4",
 		changes: (<ul className="list-disc">
@@ -35,7 +45,9 @@ export const changelog: Changelog = [
 		version: "v1.9.2",
 		changes: (<>
 			<ul className="list-disc">
-				<li><BugBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin with <code>HTTPS</code>.</li>
+				<li><BugBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin
+					with <code>HTTPS</code>.
+				</li>
 			</ul>
 		</>)
 	},
@@ -44,9 +56,11 @@ export const changelog: Changelog = [
 		version: "v1.9.1",
 		changes: (<>
 			<ul className="list-disc">
-				<li><FeatureBadge/> <MTGBadge/> Editor now has an option to edit the flavor text of any reverse faces</li>
+				<li><FeatureBadge/> <MTGBadge/> Editor now has an option to edit the flavor text of any reverse faces
+				</li>
 				<li><BugBadge/> <MTGBadge/> Editor now imports flavor text of reverse faces</li>
-				<li><BugBadge/> <MTGBadge/> Cards with too much flavor text no longer cut off the standard card text</li>
+				<li><BugBadge/> <MTGBadge/> Cards with too much flavor text no longer cut off the standard card text
+				</li>
 			</ul>
 		</>)
 	},
