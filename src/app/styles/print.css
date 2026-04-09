@@ -17,11 +17,13 @@
 
 		max-width: calc(var(--card-width)) !important;
 		max-height: calc(var(--card-height)) !important;
+		width: calc(var(--card-width));
+		height: calc(var(--card-height));
 
-		/*vertical-align: top;*/
-
-		break-inside: avoid;
-		page-break-inside: avoid;
+		.shrink-cards & {
+			max-width: calc(var(--card-width) * 0.9) !important;
+			max-height: calc(var(--card-height) * 0.9) !important;
+		}
 	}
 }
 
@@ -51,14 +53,6 @@ body .double-card {
 	grid-auto-flow: row dense;
 }
 
-.card-print > * {
-	height: auto;
-
-	break-inside: avoid;
-	-webkit-column-break-inside: avoid;
-	page-break-inside: avoid;
-}
-
 .card-print.gap {
 	grid-gap: 0.1in;
 }
@@ -78,7 +72,6 @@ body .double-card {
 }
 
 .card-print.shrink-cards {
-	/*scale: 0.9;*/
 	grid-template-columns: repeat(auto-fill, calc(var(--card-width) * 0.9));
 	grid-auto-rows: calc(var(--card-height) * 0.9);
 }

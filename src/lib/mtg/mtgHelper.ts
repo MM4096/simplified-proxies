@@ -278,7 +278,8 @@ export function applyTemplates(card: MTGCard): MTGCard {
 	if (card.reverse_text?.includes("Aftermath")) {
 		card.card_template = MTGCardTemplate.SPLIT_AFTERMATH;
 	}
-	if (card.reverse_type_line?.includes("Adventure") || card.reverse_type_line?.includes("Omen")) {
+	if (card.reverse_type_line?.includes("Adventure") || card.reverse_type_line?.includes("Omen") ||
+	(card.card_text?.includes("prepared") && card.reverse_card_name)) {
 		card.card_template = MTGCardTemplate.ADVENTURE;
 	}
 
