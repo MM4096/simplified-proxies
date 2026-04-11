@@ -293,7 +293,9 @@ export function MTGCardObject({card, isBlackWhite, includeCredit = true, classNa
 
 		<div className="bottom-container">
 			<div className="flex flex-col grow">
-				<p className="notes grow">{card.notes}</p>
+				<p className="notes grow" dangerouslySetInnerHTML={{
+					__html: `${DOMPurify.sanitize(card.notes || "")}`
+				}}></p>
 				{
 					includeCredit && (<p className="credit"/>)
 				}

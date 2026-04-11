@@ -70,8 +70,8 @@
 		height: 1em;
 		vertical-align: sub;
 		display: inline-block;
-		margin-left: 0.01in;
-		margin-right: 0.01in;
+		padding-left: 0.01in;
+		padding-right: 0.01in;
 	}
 
 	.no-paragraph-break {
