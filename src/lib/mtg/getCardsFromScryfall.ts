@@ -126,6 +126,8 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	// const includeTokens = body["includeTokens"] || false;
 	const splitDFCs = body["splitDFCs"] || false;
 
+	const importNote = body["importNote"] || "";
+
 	let lines = body["cards"].split("\n");
 	const importCards: Array<{ name: string, quantity: number }> = [];
 	let hasQuantities: boolean = false;
@@ -271,6 +273,9 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 						backFace = applyTemplates(backFace);
 					}
 
+					applyImportNote(frontFace, importNote);
+					applyImportNote(backFace, importNote);
+
 					returnedCards.push(frontFace);
 					returnedCards.push(backFace);
 					continue;
@@ -283,6 +288,8 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 						returnedCards.push(DUNGEONS["initiative"]);
 					}
 				}
+
+				applyImportNote(thisCardObject, importNote);
 
 				thisCardObject.quantity = originalQuantity;
 				returnedCards.push(thisCardObject);
@@ -301,5 +308,15 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	}), {
 		status: 200,
 	});
+}
+
+function applyImportNote(cardObject: MTGCard, importNote: string) {
+	if (importNote !== "") {
+		if (cardObject.notes) {
+			cardObject.notes += "\n" + importNote;
+		} else {
+			cardObject.notes = importNote;
+		}
+	}
 }
 //endregion

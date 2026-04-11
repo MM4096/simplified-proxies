@@ -14,6 +14,14 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2026-04-11",
+		version: "v1.9.6",
+		changes: (<ul className="list-disc">
+			<li><FeatureBadge/> <MTGBadge/> Added &quot;Import Notes&quot; feature, which adds the inputted text to the <i>Notes</i> section to all imported cards.
+			</li>
+		</ul>)
+	},
+	{
 		date: "2026-04-09",
 		version: "v1.9.5",
 		changes: (<ul className="list-disc">

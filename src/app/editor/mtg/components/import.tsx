@@ -26,6 +26,7 @@ export function ImportMTG({cards, setCardsAction}: {
 	const [importTemplates, setImportTemplates] = useState<boolean>(true);
 	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
 	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
+	const [importNote, setImportNote] = useState<string>("");
 
 	const [importType, setImportType] = useState<"moxfield" | "archidekt" | "list">("list");
 	const [moxfieldImportMaybeboard, setMoxfieldImportMaybeboard] = useState<boolean>(false);
@@ -63,6 +64,7 @@ export function ImportMTG({cards, setCardsAction}: {
 				importTemplates: importTemplates,
 				includeTokens: importIncludeTokens,
 				splitDFCs: importSplitDFCs,
+				importNote: importNote,
 			}),
 		}).then(async (response) => {
 			if (response.ok) {
@@ -223,7 +225,7 @@ export function ImportMTG({cards, setCardsAction}: {
 					<div className="collapse bg-base-100 border-gray-500 border h-max">
 						<input type="checkbox" defaultChecked={true}/>
 						<div className="collapse-title font-semibold pr-8">Additional Settings</div>
-						<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap">
+						<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap gap-2">
 							<label className="label text-sm">
 								<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands}
 									   onChange={(e) => {
@@ -300,6 +302,18 @@ export function ImportMTG({cards, setCardsAction}: {
 								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
 								<BiInfoCircle/>
 							</span>
+							</label>
+
+							<div className="divider md:divider-horizontal"/>
+
+							<label className="label label-sm text-sm">
+								<input className="input input-sm" value={importNote} onChange={(e) => {
+									setImportNote(e.target.value);
+								}} placeholder="Import Notes (optional)"/>
+								<span className="tooltip tooltip-left ">
+								<span className="tooltip-content">Any note you want to add to all the cards</span>
+								<BiInfoCircle/>
+								</span>
 							</label>
 
 						</div>
