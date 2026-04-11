@@ -4,6 +4,34 @@
 	--card-radius: 0.125in;
 }
 
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url("/fonts/dejavu-serif/DejaVuSerif.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url("/fonts/dejavu-serif/DejaVuSerif-Italic.ttf") format("truetype");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url("/fonts/dejavu-serif/DejaVuSerif-Bold.ttf") format("truetype");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url("/fonts/dejavu-serif/DejaVuSerif-BoldItalic.ttf") format("truetype");
+	font-weight: bold;
+	font-style: italic;
+}
+
 .card {
 	width: var(--card-width);
 	height: var(--card-height);
@@ -11,14 +39,14 @@
 	max-height: 3.5in;
 	border-radius: var(--card-radius);
 	border: 1px solid black;
-	font-size: 0.1in;
 	break-inside: avoid;
 	-webkit-column-break-inside: avoid;
 
 	display: flex;
 	flex-direction: column;
 
-	font-family: serif;
+	font-family: "DejaVu Serif", "Times New Roman", Times , serif;
+	font-size: 0.1in;
 	line-height: 1.5;
 
 	padding-top: 0.05in;
