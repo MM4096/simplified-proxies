@@ -28,6 +28,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 	const [importTemplates, setImportTemplates] = useState<boolean>(true);
 	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
 	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
+	const [importNote, setImportNote] = useState<string>("");
 
 	const [importType, setImportType] = useState<"moxfield" | "archidekt" | "list">("list");
 	const [moxfieldImportMaybeboard, setMoxfieldImportMaybeboard] = useState<boolean>(false);
@@ -65,6 +66,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 				importTemplates: importTemplates,
 				includeTokens: importIncludeTokens,
 				splitDFCs: importSplitDFCs,
+				importNote: importNote,
 			}),
 		}).then(async (response) => {
 			if (response.ok) {
@@ -290,18 +292,31 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
 								<BiInfoCircle/>
 							</span>
-						</label>
+							</label>
+
+							<div className="divider md:divider-horizontal"/>
+
+							<label className="label label-sm text-sm">
+								<input className="input input-sm" value={importNote} onChange={(e) => {
+									setImportNote(e.target.value);
+								}} placeholder="Import Notes (optional)"/>
+								<span className="tooltip tooltip-left ">
+								<span className="tooltip-content">Any note you want to add to all the cards</span>
+								<BiInfoCircle/>
+								</span>
+							</label>
 
 					</div>
 				</div>
 				<br/>
 
-				<label className="label">
-					<input type="checkbox" className="checkbox checkbox-error" checked={overwrite} onChange={(e) => {
-						setOverwrite(e.target.checked);
-					}}/>
-					Overwrite existing cards
-				</label>
+					<label className="label">
+						<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
+							   onChange={(e) => {
+								   setOverwrite(e.target.checked);
+							   }}/>
+						Overwrite existing cards
+					</label>
 
 				<br/>
 
