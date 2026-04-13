@@ -100,6 +100,15 @@ function collapseCardName(cardName: string): string {
 	return cardName.toLowerCase().replace(/[^a-zA-Z0-9_]/g, "");
 }
 
+function matchCollapsedName(collapsedCardName: string, allNames: string[]): string | null {
+	for (const name of allNames) {
+		if (collapseCardName(collapsedCardName) === collapseCardName(name)) {
+			return name;
+		}
+	}
+	return null
+}
+
 async function fuzzyScryfall(cardName: string): Promise<unknown> {
 	const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${cardName}`, {
 		headers: SCRYFALL_HEADERS,
@@ -114,7 +123,7 @@ async function fuzzyScryfall(cardName: string): Promise<unknown> {
  */
 export async function doScryfallSearch(body: any): Promise<Response> {
 	if (!body.hasOwnProperty("cards")) {
-		return new Response("Missing cards", {
+		return new Response(JSON.stringify({message: "Missing cards"}), {
 			status: 400,
 		});
 	}
@@ -129,6 +138,8 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	const importNote = body["importNote"] || "";
 
 	let lines = body["cards"].split("\n");
+
+	const originalNames: string[] = [];
 	const importCards: Array<{ name: string, quantity: number }> = [];
 	let hasQuantities: boolean = false;
 
@@ -178,6 +189,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			}
 		}
 
+		originalNames.push(line);
 		importCards.push({name: line, quantity: quantity});
 	}
 	//endregion
@@ -224,14 +236,16 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 					const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;
 					if (fuzzyResponse["object"] === "error") {
+						const originalName = matchCollapsedName(thisName, originalNames) || thisName;
+
 						if (fuzzyResponse.hasOwnProperty("type") && fuzzyResponse.type === "ambiguous") {
 							return new Response(JSON.stringify({
-								message: `Could not find card: ${thisName} (ambiguous request)\n${QUANTITY_MESSAGE}`
+								message: `Could not find card: ${originalName} (ambiguous request)\n${QUANTITY_MESSAGE}`
 							}), {status: 400,})
 						}
 
 						return new Response(JSON.stringify({
-							message: `Could not find card: ${thisName} (card not found)\n${QUANTITY_MESSAGE}`
+							message: `Could not find card: ${originalName} (card not found)\n${QUANTITY_MESSAGE}`
 						}), {status: 400,})
 					}
 					cardData.push(fuzzyResponse);
@@ -296,7 +310,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			}
 		} else {
 			return new Response(JSON.stringify({
-				message: `Could not find chunk ${i + 1}.`
+				message: `Could not find chunk ${i + 1} (this is an API error, not an error with the provided data).`
 			}), {
 				status: 400,
 			})

@@ -286,8 +286,8 @@ export function ImportMTG({cards, setCardsAction}: {
 								Split DFCs into separate cards
 								<span className="tooltip tooltip-right ">
 								<span className="tooltip-content">If checked, all DFCs will be imported as two cards instead of one.</span>
-								<BiInfoCircle/>
-							</span>
+									<BiInfoCircle/>
+								</span>
 							</label>
 
 							<div className="divider md:divider-horizontal"/>

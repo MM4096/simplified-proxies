@@ -14,6 +14,14 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2026-04-13",
+		version: "v1.10",
+		changes: (<ul className="list-disc">
+			<li><FeatureBadge/> Added an input to filter cards in the editor</li>
+			<li><FeatureBadge/> <MTGBadge/> Error messages while importing are a lot more descriptive</li>
+		</ul>)
+	},
+	{
 		date: "2026-04-11",
 		version: "v1.9.6",
 		changes: (<ul className="list-disc">
@@ -232,8 +240,30 @@ export const changelog: Changelog = [
 	}
 ]
 
+export function convertStringVersionToInt(version: string): number[] {
+	version = version.replace("v", "")
+	const versionArr = version.split(".")
+	let ret = []
+	for (let i = 0; i < versionArr.length; i++) {
+		ret.push(parseInt(versionArr[i]))
+	}
+	return ret
+}
+
 export function compareChangelogVersion(a: string, b: string): number {
-	return a.localeCompare(b)
+	const aArr = convertStringVersionToInt(a)
+	const bArr = convertStringVersionToInt(b)
+	for (let i = 0; i < Math.max(aArr.length, bArr.length); i++) {
+		const aVal = aArr[i] || 0
+		const bVal = bArr[i] || 0
+
+		if (aVal > bVal) {
+			return 1
+		} else if (aVal < bVal) {
+			return -1
+		}
+	}
+	return 0
 }
 
 export function compareChangelog(a: ChangelogEntry, b: ChangelogEntry): number {
