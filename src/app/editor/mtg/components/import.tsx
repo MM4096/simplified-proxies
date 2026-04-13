@@ -7,6 +7,7 @@ import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
+import Link from "next/link";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -30,6 +31,8 @@ export function ImportMTG({cards, setCardsAction}: {
 
 	const [importType, setImportType] = useState<"moxfield" | "archidekt" | "list">("list");
 	const [moxfieldImportMaybeboard, setMoxfieldImportMaybeboard] = useState<boolean>(false);
+
+	const [importErrorCount, setImportErrorCount] = useState<number>(0);
 
 	const umamiTracker = useUmamiEvent();
 
@@ -83,6 +86,7 @@ export function ImportMTG({cards, setCardsAction}: {
 				dialogRef.current?.close();
 
 				umamiTracker("mtg-CardsImported", {importType: importType, success: "true"});
+				setImportErrorCount(0);
 			} else {
 				const json = await response.json();
 				setImportError(json["message"]);
@@ -93,6 +97,7 @@ export function ImportMTG({cards, setCardsAction}: {
 					success: "false",
 					error: json["message"],
 				});
+				setImportErrorCount(importErrorCount + 1);
 			}
 
 		}).catch((e) => {
@@ -334,7 +339,17 @@ export function ImportMTG({cards, setCardsAction}: {
 						importMessage !== "" && (<label className="label">{importMessage}</label>)
 					}
 					{
-						importError !== "" && (<label className="label text-error whitespace-pre">{importError}</label>)
+						importError !== "" && (<>
+							<label className="label text-error whitespace-pre">{importError}</label>
+							{
+								importErrorCount > 1 && (<>
+									<br/>
+									<label className="label text-sm whitespace-pre italic">If this issue persists, please open a bug
+										report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
+													   target="_blank" className="link">GitHub</Link></label>
+								</>)
+							}
+						</>)
 					}
 
 					<div className="flex flex-row gap-2 w-full">
