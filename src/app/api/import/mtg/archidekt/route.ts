@@ -4,7 +4,7 @@ import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
 export async function POST(request: NextRequest) {
 	const body = await request.json();
 	const searchParams = request.nextUrl.searchParams;
-	if (!searchParams.has("url") || searchParams.get("url") == null) {
+	if (!searchParams.has("url") || searchParams.get("url") == null || searchParams.get("url") === "") {
 		return new Response(JSON.stringify({
 			message: "Missing Archidekt URL.",
 		}), {status: 400})
