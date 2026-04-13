@@ -7,6 +7,7 @@ import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
+import Link from "next/link";
 
 export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAction, cancelButtonText = "Cancel"}: {
 	cards: MTGCard[],
@@ -32,6 +33,8 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 	const [importType, setImportType] = useState<"moxfield" | "archidekt" | "list">("list");
 	const [moxfieldImportMaybeboard, setMoxfieldImportMaybeboard] = useState<boolean>(false);
+
+	const [importErrorCount, setImportErrorCount] = useState<number>(0);
 
 	const umamiTracker = useUmamiEvent();
 
@@ -83,6 +86,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 				}
 
 				umamiTracker("mtg-CardsImported", {importType: importType, success: "true"});
+				setImportErrorCount(0);
 				if (onImportAction) {
 					onImportAction();
 				}
@@ -96,6 +100,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 					success: "false",
 					error: json["message"],
 				});
+				setImportErrorCount(importErrorCount + 1);
 			}
 
 		}).catch((e) => {
@@ -320,12 +325,22 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<br/>
 
-		{
-			importMessage !== "" && (<label className="label">{importMessage}</label>)
-		}
-		{
-			importError !== "" && (<label className="label text-error whitespace-pre">{importError}</label>)
-		}
+					{
+						importMessage !== "" && (<label className="label">{importMessage}</label>)
+					}
+					{
+						importError !== "" && (<>
+							<label className="label text-error whitespace-pre">{importError}</label>
+							{
+								importErrorCount > 1 && (<>
+									<br/>
+									<label className="label text-sm whitespace-pre italic">If this issue persists, please open a bug
+										report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
+													   target="_blank" className="link">GitHub</Link></label>
+								</>)
+							}
+						</>)
+					}
 
 		<div className="grow"/>
 
