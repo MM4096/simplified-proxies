@@ -15,11 +15,24 @@ export default function ConfirmationModal({title, message, onAction, noButtonTex
 		}
 	}, [dialogRef]);
 
+	useEffect(() => {
+		const dialog = dialogRef.current;
+		if (!dialog) return;
+
+		function onCancel(e: Event) {
+			onAction(false);
+		}
+		dialog.addEventListener("cancel", onCancel);
+		return () => {
+			dialog.removeEventListener("cancel", onCancel);
+		}
+	}, [dialogRef, onAction]);
+
 	return (<>
 		<dialog className="modal" ref={dialogRef}>
-			<div className="modal-box w-1/2 flex flex-col gap-3">
+			<div className="modal-box w-1/2 max-h-3/4 flex flex-col gap-3">
 				<h3 className="font-Tomorrow font-bold text-xl">{title || "Are you Sure?"}</h3>
-				<p className="">{message || ""}</p>
+				{message || ""}
 				<div className="flex flex-row gap-2 w-full">
 					<button className="btn btn-secondary grow" onClick={() => {
 						onAction(false);

@@ -8,6 +8,7 @@ import {useUmamiEvent} from "@/app/components/analytics";
 import {NewBadge} from "@/app/components/tags/new";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
 import Link from "next/link";
+import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 
 export function ImportMTG({cards, setCardsAction}: {
 	cards: MTGCard[],
@@ -73,6 +74,48 @@ export function ImportMTG({cards, setCardsAction}: {
 			if (response.ok) {
 				const json = await response.json();
 				const retCards: MTGCard[] = json["cards"];
+
+				// check if API returned any warnings
+				const warnings: string[] = json.hasOwnProperty("warnings") ? json["warnings"] : [];
+				if (warnings.length > 0) {
+					umamiTracker("mtg-CardsImported", {
+						importType: importType,
+						importBody: importText,
+						success: "true",
+						warnings: warnings,
+					});
+
+					setImportMessage("Resolving Warnings...")
+
+					const shouldNotAbort = await confirmationPrompt(`Warning`,
+						(<>
+							<p><b>Your import didn&apos;t fail,
+								but {warnings.length} warning{warnings.length > 1 ? "s" : ""} was encountered.</b><br/>
+								You can either cancel the import and fix the warnings manually, or accept the automatic
+								changes that were made.</p><br/>
+							<b>Warnings:</b>
+							<div className="overflow-scroll">
+								<ul className="list-disc">
+									{
+										warnings.map((warning, index) => {
+											return (<li key={index}>{index + 1}: <i>{warning}</i></li>)
+										})
+									}
+								</ul>
+							</div>
+
+							<label className="label text-sm whitespace-pre italic">Something wrong? Please open a
+								bug report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
+												   target="_blank" className="link">GitHub</Link></label>
+						</>),
+						"Cancel Import", "Continue Anyways");
+					if (!shouldNotAbort) {
+						setImportMessage("");
+						setImportError("Import Cancelled: User Aborted");
+						setDisableButtons(false);
+						return;
+					}
+				}
 
 				if (overwrite) {
 					setCardsAction(retCards);
@@ -344,7 +387,8 @@ export function ImportMTG({cards, setCardsAction}: {
 							{
 								importErrorCount > 1 && (<>
 									<br/>
-									<label className="label text-sm whitespace-pre italic">If this issue persists, please open a bug
+									<label className="label text-sm whitespace-pre italic">If this issue persists, please open a
+										bug
 										report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
 													   target="_blank" className="link">GitHub</Link></label>
 								</>)
