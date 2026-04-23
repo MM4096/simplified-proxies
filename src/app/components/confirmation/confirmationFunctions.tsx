@@ -1,7 +1,10 @@
 import {createRoot} from "react-dom/client";
 import ConfirmationModal from "@/app/components/confirmation/confirmationModal";
+import {ReactNode} from "react";
 
-export async function confirmationPrompt(title: string, message: string, noButtonText: string = "Cancel", yesButtonText: string = "Confirm"): Promise<boolean> {
+export async function confirmationPrompt(title: string, message: string | ReactNode,
+										 noButtonText: string = "Cancel",
+										 yesButtonText: string = "Confirm"): Promise<boolean> {
 	return new Promise<boolean>((resolve) => {
 		const container: HTMLDivElement = document.createElement("div");
 		document.body.appendChild(container);
