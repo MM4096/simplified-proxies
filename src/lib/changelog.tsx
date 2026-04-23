@@ -14,6 +14,19 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
+		date: "2026-04-23",
+		version: "v1.11",
+		changes: (<ul className="list-disc">
+			<li><FeatureBadge/> Made mana symbols/energy icons larger</li>
+			<li><FeatureBadge/> <MTGBadge/> Import warnings are displayed in a prompt asking the user whether or not
+				they want to continue, instead of outright failing.
+			</li>
+			<li><FeatureBadge/> <MTGBadge/> Quantities are no longer required for all cards.</li>
+			<li><FeatureBadge/> <MTGBadge/> Similar matches are now given as warnings.</li>
+			<li><BugBadge/> Filtering cards with formatting in their names now works as intended.</li>
+		</ul>)
+	},
+	{
 		date: "2026-04-13",
 		version: "v1.10",
 		changes: (<ul className="list-disc">
@@ -25,7 +38,9 @@ export const changelog: Changelog = [
 		date: "2026-04-11",
 		version: "v1.9.6",
 		changes: (<ul className="list-disc">
-			<li><FeatureBadge/> <MTGBadge/> Added &quot;Import Notes&quot; feature, which adds the inputted text to the <i>Notes</i> section to all imported cards.</li>
+			<li><FeatureBadge/> <MTGBadge/> Added &quot;Import Notes&quot; feature, which adds the inputted text to
+				the <i>Notes</i> section to all imported cards.
+			</li>
 			<li>The font &quot;DejaVu Serif&quot; is now the default font</li>
 		</ul>)
 	},
