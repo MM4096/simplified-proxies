@@ -251,7 +251,10 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 					}), {status: 400,})
 				}
 				const originalName = matchCollapsedName(thisName, originalNames) || thisName;
-				warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}, and its quantity was set to 1.`);
+
+				if (!fuzzyResponse.hasOwnProperty("flavor_name") || (fuzzyResponse["flavor_name"] as string).toLowerCase() !== originalName.toLowerCase()) {
+					warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}, and its quantity was set to 1.`);
+				}
 				cardData.push(fuzzyResponse);
 			}
 
