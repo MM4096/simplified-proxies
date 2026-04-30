@@ -14,7 +14,7 @@ export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
 	{
-		date: "2026-04-23",
+		date: "2026-04-30",
 		version: "v1.11",
 		changes: (<ul className="list-disc">
 			<li><FeatureBadge/> Made mana symbols/energy icons larger</li>
