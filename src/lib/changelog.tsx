@@ -23,6 +23,9 @@ export const changelog: Changelog = [
 			</li>
 			<li><FeatureBadge/> <MTGBadge/> Quantities are no longer required for all cards.</li>
 			<li><FeatureBadge/> <MTGBadge/> Similar matches are now given as warnings.</li>
+			<li><MTGBadge/> Import now throw warnings if parentheses are found (usually containing set codes when pasted
+				from Moxfield) instead of failing
+			</li>
 			<li><BugBadge/> Filtering cards with formatting in their names now works as intended.</li>
 		</ul>)
 	},

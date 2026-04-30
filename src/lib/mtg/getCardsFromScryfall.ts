@@ -154,7 +154,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	lines = tempLines;
 
 	for (let i = 0; i < lines.length; i++) {
-		let line = lines[i];
+		let line = lines[i] as string;
 		if (line === "") {
 			continue;
 		}
@@ -173,6 +173,12 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			// hasQuantities = true;
 			line = parts.slice(1).join(" ");
 			quantity = number;
+		}
+
+		if (line.includes("(")) {
+			const trim_line = line.split("(")[0].trim();
+			warnings.push(`Card name contains parentheses: ${line}. Removed parentheses. (Please note that set ID is not currently supported.)`);
+			line = trim_line;
 		}
 
 		// check for a basic land
