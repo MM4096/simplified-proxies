@@ -13,16 +13,20 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 }) {
 	const [filter, setFilter] = useState<string>("");
 
-	function getFullDisplayName(card: Card): string | ReactNode {
+	function getFullDisplayName(card: Card, textOnly: boolean = false): string | ReactNode {
 		if (card.hasOwnProperty("reverse_card_name") && (card as Record<string, unknown>)["reverse_card_name"] !== "") {
 			return `${card.card_name} // ${(card as Record<string, unknown>).reverse_card_name}`;
 		}
 
 		if (card.hasOwnProperty("flavor_name") && (card as Record<string, unknown>)["flavor_name"] !== "") {
-			return (<>{(card as Record<string, unknown>)["flavor_name"]} (<i>{card.card_name}</i>)</>)
+			if (textOnly) {
+				return `${(card as Record<string, unknown>)["flavor_name"]} (${card.card_name})`;
+			}
+
+			return (<>{(card as Record<string, unknown>)["flavor_name"]} (<i>{card.card_name}</i>)</>);
 		}
 
-		return card.card_name || ""
+		return card.card_name || "";
 	}
 
 	if (cards.length === 0) return (
@@ -42,7 +46,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 		<div className="flex flex-col gap-2 overflow-y-auto">
 			{
 				cards.map((card, index) => {
-					if (!getFullDisplayName(card)?.toString().toLowerCase().includes(filter.toLowerCase())) {
+					if (!getFullDisplayName(card, true)?.toString().toLowerCase().includes(filter.toLowerCase())) {
 						return null;
 					}
 

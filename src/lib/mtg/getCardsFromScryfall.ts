@@ -14,7 +14,7 @@ const SCRYFALL_HEADERS = {
 	"Content-Type": "application/json",
 	"User-Agent": "SimplifiedProxies/1.0",
 };
-const QUANTITY_MESSAGE = "Make sure that no headers are included, and that quantities are consistent (all cards need to have a quantity, or NO cards have a quantity)"
+const NOT_FOUND_MESSAGE = "Please check your spellings and ensure that deck headers (e.g. \"Deck\" and \"Sideboard\") are removed."
 
 function handleReminderText(text: string, reminderTextBehavior: ReminderTextBehavior): string {
 	// regex gets all bracketed groups
@@ -135,13 +135,15 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	// const includeTokens = body["includeTokens"] || false;
 	const splitDFCs = body["splitDFCs"] || false;
 
+	// gets populated with non-critical warnings
+	const warnings: string[] = [];
+
 	const importNote = body["importNote"] || "";
 
 	let lines = body["cards"].split("\n");
 
 	const originalNames: string[] = [];
 	const importCards: Array<{ name: string, quantity: number }> = [];
-	let hasQuantities: boolean = false;
 
 	const tempLines: string[] = [];
 	for (const line of lines) {
@@ -157,27 +159,20 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			continue;
 		}
 
-		const parts = line.split(" ");
+		const parts = line.split(" ") as string[];
 
-		// check for a quantity item
+		// check whether card has a quantity
 		let quantity = 1;
-		if (parts.length > 1 && (hasQuantities || i === 0)) {
-			const quantity_part = parts[0].replace("x", "");
-			const number = parseInt(quantity_part);
-			if (isNaN(number)) {
-				if (i === 0) {
-					hasQuantities = false;
-				} else {
-					return new Response(`Invalid quantity (at line ${i + 1} (${line}))`, {
-						status: 400,
-					});
-				}
-			} else {
-				hasQuantities = true;
-				quantity = number;
-				line = parts.slice(1).join(" ");
-			}
 
+		const quantity_part = parts[0].replace("x", "");
+		let number = parseInt(quantity_part);
+
+		if (isNaN(number)) {
+			quantity = 1;
+		} else {
+			// hasQuantities = true;
+			line = parts.slice(1).join(" ");
+			quantity = number;
 		}
 
 		// check for a basic land
@@ -223,102 +218,110 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			body: JSON.stringify(thisChunk),
 		});
 
-		if (response.ok) {
-			const json = await response.json();
-			const cardData = json["data"];
-
-			if (json["not_found"] && json["not_found"].length > 0) {
-				for (let i = 0; i < json["not_found"].length; i++) {
-					const thisName: string = json["not_found"][i]["name"];
-
-					// wait 100ms between requests to honor Scryfall's soft rate limit
-					await setTimeout(100)
-
-					const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;
-					if (fuzzyResponse["object"] === "error") {
-						const originalName = matchCollapsedName(thisName, originalNames) || thisName;
-
-						if (fuzzyResponse.hasOwnProperty("type") && fuzzyResponse.type === "ambiguous") {
-							return new Response(JSON.stringify({
-								message: `Could not find card: ${originalName} (ambiguous request)\n${QUANTITY_MESSAGE}`
-							}), {status: 400,})
-						}
-
-						return new Response(JSON.stringify({
-							message: `Could not find card: ${originalName} (card not found)\n${QUANTITY_MESSAGE}`
-						}), {status: 400,})
-					}
-					cardData.push(fuzzyResponse);
-				}
-
-			}
-
-			const thisChunkOriginalNames = originalRequest[i];
-			for (let i = 0; i < cardData.length; i++) {
-				const thisCard = cardData[i];
-
-				// get original quantity
-				let originalQuantity = 1;
-				const thisCollapsedName = collapseCardName(thisCard["name"] as string);
-				if (nameMap.hasOwnProperty(thisCollapsedName)) {
-					const mappedName = nameMap[thisCollapsedName];
-					for (let j = 0; j < thisChunkOriginalNames.length; j++) {
-						if (thisChunkOriginalNames[j].name === mappedName) {
-							originalQuantity = thisChunkOriginalNames[j].quantity;
-							break;
-						}
-					}
-				}
-
-				let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, flavorTextBehavior, importTemplates);
-
-				if (splitDFCs && hasReverseFace(thisCardObject)) {
-					let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);
-					frontFace.quantity = originalQuantity;
-					frontFace.notes = `Front Face, flips into ${thisCardObject.reverse_card_name}`;
-					frontFace.face_type = FaceType.FRONT;
-
-					backFace.quantity = originalQuantity;
-					backFace.notes = `Back Face, flips into ${thisCardObject.card_name}`;
-					backFace.face_type = FaceType.BACK;
-
-					if (importTemplates) {
-						frontFace = applyTemplates(frontFace);
-						backFace = applyTemplates(backFace);
-					}
-
-					applyImportNote(frontFace, importNote);
-					applyImportNote(backFace, importNote);
-
-					returnedCards.push(frontFace);
-					returnedCards.push(backFace);
-					continue;
-				}
-
-				if (importTemplates) {
-					thisCardObject = applyTemplates(thisCardObject)
-
-					if (thisCardObject.card_name?.toLowerCase().includes("undercity")) {
-						returnedCards.push(DUNGEONS["initiative"]);
-					}
-				}
-
-				applyImportNote(thisCardObject, importNote);
-
-				thisCardObject.quantity = originalQuantity;
-				returnedCards.push(thisCardObject);
-			}
-		} else {
+		if (!response.ok) {
 			return new Response(JSON.stringify({
-				message: `Could not find chunk ${i + 1} (this is an API error, not an error with the provided data).`
+				message: `Could not find chunk ${i + 1}. Please try again later. NOTE: this is an API error, not an error with the provided data.`
 			}), {
 				status: 400,
 			})
+		}
+
+		const json = await response.json();
+		const cardData = json["data"];
+
+		if (json["not_found"] && json["not_found"].length > 0) {
+			for (let i = 0; i < json["not_found"].length; i++) {
+				const thisName: string = json["not_found"][i]["name"];
+
+				// wait 100ms between requests to honor Scryfall's soft rate limit
+				await setTimeout(100)
+
+				const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;
+				if (fuzzyResponse["object"] === "error") {
+					const originalName = matchCollapsedName(thisName, originalNames) || thisName;
+
+					if (fuzzyResponse.hasOwnProperty("type") && fuzzyResponse.type === "ambiguous") {
+						return new Response(JSON.stringify({
+							message: `Could not find card: ${originalName} (ambiguous request)\n${NOT_FOUND_MESSAGE}`
+						}), {status: 400,})
+					}
+
+					return new Response(JSON.stringify({
+						message: `Could not find card: ${originalName} (card not found)\n${NOT_FOUND_MESSAGE}`
+					}), {status: 400,})
+				}
+				const originalName = matchCollapsedName(thisName, originalNames) || thisName;
+
+				const is_card_flavor_name = fuzzyResponse.hasOwnProperty("flavor_name") && (fuzzyResponse["flavor_name"] as string).toLowerCase() == originalName.toLowerCase();
+				const is_same_name = fuzzyResponse.hasOwnProperty("name") && (fuzzyResponse["name"] as string).toLowerCase() == originalName.toLowerCase();
+				if (!is_card_flavor_name && !is_same_name) {
+					warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}.`);
+				}
+				cardData.push(fuzzyResponse);
+			}
+
+		}
+
+		const thisChunkOriginalNames = originalRequest[i];
+		for (let i = 0; i < cardData.length; i++) {
+			const thisCard = cardData[i];
+
+			// get original quantity
+			let originalQuantity = 1;
+			const thisCollapsedName = collapseCardName(thisCard["name"] as string);
+			if (nameMap.hasOwnProperty(thisCollapsedName)) {
+				const mappedName = nameMap[thisCollapsedName];
+				for (let j = 0; j < thisChunkOriginalNames.length; j++) {
+					if (thisChunkOriginalNames[j].name === mappedName) {
+						originalQuantity = thisChunkOriginalNames[j].quantity;
+						break;
+					}
+				}
+			}
+
+			let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, flavorTextBehavior, importTemplates);
+
+			if (splitDFCs && hasReverseFace(thisCardObject)) {
+				let [frontFace, backFace] = isolateFrontAndBackFaces(thisCardObject);
+				frontFace.quantity = originalQuantity;
+				frontFace.notes = `Front Face, flips into ${thisCardObject.reverse_card_name}`;
+				frontFace.face_type = FaceType.FRONT;
+
+				backFace.quantity = originalQuantity;
+				backFace.notes = `Back Face, flips into ${thisCardObject.card_name}`;
+				backFace.face_type = FaceType.BACK;
+
+				if (importTemplates) {
+					frontFace = applyTemplates(frontFace);
+					backFace = applyTemplates(backFace);
+				}
+
+				applyImportNote(frontFace, importNote);
+				applyImportNote(backFace, importNote);
+
+				returnedCards.push(frontFace);
+				returnedCards.push(backFace);
+				continue;
+			}
+
+			if (importTemplates) {
+				thisCardObject = applyTemplates(thisCardObject)
+
+				if (thisCardObject.card_name?.toLowerCase().includes("undercity")) {
+					returnedCards.push(DUNGEONS["initiative"]);
+				}
+			}
+
+			applyImportNote(thisCardObject, importNote);
+
+			thisCardObject.quantity = originalQuantity;
+			returnedCards.push(thisCardObject);
 		}
 	}
 
 	return new Response(JSON.stringify({
 		cards: returnedCards,
+		warnings: warnings,
 	}), {
 		status: 200,
 	});
@@ -333,4 +336,5 @@ function applyImportNote(cardObject: MTGCard, importNote: string) {
 		}
 	}
 }
+
 //endregion
