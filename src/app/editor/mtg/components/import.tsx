@@ -1,6 +1,6 @@
 "use client";
 
-import {useRef, useState} from "react";
+import {useState} from "react";
 import {MTGCard} from "@/lib/card";
 import {FlavorTextBehavior, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
@@ -170,47 +170,47 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 						   setImportType("list");
 					   }}/>
 
-							<span>Import from List</span>
-						</label>
-						<div className="tab-content border-black p-3">
-							<p>Paste a list of cards below. Card names must be exact (except symbols and capitalization)
-								and must match one of the following formats:</p>
-							<div className="flex flex-col md:flex-row w-full">
-								<div className="border p-2 grow md:w-max">
-									<p>Plains</p>
-									<p>Deflecting Swat</p>
-									<p>Deflecting Swat</p>
-									<p>sakura tribe elder</p>
-									<p>chandra flames fury</p>
-									<p>commit // memory</p>
-								</div>
-								<div className="border p-2 grow md:w-max">
-									<p>2 Plains</p>
-									<p>2 Deflecting Swat</p>
-									<p>4 sakura tribe elder</p>
-									<p>10 chandra flames fury</p>
-									<p>1 Commit</p>
-								</div>
-								<div className="border p-2 grow md:w-max">
-									<p>2x Plains</p>
-									<p>2x Deflecting Swat</p>
-									<p>4x sakura tribe elder</p>
-									<p>10x chandra flames fury</p>
-									<p>1x Memory</p>
-								</div>
-							</div>
-							<p className="text-xs">All cards must either have no quantity given, or all cards must have
-								quantities.<br/>
-								Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
-							<fieldset className="fieldset">
-								<legend className="fieldset-legend"></legend>
-								<textarea className="textarea w-full" placeholder="Paste your card data here"
-										  value={importText}
-										  onChange={(e) => {
-											  setImportText(e.target.value);
-										  }}/>
-							</fieldset>
-						</div>
+				<span>Import from List</span>
+			</label>
+			<div className="tab-content border-black p-3">
+				<p>Paste a list of cards below. Card names must be exact (except symbols and capitalization)
+					and must match one of the following formats:</p>
+				<div className="flex flex-col md:flex-row w-full">
+					<div className="border p-2 grow md:w-max">
+						<p>Plains</p>
+						<p>Deflecting Swat</p>
+						<p>Deflecting Swat</p>
+						<p>sakura tribe elder</p>
+						<p>chandra flames fury</p>
+						<p>commit // memory</p>
+					</div>
+					<div className="border p-2 grow md:w-max">
+						<p>2 Plains</p>
+						<p>2 Deflecting Swat</p>
+						<p>4 sakura tribe elder</p>
+						<p>10 chandra flames fury</p>
+						<p>1 Commit</p>
+					</div>
+					<div className="border p-2 grow md:w-max">
+						<p>2x Plains</p>
+						<p>2x Deflecting Swat</p>
+						<p>4x sakura tribe elder</p>
+						<p>10x chandra flames fury</p>
+						<p>1x Memory</p>
+					</div>
+				</div>
+				<p className="text-xs">All cards must either have no quantity given, or all cards must have
+					quantities.<br/>
+					Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
+				<fieldset className="fieldset">
+					<legend className="fieldset-legend"></legend>
+					<textarea className="textarea w-full" placeholder="Paste your card data here"
+							  value={importText}
+							  onChange={(e) => {
+								  setImportText(e.target.value);
+							  }}/>
+				</fieldset>
+			</div>
 
 
 			<label className="tab">
@@ -281,33 +281,33 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<div className="divider md:divider-horizontal"/>
 
-						<label className="label text-sm">
-							<select className="select select-sm w-min" value={importReminderTextBehavior}
-									onChange={(e) => {
-										setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
-									}}>
-								<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
-								<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
-								<option value={ReminderTextBehavior.HIDDEN}>Exclude reminder text</option>
-							</select>
-							<span className="tooltip ">
+				<label className="label text-sm">
+					<select className="select select-sm w-min" value={importReminderTextBehavior}
+							onChange={(e) => {
+								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
+							}}>
+						<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
+						<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
+						<option value={ReminderTextBehavior.HIDDEN}>Exclude reminder text</option>
+					</select>
+					<span className="tooltip ">
 								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets, like this).</span>
 								<BiInfoCircle/>
 							</span>
-						</label>
+				</label>
 
-						<div className="divider md:divider-horizontal"/>
+				<div className="divider md:divider-horizontal"/>
 
-						<label className="label text-sm">
-							<select className="select select-sm w-min" value={importFlavorTextBehavior}
-									onChange={(e) => {
-										setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
-									}}>
-								<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
-								<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
-								<option value={FlavorTextBehavior.NONE}>Exclude flavor</option>
-							</select>
-							<span className="tooltip ">
+				<label className="label text-sm">
+					<select className="select select-sm w-min" value={importFlavorTextBehavior}
+							onChange={(e) => {
+								setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
+							}}>
+						<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
+						<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
+						<option value={FlavorTextBehavior.NONE}>Exclude flavor</option>
+					</select>
+					<span className="tooltip ">
 								<span className="tooltip-content z-100">Flavor names are reprints with different names, e.g. Vivi&apos;s Thunder Magic is Lightning Bolt.</span>
 								<BiInfoCircle/>
 							</span>
@@ -341,49 +341,49 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 							</span>
 				</label>
 
-							<div className="divider md:divider-horizontal"/>
+				<div className="divider md:divider-horizontal"/>
 
-							<label className="label label-sm text-sm">
-								<input className="input input-sm" value={importNote} onChange={(e) => {
-									setImportNote(e.target.value);
-								}} placeholder="Import Notes (optional)"/>
-								<span className="tooltip tooltip-left ">
+				<label className="label label-sm text-sm">
+					<input className="input input-sm" value={importNote} onChange={(e) => {
+						setImportNote(e.target.value);
+					}} placeholder="Import Notes (optional)"/>
+					<span className="tooltip tooltip-left ">
 								<span className="tooltip-content">Any note you want to add to all the cards</span>
 								<BiInfoCircle/>
 								</span>
-							</label>
+				</label>
 
-						</div>
-					</div>
-					<br/>
+			</div>
+		</div>
+		<br/>
 
-					<label className="label">
-						<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
-							   onChange={(e) => {
-								   setOverwrite(e.target.checked);
-							   }}/>
-						Overwrite existing cards
-					</label>
+		<label className="label">
+			<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
+				   onChange={(e) => {
+					   setOverwrite(e.target.checked);
+				   }}/>
+			Overwrite existing cards
+		</label>
 
-				<br/>
+		<br/>
 
-					{
-						importMessage !== "" && (<label className="label">{importMessage}</label>)
-					}
-					{
-						importError !== "" && (<>
-							<label className="label text-error whitespace-pre">{importError}</label>
-							{
-								importErrorCount > 1 && (<>
-									<br/>
-									<label className="label text-sm whitespace-pre italic">If this issue persists, please open a
-										bug
-										report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-													   target="_blank" className="link">GitHub</Link></label>
-								</>)
-							}
-						</>)
-					}
+		{
+			importMessage !== "" && (<label className="label">{importMessage}</label>)
+		}
+		{
+			importError !== "" && (<>
+				<label className="label text-error whitespace-pre">{importError}</label>
+				{
+					importErrorCount > 1 && (<>
+						<br/>
+						<label className="label text-sm whitespace-pre italic">If this issue persists, please open a
+							bug
+							report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
+										   target="_blank" className="link">GitHub</Link></label>
+					</>)
+				}
+			</>)
+		}
 
 		<div className="grow"/>
 

@@ -1,5 +1,3 @@
-
-
 import {MTGCard, PTCGCard} from "@/lib/card";
 
 export function PTCGInput({card, valKey, setValue, title, placeholder, isTextarea = false}: {
@@ -16,12 +14,11 @@ export function PTCGInput({card, valKey, setValue, title, placeholder, isTextare
 		return (<fieldset className="fieldset">
 			<legend className="fieldset-legend">{title}</legend>
 			<textarea placeholder={placeholder} className="textarea" value={card[valKey] || ""}
-				   onChange={(e) => {
-					   setValue(valKey, e.target.value)
-				   }}/>
+					  onChange={(e) => {
+						  setValue(valKey, e.target.value)
+					  }}/>
 		</fieldset>)
-	}
-	else {
+	} else {
 		return (<fieldset className="fieldset">
 			<legend className="fieldset-legend">{title}</legend>
 			<input type="text" placeholder={placeholder} className="input" value={card[valKey] || ""}
@@ -50,8 +47,7 @@ export function MTGInput({card, valKey, setValue, title, placeholder, isTextarea
 						  setValue(valKey, e.target.value)
 					  }}/>
 		</fieldset>)
-	}
-	else {
+	} else {
 		return (<fieldset className="fieldset">
 			<legend className="fieldset-legend">{title}</legend>
 			<input type="text" placeholder={placeholder} className="input" value={card[valKey] || ""}

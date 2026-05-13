@@ -46,9 +46,11 @@ export function ChangelogComponent() {
 								<div tabIndex={0}
 									 className={`collapse collapse-plus bg-base-100 border-base-300 border shrink-0`}
 									 key={index}>
-									<div className="collapse-title font-bold flex flex-row gap-2 items-center">{item.version}
+									<div
+										className="collapse-title font-bold flex flex-row gap-2 items-center">{item.version}
 										{
-											compareChangelogVersion(item.version, lastSavedVersion) >= 1 && (<span className="badge badge-xs badge-primary">New</span>)
+											compareChangelogVersion(item.version, lastSavedVersion) >= 1 && (
+												<span className="badge badge-xs badge-primary">New</span>)
 										}
 									</div>
 									<div className="collapse-content text-sm">
@@ -68,7 +70,8 @@ export function ChangelogComponent() {
 				<button onClick={() => {
 					updateLastSavedVersion();
 					dialogRef.current?.close();
-				}}>close</button>
+				}}>close
+				</button>
 			</form>
 		</dialog>
 	</>)
