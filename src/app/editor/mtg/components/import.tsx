@@ -78,13 +78,6 @@ export function ImportMTG({cards, setCardsAction}: {
 				// check if API returned any warnings
 				const warnings: string[] = json.hasOwnProperty("warnings") ? json["warnings"] : [];
 				if (warnings.length > 0) {
-					umamiTracker("mtg-CardsImported", {
-						importType: importType,
-						importBody: importText,
-						success: "true",
-						warnings: warnings,
-					});
-
 					setImportMessage("Resolving Warnings...")
 
 					const shouldNotAbort = await confirmationPrompt(`Warning`,
@@ -106,10 +99,17 @@ export function ImportMTG({cards, setCardsAction}: {
 
 							<label className="label text-sm whitespace-pre italic">Something wrong? Please open a
 								bug report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-												   target="_blank" className="link">GitHub</Link></label>
+								                   target="_blank" className="link">GitHub</Link></label>
 						</>),
 						"Cancel Import", "Continue Anyways");
 					if (!shouldNotAbort) {
+						umamiTracker("mtg-CardsImported", {
+							importType: importType,
+							importBody: importText,
+							success: "false",
+							warnings: warnings,
+						});
+
 						setImportMessage("");
 						setImportError("Import Cancelled: User Aborted");
 						setDisableButtons(false);
@@ -128,7 +128,15 @@ export function ImportMTG({cards, setCardsAction}: {
 
 				dialogRef.current?.close();
 
-				umamiTracker("mtg-CardsImported", {importType: importType, success: "true"});
+				const umamiData = {
+					importType: importType,
+					success: "true",
+				}
+				if (warnings.length > 0) {
+					umamiData["warnings"] = warnings;
+					umamiData["importBody"] = importText;
+				}
+				umamiTracker("mtg-CardsImported", umamiData);
 				setImportErrorCount(0);
 			} else {
 				const json = await response.json();
@@ -169,9 +177,9 @@ export function ImportMTG({cards, setCardsAction}: {
 
 						<label className="tab">
 							<input type="radio" name="mtg-import-type"
-								   id="list-import"
-								   defaultChecked={true}
-								   onChange={() => {
+							       id="list-import"
+							       defaultChecked={true}
+							       onChange={() => {
 									   setImportType("list");
 								   }}/>
 
@@ -212,8 +220,8 @@ export function ImportMTG({cards, setCardsAction}: {
 							<fieldset className="fieldset">
 								<legend className="fieldset-legend"></legend>
 								<textarea className="textarea w-full" placeholder="Paste your card data here"
-										  value={importText}
-										  onChange={(e) => {
+								          value={importText}
+								          onChange={(e) => {
 											  setImportText(e.target.value);
 										  }}/>
 							</fieldset>
@@ -222,8 +230,8 @@ export function ImportMTG({cards, setCardsAction}: {
 
 						<label className="tab">
 							<input type="radio" name="mtg-import-type"
-								   id="archidekt-import"
-								   onChange={() => {
+							       id="archidekt-import"
+							       onChange={() => {
 									   setImportType("archidekt");
 								   }}/>
 
@@ -232,16 +240,16 @@ export function ImportMTG({cards, setCardsAction}: {
 						<div className="tab-content border-black p-3">
 							<p>Paste in your Archidekt deck URL here:</p>
 							<input className="input w-full" type="url"
-								   placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
-								   onChange={(e) => {
+							       placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
+							       onChange={(e) => {
 									   setImportText(e.target.value);
 								   }}/>
 						</div>
 
 						<label className="tab">
 							<input type="radio" name="mtg-import-type"
-								   id="moxfield-import"
-								   onChange={() => {
+							       id="moxfield-import"
+							       onChange={() => {
 									   setImportType("moxfield");
 								   }}/>
 
@@ -250,15 +258,15 @@ export function ImportMTG({cards, setCardsAction}: {
 						<div className="tab-content border-black p-3">
 							<p>Paste in your Moxfield deck URL here:</p>
 							<input className="input w-full" type="url"
-								   placeholder="https://moxfield.com/decks/1234567890" value={importText}
-								   onChange={(e) => {
+							       placeholder="https://moxfield.com/decks/1234567890" value={importText}
+							       onChange={(e) => {
 									   setImportText(e.target.value);
 								   }}/>
 							<br/><br/>
 							<label className="label label-sm text-sm">
 								<input type="checkbox" className="checkbox checkbox-sm"
-									   checked={moxfieldImportMaybeboard}
-									   onChange={(e) => {
+								       checked={moxfieldImportMaybeboard}
+								       onChange={(e) => {
 										   setMoxfieldImportMaybeboard(e.target.checked);
 									   }}
 								/>
@@ -276,7 +284,7 @@ export function ImportMTG({cards, setCardsAction}: {
 						<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap gap-2">
 							<label className="label text-sm">
 								<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands}
-									   onChange={(e) => {
+								       onChange={(e) => {
 										   setImportBasicLands(e.target.checked);
 									   }}/>
 								Import basic lands
@@ -291,7 +299,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 							<label className="label text-sm">
 								<select className="select select-sm w-min" value={importReminderTextBehavior}
-										onChange={(e) => {
+								        onChange={(e) => {
 											setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
 										}}>
 									<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text
@@ -309,7 +317,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 							<label className="label text-sm">
 								<select className="select select-sm w-min" value={importFlavorTextBehavior}
-										onChange={(e) => {
+								        onChange={(e) => {
 											setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
 										}}>
 									<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names
@@ -328,7 +336,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 							<label className="label text-sm">
 								<input type="checkbox" className="checkbox checkbox-sm" checked={importSplitDFCs}
-									   onChange={(e) => {
+								       onChange={(e) => {
 										   setImportSplitDFCs(e.target.checked);
 									   }}/>
 								Split DFCs into separate cards
@@ -342,7 +350,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 							<label className="label text-sm">
 								<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates}
-									   onChange={(e) => {
+								       onChange={(e) => {
 										   setImportTemplates(e.target.checked);
 									   }}/>
 								Automatically apply templates
@@ -370,7 +378,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 					<label className="label">
 						<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
-							   onChange={(e) => {
+						       onChange={(e) => {
 								   setOverwrite(e.target.checked);
 							   }}/>
 						Overwrite existing cards
@@ -390,7 +398,7 @@ export function ImportMTG({cards, setCardsAction}: {
 									<label className="label text-sm whitespace-pre italic">If this issue persists, please open a
 										bug
 										report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-													   target="_blank" className="link">GitHub</Link></label>
+										               target="_blank" className="link">GitHub</Link></label>
 								</>)
 							}
 						</>)
