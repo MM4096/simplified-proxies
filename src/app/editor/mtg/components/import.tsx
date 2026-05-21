@@ -128,7 +128,7 @@ export function ImportMTG({cards, setCardsAction}: {
 
 				dialogRef.current?.close();
 
-				const umamiData = {
+				const umamiData: {importType: string, success: string, warnings?: string[], importBody?: string} = {
 					importType: importType,
 					success: "true",
 				}
