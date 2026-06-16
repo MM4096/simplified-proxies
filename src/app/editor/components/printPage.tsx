@@ -26,6 +26,9 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
 
 	function getProjectNames() {
+		if (!isMounted) {
+			return [];
+		}
 		let retProjects: string[] = [];
 		try {
 			const projectsStorage = JSON.parse(localStorage.getItem(gameLocalStorageKey) || "{}");
@@ -42,14 +45,15 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	}, []);
 
 	useEffect(() => {
-		const projectStorage = JSON.parse(localStorage.getItem(gameLocalStorageKey) || "{}");
-		if (project) {
-			setCards(projectStorage[project] || []);
-		} else {
-			setCards(projectStorage["UNSAVED"] || []);
+		if (isMounted) {
+			const projectStorage = JSON.parse(localStorage.getItem(gameLocalStorageKey) || "{}");
+			if (project) {
+				setCards(projectStorage[project] || []);
+			} else {
+				setCards(projectStorage["UNSAVED"] || []);
+			}
 		}
-
-	}, [gameLocalStorageKey, project]);
+	}, [gameLocalStorageKey, project, isMounted]);
 
 	useEffect(() => {
 		const temp: Card[] = [];

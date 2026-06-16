@@ -4,6 +4,7 @@ import {MTGBadge} from "@/app/components/tags/games/mtg";
 import {PTCGBadge} from "@/app/components/tags/games/ptcg";
 import {BugBadge} from "@/app/components/tags/bug";
 import {FeatureBadge} from "@/app/components/tags/feature";
+import Link from "next/link";
 
 export type ChangelogEntry = {
 	date: string,
@@ -13,6 +14,18 @@ export type ChangelogEntry = {
 export type Changelog = ChangelogEntry[];
 
 export const changelog: Changelog = [
+	{
+		date: "2026-06-16",
+		version: "v1.12",
+		changes: (<ul className="list-disc">
+			<li><FeatureBadge/> <MTGBadge/> Import with Moxfield now preserves the original language as they appear in
+				the Moxfield decklist by default. This can be disabled by unchecking &quot;Preserve Original Card
+				Language&quot; (<Link className="link" target="_blank"
+				                      href="https://github.com/MM4096/simplified-proxies/issues/10">#10</Link>).<br/>
+				<i>Archidekt and List import to be implemented soon!</i>
+			</li>
+		</ul>)
+	},
 	{
 		date: "2026-04-30",
 		version: "v1.11",

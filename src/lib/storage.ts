@@ -16,5 +16,9 @@ export function setSimplifiedEditor(value: boolean) {
 }
 
 export function isSimplifiedEditor(): boolean {
+	if (typeof window === "undefined" || !window.localStorage) {
+		return false;
+	}
+
 	return getItem("simplified-editor", false) as boolean;
 }

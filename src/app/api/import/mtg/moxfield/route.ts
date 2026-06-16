@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	const importMaybeboard = searchParams.get("importMaybeboard") == "true";
+	const useForeignLanguage = searchParams.get("useForeignLanguage") == "true";
 
 	let moxfieldURL = searchParams.get("url")!.trim();
 	if (!moxfieldURL.startsWith("https://") && !moxfieldURL.startsWith("http://")) {
@@ -53,6 +54,7 @@ export async function POST(request: NextRequest) {
 
 	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
+	let import_ids: Array<{quantity: number, id: string}> = [];
 	let import_cards: string[] = [];
 	for (const [key, value] of Object.entries(boards)) {
 		if (key == "maybeboard" && !importMaybeboard) {
@@ -63,12 +65,29 @@ export async function POST(request: NextRequest) {
 		}
 
 		for (const [_, card] of Object.entries((value as Record<string, unknown>)["cards"] as Record<string, any>)) {
-			const quantity = card["quantity"];
-			const name = (card["card"])["name"];
-			import_cards.push(`${quantity} ${name}`);
+			if (useForeignLanguage) {
+				const quantity = card["quantity"];
+				const id = card["card"]["scryfall_id"];
+				import_ids.push({
+					quantity: quantity,
+					id: id
+				});
+			}
+			else {
+				const name = (card["card"])["name"];
+				import_cards.push(`${card["quantity"]} ${name}`);
+			}
 		}
 	}
-	body["cards"] = import_cards.join("\n");
+
+	if (useForeignLanguage) {
+		body["ids"] = import_ids;
+		if (body.hasOwnProperty("cards")) {
+			delete body.cards;
+		}
+	} else {
+		body["cards"] = import_cards.join("\n");
+	}
 
 	return await doScryfallSearch(body);
 }

@@ -34,6 +34,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 	const [importType, setImportType] = useState<"moxfield" | "archidekt" | "list">("list");
 	const [moxfieldImportMaybeboard, setMoxfieldImportMaybeboard] = useState<boolean>(false);
+	const [moxfieldUseForeignLanguage, setmoxfieldUseForeignLanguage] = useState<boolean>(true);
 
 	const [importErrorCount, setImportErrorCount] = useState<number>(0);
 
@@ -53,7 +54,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 				fetchUrl = `/api/import/mtg`;
 				break;
 			case "moxfield":
-				fetchUrl = `/api/import/mtg/moxfield?url=${encodeURIComponent(importText)}&importMaybeboard=${moxfieldImportMaybeboard}`;
+				fetchUrl = `/api/import/mtg/moxfield?url=${encodeURIComponent(importText)}&importMaybeboard=${moxfieldImportMaybeboard}&useForeignLanguage=${moxfieldUseForeignLanguage}`;
 				break;
 		}
 
@@ -108,7 +109,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 							<label className="label text-sm whitespace-pre italic">Something wrong? Please open a
 								bug report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-												   target="_blank" className="link">GitHub</Link></label>
+								                   target="_blank" className="link">GitHub</Link></label>
 						</>),
 						"Cancel Import", "Continue Anyways");
 					if (!shouldNotAbort) {
@@ -164,9 +165,9 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 			<label className="tab">
 				<input type="radio" name="mtg-import-type"
-					   id="list-import"
-					   defaultChecked={true}
-					   onChange={() => {
+				       id="list-import"
+				       defaultChecked={true}
+				       onChange={() => {
 						   setImportType("list");
 					   }}/>
 
@@ -205,8 +206,8 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 				<fieldset className="fieldset">
 					<legend className="fieldset-legend"></legend>
 					<textarea className="textarea w-full" placeholder="Paste your card data here"
-							  value={importText}
-							  onChange={(e) => {
+					          value={importText}
+					          onChange={(e) => {
 								  setImportText(e.target.value);
 							  }}/>
 				</fieldset>
@@ -215,8 +216,8 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 			<label className="tab">
 				<input type="radio" name="mtg-import-type"
-					   id="archidekt-import"
-					   onChange={() => {
+				       id="archidekt-import"
+				       onChange={() => {
 						   setImportType("archidekt");
 					   }}/>
 
@@ -225,16 +226,16 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Archidekt deck URL here:</p>
 				<input className="input w-full" type="url"
-					   placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
-					   onChange={(e) => {
+				       placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
+				       onChange={(e) => {
 						   setImportText(e.target.value);
 					   }}/>
 			</div>
 
 			<label className="tab">
 				<input type="radio" name="mtg-import-type"
-					   id="moxfield-import"
-					   onChange={() => {
+				       id="moxfield-import"
+				       onChange={() => {
 						   setImportType("moxfield");
 					   }}/>
 
@@ -243,19 +244,34 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Moxfield deck URL here:</p>
 				<input className="input w-full" type="url"
-					   placeholder="https://moxfield.com/decks/1234567890" value={importText}
-					   onChange={(e) => {
+				       placeholder="https://moxfield.com/decks/1234567890" value={importText}
+				       onChange={(e) => {
 						   setImportText(e.target.value);
 					   }}/>
 				<br/><br/>
-				<label className="label label-sm text-sm">
-					<input type="checkbox" className="checkbox checkbox-sm" checked={moxfieldImportMaybeboard}
-						   onChange={(e) => {
-							   setMoxfieldImportMaybeboard(e.target.checked);
-						   }}
-					/>
-					<span>Import Considering/Maybeboard</span>
-				</label>
+
+				<div className="flex flex-row gap-2">
+					<label className="label label-sm text-sm">
+						<input type="checkbox" className="checkbox checkbox-sm" checked={moxfieldImportMaybeboard}
+						       onChange={(e) => {
+								   setMoxfieldImportMaybeboard(e.target.checked);
+							   }}
+						/>
+						<span>Import Considering/Maybeboard</span>
+					</label>
+
+					<label className="label label-sm text-sm">
+						<input type="checkbox" className="checkbox checkbox-sm" checked={moxfieldUseForeignLanguage}
+						       onChange={(e) => {
+								   setmoxfieldUseForeignLanguage(e.target.checked);
+							   }}
+						/>
+						<span>Preserve Original Card Language</span>
+						<div className="tooltip tooltip-top" data-tip="If checked, will import all cards according to the language as they appear in Moxfield (e.g. Japanese cards will use Japanese). If unchecked, imports the English version.">
+							<BiInfoCircle/>
+						</div>
+					</label>
+				</div>
 			</div>
 
 		</div>
@@ -268,7 +284,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 			<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap">
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setImportBasicLands(e.target.checked);
 						   }}/>
 					Import basic lands
@@ -283,7 +299,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<select className="select select-sm w-min" value={importReminderTextBehavior}
-							onChange={(e) => {
+					        onChange={(e) => {
 								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
 							}}>
 						<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
@@ -300,7 +316,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<select className="select select-sm w-min" value={importFlavorTextBehavior}
-							onChange={(e) => {
+					        onChange={(e) => {
 								setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
 							}}>
 						<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
@@ -317,7 +333,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importSplitDFCs}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setImportSplitDFCs(e.target.checked);
 						   }}/>
 					Split DFCs into separate cards
@@ -331,7 +347,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setImportTemplates(e.target.checked);
 						   }}/>
 					Automatically apply templates
@@ -359,7 +375,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 		<label className="label">
 			<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
-				   onChange={(e) => {
+			       onChange={(e) => {
 					   setOverwrite(e.target.checked);
 				   }}/>
 			Overwrite existing cards
@@ -379,7 +395,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 						<label className="label text-sm whitespace-pre italic">If this issue persists, please open a
 							bug
 							report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-										   target="_blank" className="link">GitHub</Link></label>
+							               target="_blank" className="link">GitHub</Link></label>
 					</>)
 				}
 			</>)

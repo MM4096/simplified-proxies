@@ -45,10 +45,10 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 	for (let i = 0; i < faceData.length; i++) {
 		const thisData = faceData[i];
 		if (isReverseFace) {
-			thisCard.reverse_card_name = thisData["name"]?.toString() || "";
+			thisCard.reverse_card_name = thisData["printed_name"]?.toString() || thisData["name"]?.toString() || "";
 			thisCard.reverse_mana_cost = thisData["mana_cost"]?.toString() || "";
-			thisCard.reverse_type_line = thisData["type_line"]?.toString() || "";
-			thisCard.reverse_text = handleReminderText(thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
+			thisCard.reverse_type_line = thisData["printed_type_line"]?.toString() || thisData["type_line"]?.toString() || "";
+			thisCard.reverse_text = handleReminderText(thisData["printed_text"]?.toString() || thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
 			if (thisData.hasOwnProperty("flavor_text") && flavorTextBehavior === FlavorTextBehavior.BOTH) {
 				thisCard.reverse_flavor_text = thisData["flavor_text"]?.toString() || "";
 			}
@@ -63,7 +63,7 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 			}
 		} else {
 			isReverseFace = true;
-			thisCard.card_name = thisData["name"]?.toString() || "";
+			thisCard.card_name = thisData["printed_name"]?.toString() || thisData["name"]?.toString() || "";
 
 			if (thisData.hasOwnProperty("flavor_name") && flavorTextBehavior !== FlavorTextBehavior.NONE) {
 				thisCard.flavor_name = thisData["flavor_name"]?.toString() || "";
@@ -73,8 +73,8 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 			}
 
 			thisCard.mana_cost = thisData["mana_cost"]?.toString() || "";
-			thisCard.type_line = thisData["type_line"]?.toString() || "";
-			thisCard.card_text = handleReminderText(thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
+			thisCard.type_line = thisData["printed_type_line"]?.toString() || thisData["type_line"]?.toString() || "";
+			thisCard.card_text = handleReminderText(thisData["printed_text"]?.toString() || thisData["oracle_text"]?.toString() || "", reminderTextBehavior);
 			thisCard.power = thisData["power"]?.toString() || "";
 			thisCard.toughness = thisData["toughness"]?.toString() || "";
 
@@ -122,8 +122,8 @@ async function fuzzyScryfall(cardName: string): Promise<unknown> {
  * Gets MTG Card data, run instead of calling the API
  */
 export async function doScryfallSearch(body: any): Promise<Response> {
-	if (!body.hasOwnProperty("cards")) {
-		return new Response(JSON.stringify({message: "Missing cards"}), {
+	if (!body.hasOwnProperty("cards") && !body.hasOwnProperty("ids")) {
+		return new Response(JSON.stringify({message: "Missing card list"}), {
 			status: 400,
 		});
 	}
@@ -140,10 +140,17 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 	const importNote = body["importNote"] || "";
 
-	let lines = body["cards"].split("\n");
+	let lines: string[] = [];
+	if (body.hasOwnProperty("cards")) {
+		lines = body["cards"].split("\n");
+	}
+	let ids: Array<{ quantity: number, id: string }> = [];
+	if (body.hasOwnProperty("ids")) {
+		ids = body["ids"];
+	}
 
 	const originalNames: string[] = [];
-	const importCards: Array<{ name: string, quantity: number }> = [];
+	const importCards: Array<{ name?: string, id?: string, quantity: number }> = [];
 
 	const tempLines: string[] = [];
 	for (const line of lines) {
@@ -153,6 +160,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	}
 	lines = tempLines;
 
+	//region Handle card list
 	for (let i = 0; i < lines.length; i++) {
 		let line = lines[i] as string;
 		if (line === "") {
@@ -195,19 +203,36 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	}
 	//endregion
 
+	//region Handle card IDs
+	for (let i = 0; i < ids.length; i++) {
+		const cardObject = ids[i];
+		importCards.push({
+			id: cardObject.id,
+			quantity: cardObject.quantity,
+		})
+	}
+	//endregion
+
 	//region Chunkify
 	const chunks: Array<{ identifiers: object }> = [];
-	const originalRequest: Array<{ name: string, quantity: number }>[] = [];
+	const originalRequest: Array<{ name?: string, id?: string, quantity: number }>[] = [];
 	const nameMap: Record<string, string> = {};
 	for (let i = 0; i < importCards.length; i += 75) {
 		const theseCards = importCards.slice(i, i + 75);
 		chunks.push({
 			identifiers: theseCards.map((card) => {
-				const parsedName = collapseCardName(card.name);
-				nameMap[parsedName] = card.name;
-				return {
-					name: parsedName,
+				if (card.hasOwnProperty("name") && card.name) {
+					const parsedName = collapseCardName(card.name);
+					nameMap[parsedName] = card.name;
+					return {
+						name: parsedName,
+					}
+				} else if (card.hasOwnProperty("id")) {
+					return {
+						id: card.id
+					}
 				}
+
 			})
 		});
 		originalRequest.push(theseCards);
@@ -237,6 +262,12 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 		if (json["not_found"] && json["not_found"].length > 0) {
 			for (let i = 0; i < json["not_found"].length; i++) {
+				const thisErrorCard: object = json["not_found"][i];
+				if (!thisErrorCard.hasOwnProperty("name")) {
+					return new Response(JSON.stringify({
+						message: "Could not find a card ID. If you imported with a Moxfield deck URL, try using unchecking Force Printing Language. If you manually set any parameters in the request body, please stop."
+					}), {status: 400});
+				}
 				const thisName: string = json["not_found"][i]["name"];
 
 				// wait 100ms between requests to honor Scryfall's soft rate limit
@@ -272,18 +303,43 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 		for (let i = 0; i < cardData.length; i++) {
 			const thisCard = cardData[i];
 
+			// check for a basic land (yes, I know this was handled earlier, this is just a rerun to weed out cards imported with IDs)
+			if (!importBasicLands) {
+				const lowercase = thisCard["name"].toString().toLowerCase();
+				if (lowercase === "plains" || lowercase === "island" || lowercase === "swamp" || lowercase === "mountain" || lowercase === "forest") {
+					// ignore
+					continue;
+				}
+			}
+
 			// get original quantity
 			let originalQuantity = 1;
+			let matchedQuantity = false;
+			// check quantity through name map
 			const thisCollapsedName = collapseCardName(thisCard["name"] as string);
 			if (nameMap.hasOwnProperty(thisCollapsedName)) {
 				const mappedName = nameMap[thisCollapsedName];
 				for (let j = 0; j < thisChunkOriginalNames.length; j++) {
 					if (thisChunkOriginalNames[j].name === mappedName) {
 						originalQuantity = thisChunkOriginalNames[j].quantity;
+						matchedQuantity = true;
 						break;
 					}
 				}
 			}
+			// check quantity through IDs
+			if (!matchedQuantity) {
+				const thisCardId: string = thisCard["id"] as string;
+				for (let i = 0; i < ids.length; i++) {
+					let thisCardObject = ids[i];
+					if (thisCardId == thisCardObject.id) {
+						originalQuantity = thisCardObject.quantity;
+						matchedQuantity = true;
+						break;
+					}
+				}
+			}
+
 
 			let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, flavorTextBehavior, importTemplates);
 
