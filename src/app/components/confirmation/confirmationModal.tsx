@@ -22,7 +22,6 @@ export default function ConfirmationModal({title, message, onAction, noButtonTex
 		function onCancel(e: Event) {
 			onAction(false);
 		}
-
 		dialog.addEventListener("cancel", onCancel);
 		return () => {
 			dialog.removeEventListener("cancel", onCancel);
@@ -46,8 +45,7 @@ export default function ConfirmationModal({title, message, onAction, noButtonTex
 			<form method="dialog" className="modal-backdrop">
 				<button onClick={() => {
 					onAction(false);
-				}}>close
-				</button>
+				}}>close</button>
 			</form>
 		</dialog>
 	</>)

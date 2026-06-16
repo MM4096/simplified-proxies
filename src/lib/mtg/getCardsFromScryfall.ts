@@ -340,7 +340,6 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 				}
 			}
 
-
 			let thisCardObject = convertScryfallResultToMtgCard(thisCard, reminderTextBehavior, flavorTextBehavior, importTemplates);
 
 			if (splitDFCs && hasReverseFace(thisCardObject)) {

@@ -96,24 +96,28 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 				<HideCreditBox showCredit={showCredit} setShowCreditAction={setShowCredit}/>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={useGap} onChange={(e) => setUseGap(e.target.checked)}/>
+					<input type="checkbox" className="checkbox" checked={useGap}
+						   onChange={(e) => setUseGap(e.target.checked)}/>
 					Gap between cards
 				</label>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={roundCorners} onChange={(e) => setRoundCorners(e.target.checked)}/>
+					<input type="checkbox" className="checkbox" checked={roundCorners}
+						   onChange={(e) => setRoundCorners(e.target.checked)}/>
 					Rounded Corners
 				</label>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
-					<input type="checkbox" className="checkbox" checked={shrinkCards} onChange={(e) => setShrinkCards(e.target.checked)}/>
+					<input type="checkbox" className="checkbox" checked={shrinkCards}
+						   onChange={(e) => setShrinkCards(e.target.checked)}/>
 					Shrink Cards by 10%
 				</label>
 			</div>
 			<br/>
 			<div className="custom-divider"/>
 		</div>
-		<div className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
+		<div
+			className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
 			{
 				allCards.map((card, index) => {
 					switch (gameId) {

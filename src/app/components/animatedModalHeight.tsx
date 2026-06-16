@@ -2,7 +2,7 @@
 
 import {ReactNode, useEffect, useRef, useState} from "react";
 
-export default function AnimatedModalHeight({children}: { children: ReactNode }) {
+export default function AnimatedModalHeight({children}: {children: ReactNode}) {
 	const divRef = useRef<HTMLDivElement>(null);
 	const [height, setHeight] = useState(0);
 
