@@ -93,7 +93,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 					const shouldNotAbort = await confirmationPrompt(`Warning`,
 						(<>
 							<p><b>Your import didn&apos;t fail,
-								but {warnings.length} warning{warnings.length > 1 ? "s" : ""} was encountered.</b><br/>
+								but {warnings.length} warning{warnings.length > 1 ? "s were" : " was"} encountered.</b><br/>
 								You can either cancel the import and fix the warnings manually, or accept the automatic
 								changes that were made.</p><br/>
 							<b>Warnings:</b>
