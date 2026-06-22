@@ -5,6 +5,7 @@ import {PTCGBadge} from "@/app/components/tags/games/ptcg";
 import {BugBadge} from "@/app/components/tags/bug";
 import {FeatureBadge} from "@/app/components/tags/feature";
 import Link from "next/link";
+import {ChangeBadge} from "@/app/components/tags/change";
 
 export type ChangelogEntry = {
 	date: string,
@@ -13,15 +14,27 @@ export type ChangelogEntry = {
 }
 export type Changelog = ChangelogEntry[];
 
+const gitURL: string = "https://github.com/MM4096/simplified-proxies"
+
 export const changelog: Changelog = [
+	{
+		date: "2026-06-22",
+		version: "v1.12.1",
+		changes: (<ul className="list-disc">
+			<li><BugBadge/> Switching to an empty project no longer populates it with cards from the last selected
+				project (<BugReport reportId={11}/>)
+			</li>
+			<li><ChangeBadge/> Creating a new project no longer populates it with cards from the UNSAVED project (<BugReport reportId={11}/>).</li>
+			<li><FeatureBadge/> An option now exists to copy all cards from one project to another (<BugReport reportId={11}/>)</li>
+		</ul>)
+	},
 	{
 		date: "2026-06-16",
 		version: "v1.12",
 		changes: (<ul className="list-disc">
 			<li><FeatureBadge/> <MTGBadge/> Import with Moxfield now preserves the original language as they appear in
 				the Moxfield decklist by default. This can be disabled by unchecking &quot;Preserve Original Card
-				Language&quot; (<Link className="link" target="_blank"
-				                      href="https://github.com/MM4096/simplified-proxies/issues/10">#10</Link>).<br/>
+				Language&quot; (<BugReport reportId={10}/>)<br/>
 				<i>Archidekt and List import to be implemented soon!</i>
 			</li>
 		</ul>)
@@ -92,7 +105,7 @@ export const changelog: Changelog = [
 		version: "v1.9.2",
 		changes: (<>
 			<ul className="list-disc">
-				<li><BugBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin
+				<li><ChangeBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin
 					with <code>HTTPS</code>.
 				</li>
 			</ul>
@@ -270,6 +283,13 @@ export const changelog: Changelog = [
 		version: "v1.0"
 	}
 ]
+
+export function BugReport({reportId}: {
+	reportId: number | string,
+}) {
+	return (<Link href={`${gitURL}/issues/${reportId}`} target="_blank"
+	              className="link">#{reportId}</Link>);
+}
 
 export function convertStringVersionToInt(version: string): number[] {
 	version = version.replace("v", "")
