@@ -144,7 +144,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	if (body.hasOwnProperty("cards")) {
 		lines = body["cards"].split("\n");
 	}
-	let ids: Array<{ quantity: number, id: string }> = [];
+	let ids: Array<{ quantity: number, id: string, name: string }> = [];
 	if (body.hasOwnProperty("ids")) {
 		ids = body["ids"];
 	}
@@ -209,6 +209,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 		importCards.push({
 			id: cardObject.id,
 			quantity: cardObject.quantity,
+			name: cardObject.name,
 		})
 	}
 	//endregion
@@ -221,18 +222,18 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 		const theseCards = importCards.slice(i, i + 75);
 		chunks.push({
 			identifiers: theseCards.map((card) => {
+				const returnObj: Record<string, unknown> = {};
+
+				if (card.hasOwnProperty("id")) {
+					returnObj["id"] = card.id;
+				}
 				if (card.hasOwnProperty("name") && card.name) {
 					const parsedName = collapseCardName(card.name);
 					nameMap[parsedName] = card.name;
-					return {
-						name: parsedName,
-					}
-				} else if (card.hasOwnProperty("id")) {
-					return {
-						id: card.id
-					}
+					returnObj["name"] = parsedName;
 				}
 
+				return returnObj
 			})
 		});
 		originalRequest.push(theseCards);
@@ -248,10 +249,12 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			method: "POST",
 			body: JSON.stringify(thisChunk),
 		});
+		// scryfall rate limit
+		await setTimeout(500);
 
 		if (!response.ok) {
 			return new Response(JSON.stringify({
-				message: `Could not find chunk ${i + 1}. Please try again later. NOTE: this is an API error, not an error with the provided data.`
+				message: `Could not find chunk ${i + 1}. Please try again later. NOTE: this is likely an API error, not an error with the provided data.\n(Error Code: ${response.status})`
 			}), {
 				status: 400,
 			})
@@ -262,16 +265,18 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 		if (json["not_found"] && json["not_found"].length > 0) {
 			for (let i = 0; i < json["not_found"].length; i++) {
-				const thisErrorCard: object = json["not_found"][i];
+				const thisErrorCard: Record<string, unknown> = json["not_found"][i] as Record<string, unknown>;
+
 				if (!thisErrorCard.hasOwnProperty("name")) {
 					return new Response(JSON.stringify({
-						message: "Could not find a card ID. If you imported with a Moxfield deck URL, try using unchecking Force Printing Language. If you manually set any parameters in the request body, please stop."
+						message: `Card ID could not be found. Card: ${JSON.stringify(thisErrorCard)}`
 					}), {status: 400});
 				}
+
 				const thisName: string = json["not_found"][i]["name"];
 
-				// wait 100ms between requests to honor Scryfall's soft rate limit
-				await setTimeout(100)
+				// scryfall rate limit
+				await setTimeout(500)
 
 				const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;
 				if (fuzzyResponse["object"] === "error") {
@@ -289,11 +294,18 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 				}
 				const originalName = matchCollapsedName(thisName, originalNames) || thisName;
 
+				// check whether the name was slightly off
 				const is_card_flavor_name = fuzzyResponse.hasOwnProperty("flavor_name") && (fuzzyResponse["flavor_name"] as string).toLowerCase() == originalName.toLowerCase();
 				const is_same_name = fuzzyResponse.hasOwnProperty("name") && (fuzzyResponse["name"] as string).toLowerCase() == originalName.toLowerCase();
-				if (!is_card_flavor_name && !is_same_name) {
+
+				// check whether a card ID could not be found
+				if (thisErrorCard.hasOwnProperty("id")) {
+					warnings.push(`ORIGINAL LANGUAGE: Could not find card ID: ${thisErrorCard["id"]}. Replaced with English version: ${fuzzyResponse["name"]}.`);
+				}
+				else if (!is_card_flavor_name && !is_same_name) {
 					warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}.`);
 				}
+
 				cardData.push(fuzzyResponse);
 			}
 
