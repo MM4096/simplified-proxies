@@ -37,6 +37,8 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [activeTab, setActiveTab] = useState<"input" | "list" | "preview" | "options">("list");
 
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
+	// TODO: Fix this when a better solution exists
+	const [refreshCardList, setRefreshCardList] = useState<number>(0);
 
 	function changeVal(key: string, value: string) {
 		const tempCardCopy = {...tempCard, [key as keyof Card]: value};
@@ -78,7 +80,8 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		const projectData = getProjectData();
 		setCards(projectData);
-	}, [currentProject, gameLocalStorageKey])
+
+	}, [currentProject, gameLocalStorageKey, refreshCardList])
 
 	// write cards to storage
 	useEffect(() => {
@@ -132,10 +135,10 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 			</div>
 
 			<CardList cards={cards} setCards={setCards} editingIndex={editingIndex}
-					  setEditingIndex={async (index: number | null) => {
+			          setEditingIndex={async (index: number | null) => {
 						  setEditingIndex(index);
 					  }}
-					  className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`} newCard={async () => {
+			          className={`${activeTab === "list" ? "active-tab" : ""} grow shrink-0`} newCard={async () => {
 				setEditingIndex(null);
 			}}/>
 
@@ -186,8 +189,12 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 			{importCardsAction({setCards, cards})}
 
-			<ProjectsBox localStorageKey={gameLocalStorageKey} setProjectAction={setCurrentProject}
-						 selectedProject={currentProject}/>
+			<ProjectsBox localStorageKey={gameLocalStorageKey}
+			             setProjectAction={(project: string) => {
+							 setCurrentProject(project);
+							 setRefreshCardList(refreshCardList + 1);
+						 }}
+			             selectedProject={currentProject}/>
 			{
 				demoCard ? (<button className="btn btn-outline" onClick={() => {
 					setCards([...cards, demoCard]);
@@ -229,7 +236,6 @@ export function SimplifiedEditorPage({
 			setCards(projectData);
 		} else {
 			// otherwise, ignore it and save the new cards
-
 		}
 	}, [gameLocalStorageKey])
 

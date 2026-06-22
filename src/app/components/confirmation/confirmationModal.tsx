@@ -1,6 +1,6 @@
 import {ReactNode, useEffect, useRef} from "react";
 
-export default function ConfirmationModal({title, message, onAction, noButtonText, yesButtonText}: {
+export function ConfirmationModal({title, message, onAction, noButtonText, yesButtonText}: {
 	title?: ReactNode | string,
 	message?: ReactNode | string,
 	onAction: (confirmed: boolean) => void,
@@ -48,5 +48,47 @@ export default function ConfirmationModal({title, message, onAction, noButtonTex
 				}}>close</button>
 			</form>
 		</dialog>
+	</>)
+}
+
+export function AlertModal({title, message, onAction, okButtonText}: {
+	title?: ReactNode | string,
+	message?: ReactNode | string,
+	onAction: () => void,
+	okButtonText: string,
+}) {
+	const dialogRef = useRef<HTMLDialogElement>(null);
+
+	useEffect(() => {
+		if (dialogRef && dialogRef.current) {
+			dialogRef.current.showModal();
+		}
+	}, [dialogRef]);
+
+	useEffect(() => {
+		const dialog = dialogRef.current;
+		if (!dialog) return;
+
+		function onCancel(e: Event) {
+			onAction();
+		}
+		dialog.addEventListener("cancel", onCancel);
+		return () => {
+			dialog.removeEventListener("cancel", onCancel);
+		}
+	}, [dialogRef, onAction]);
+
+	return (<>
+	<dialog className="modal" ref={dialogRef}>
+			<div className="modal-box w-1/2 max-h-3/4 flex flex-col gap-3">
+				<h3 className="font-Tomorrow font-bold text-xl">{title || "Alert"}</h3>
+				{message || ""}
+				<div className="flex flex-row gap-2 w-full">
+					<button className="btn btn-accent grow" onClick={() => {
+						onAction();
+					}}>{okButtonText}</button>
+				</div>
+			</div>
+	</dialog>
 	</>)
 }
