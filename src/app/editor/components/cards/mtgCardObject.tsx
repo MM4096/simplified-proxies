@@ -46,18 +46,28 @@ function applyTemplatingStyles(text: string, template: MTGCardTemplate): string 
 			// keep track for next section
 			let station_count: string = "";
 			for (let i = 0; i < parts.length; i++) {
-				const this_part: string = parts[i];
-				if (this_part.startsWith("STATION")) {
-					station_count = this_part.replaceAll("STATION", "").trim();
-					continue;
+				let this_part: string = parts[i];
+				const COUNTER_REGEX = /^(\d+\+?) \|.*$/;
+
+				const counter_match: RegExpMatchArray | null = this_part.match(COUNTER_REGEX);
+
+				if (counter_match) {
+					station_count = counter_match[1];
+					this_part = this_part.split("| ")[1];
 				}
+
+				// if (this_part.startsWith("STATION")) {
+				// 	station_count = this_part.replaceAll("STATION", "").trim();
+				// 	continue;
+				// }
 
 				if (station_count !== "") {
 					let extra = "";
 					let first_elem = true;
+
 					// look ahead for other parts and merge into this one
 					while (i < parts.length) {
-						if (parts[i].startsWith("STATION")) {
+						if (parts[i].match(COUNTER_REGEX) && !first_elem) {
 							break;
 						}
 						if (first_elem) {
@@ -65,7 +75,14 @@ function applyTemplatingStyles(text: string, template: MTGCardTemplate): string 
 						} else {
 							extra += "<span class='paragraph-break'></span>";
 						}
-						extra += `${parts[i]}`;
+
+						let this_part = parts[i];
+						const split_parts = this_part.split("| ");
+						if (split_parts.length > 1) {
+							this_part = split_parts.slice(1).join("| ");
+						}
+
+						extra += `${this_part}`;
 						i++;
 					}
 					i--;
