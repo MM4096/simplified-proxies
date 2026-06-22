@@ -77,13 +77,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		}
 
 		const projectData = getProjectData();
-		if (projectData.length > 0) {
-			// if cards already exist in the new project, use that
-			setCards(projectData);
-		} else {
-			// otherwise, ignore it and save the new cards
-
-		}
+		setCards(projectData);
 	}, [currentProject, gameLocalStorageKey])
 
 	// write cards to storage

@@ -1,6 +1,7 @@
 "use client";
 
 import {useEffect, useRef, useState} from "react";
+import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 
 export function ProjectsBox({localStorageKey, setProjectAction, selectedProject}: {
 	localStorageKey: string,
@@ -81,9 +82,9 @@ export function ProjectsBox({localStorageKey, setProjectAction, selectedProject}
 					}
 
 
-					<button className="btn-error btn-outline btn" onClick={() => {
-						const result = prompt("Are you sure you want to delete this project? This action is irreversible.\n\nTo continue, type \"DELETE\" in the box below.");
-						if (result === "DELETE") {
+					<button className="btn-error btn-outline btn" onClick={async () => {
+						const result = await confirmationPrompt("Delete Project", "Are you sure you want to delete this project? This action cannot be undone.", "Cancel", "Delete Project");
+						if (result) {
 							deleteCurrentProject();
 						}
 					}}>Delete this Project</button>
@@ -110,7 +111,7 @@ export function ProjectsBox({localStorageKey, setProjectAction, selectedProject}
 		<dialog className="modal" ref={newProjectDialogRef}>
 			<div className="modal-box gap-3 flex flex-col">
 				<h3 className="font-bold text-xl custom-divider">New Project</h3>
-				<p>This moves your current cards to the new project.</p>
+				<p>This creates a new, blank project.</p>
 				<input type="text" className="input input-bordered w-full" placeholder="Project Name"
 					   value={newProjectName} onChange={(e) => {
 					setNewProjectName(e.target.value);
