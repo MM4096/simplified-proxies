@@ -18,6 +18,14 @@ const gitURL: string = "https://github.com/MM4096/simplified-proxies"
 
 export const changelog: Changelog = [
 	{
+		date: "2026-06-24",
+		version: "v1.12.2",
+		changes: (<ul className="list-disc">
+			<li><BugBadge/> <MTGBadge/> While importing with Moxfield, invalid Scryfall IDs no longer throws an error.</li>
+			<li><BugBadge/> <MTGBadge/> Spacecraft template now works as intended (<BugReport reportId={15}/>)</li>
+		</ul>)
+	},
+	{
 		date: "2026-06-22",
 		version: "v1.12.1",
 		changes: (<ul className="list-disc">

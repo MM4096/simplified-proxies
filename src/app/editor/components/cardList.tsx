@@ -29,17 +29,10 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 		return card.card_name || "";
 	}
 
-	if (cards.length === 0) return (
-		<div className="card-list">
-			<h2 className="custom-divider">Card List</h2>
-			<p>No cards</p>
-		</div>
-	)
-
 	return (<div className={`${className} card-list max-h-full h-full overflow-y-auto md:w-1/5`}>
 		<h2 className="custom-divider">Card List</h2>
 		<input className="input w-full shrink-0 rounded-xl" type="text" placeholder="Filter cards..." value={filter}
-			   onChange={(e) => {
+		       onChange={(e) => {
 				   setFilter(e.target.value);
 			   }}
 		/>
@@ -65,7 +58,7 @@ export function CardList({cards, setCards, editingIndex, setEditingIndex, classN
 
 						<span className="text-xs mr-2">QTY:</span>
 						<input className="input input-sm shrink !max-w-[10ch]" type="number" value={card.quantity || 1}
-							   onChange={(e) => {
+						       onChange={(e) => {
 								   const value = parseInt(e.target.value);
 
 								   if (value <= 0) {
