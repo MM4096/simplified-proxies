@@ -56,11 +56,6 @@ function applyTemplatingStyles(text: string, template: MTGCardTemplate): string 
 					this_part = this_part.split("| ")[1];
 				}
 
-				// if (this_part.startsWith("STATION")) {
-				// 	station_count = this_part.replaceAll("STATION", "").trim();
-				// 	continue;
-				// }
-
 				if (station_count !== "") {
 					let extra = "";
 					let first_elem = true;

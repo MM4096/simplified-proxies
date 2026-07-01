@@ -23,6 +23,7 @@ export const changelog: Changelog = [
 		changes: (<ul className="list-disc">
 			<li><BugBadge/> <MTGBadge/> While importing with Moxfield, invalid Scryfall IDs no longer throws an error.</li>
 			<li><BugBadge/> <MTGBadge/> Spacecraft template now works as intended (<BugReport reportId={15}/>)</li>
+			<li><FeatureBadge/> <MTGBadge/> Added example templates for in-editor editing</li>
 		</ul>)
 	},
 	{

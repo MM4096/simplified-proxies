@@ -10,7 +10,7 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card, MTGCard, PTCGCard} from "@/lib/card";
 import {setSimplifiedEditor} from "@/lib/storage";
-import {TemplateExamples} from "@/app/editor/components/template_examples";
+import {TemplateExamples} from "@/app/editor/components/templateExamples";
 
 export type EditorPageProps = {
 	gameName: string,
