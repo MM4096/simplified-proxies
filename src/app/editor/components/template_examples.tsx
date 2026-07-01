@@ -1,8 +1,9 @@
 import {Card} from "@/lib/card";
 import {useRef} from "react";
+import {TemplateCards} from "@/lib/mtg/templateCards";
 
 export function TemplateExamples({templates, appendCard}: {
-	templates: Record<string, Card>,
+	templates: TemplateCards,
 	appendCard: (card: Card) => void,
 }) {
 	const templateDialogRef = useRef<HTMLDialogElement>(null);
