@@ -10,6 +10,7 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card, MTGCard, PTCGCard} from "@/lib/card";
 import {setSimplifiedEditor} from "@/lib/storage";
+import {TemplateExamples} from "@/app/editor/components/templateExamples";
 
 export type EditorPageProps = {
 	gameName: string,
@@ -18,6 +19,7 @@ export type EditorPageProps = {
 	cardInputsAction: (props: { onChange: (key: string, value: string) => void, card: Card }) => ReactNode,
 	importCardsAction: (props: { setCards: (cards: Card[]) => void, cards: Card[] }) => ReactNode,
 	demoCard?: Card,
+	templateCards?: Record<string, Card>,
 }
 
 /**
@@ -28,7 +30,7 @@ export type EditorPageProps = {
  * @param cardInputs Inputs to fill in card information
  * @constructor
  */
-export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction, demoCard}:
+export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAction, importCardsAction, demoCard, templateCards}:
 						   EditorPageProps) {
 	const [cards, setCards] = useState<Card[]>([]);
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -199,6 +201,13 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 				demoCard ? (<button className="btn btn-outline" onClick={() => {
 					setCards([...cards, demoCard]);
 				}}>Insert Demo Card</button>) : ""
+			}
+			{
+				templateCards ? (<>
+					<TemplateExamples templates={templateCards} appendCard={(card: Card) => {
+						setCards([...cards, card]);
+					}}/>
+				</>) : ""
 			}
 		</div>
 

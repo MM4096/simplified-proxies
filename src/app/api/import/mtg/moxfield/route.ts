@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
 	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
-	let import_ids: Array<{quantity: number, id: string}> = [];
+	let import_ids: Array<{quantity: number, id: string, name: string}> = [];
 	let import_cards: string[] = [];
 	for (const [key, value] of Object.entries(boards)) {
 		if (key == "maybeboard" && !importMaybeboard) {
@@ -68,9 +68,11 @@ export async function POST(request: NextRequest) {
 			if (useForeignLanguage) {
 				const quantity = card["quantity"];
 				const id = card["card"]["scryfall_id"];
+				const name = card["card"]["name"];
 				import_ids.push({
 					quantity: quantity,
-					id: id
+					id: id,
+					name: name,
 				});
 			}
 			else {
