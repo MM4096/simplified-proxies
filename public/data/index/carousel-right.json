@@ -1,0 +1,57 @@
+[
+	{
+		"card_name": "Thanos, the Mad Titan",
+		"mana_cost": "{R}{W}{B}",
+		"type_line": "Legendary Creature {-} Eternal Villain",
+		"card_text": "Deathtouch, lifelink\nPower-up {-} {C}{W}{U}{B}{R}{G}: Put two +1/+1 counters on Thanos. Choose odd or even. Destroy each other creature with mana value of the chosen quality. <i>(Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn. Zero is even.)</i>",
+		"power": "4",
+		"toughness": "4",
+		"quantity": 1
+	},
+	{
+		"card_name": "Genesis Ultimatum",
+		"flavor_name": "The Five Arrive",
+		"mana_cost": "{G}{G}{U}{U}{U}{R}{R}",
+		"type_line": "Sorcery",
+		"card_text": "Look at the top five cards of your library. Put any number of permanent cards from among them onto the battlefield and the rest into your hand. Exile Genesis Ultimatum.",
+		"power": "",
+		"toughness": "",
+		"quantity": 1
+	},
+	{
+		"card_name": "Dawnsire, Sunstar Dreadnought",
+		"mana_cost": "{5}",
+		"type_line": "Legendary Artifact {-} Spacecraft",
+		"card_text": "Station <i>(Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 20+.)</i>\n10+ | Whenever you attack, Dawnsire deals 100 damage to up to one target creature or planeswalker.\n20+ | Flying",
+		"power": "20",
+		"toughness": "20",
+		"card_template": "Spacecraft",
+		"quantity": 1
+	},
+	{
+		"card_name": "Virtue of Knowledge",
+		"mana_cost": "{4}{U}",
+		"type_line": "Enchantment",
+		"card_text": "If a permanent entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+		"power": "",
+		"toughness": "",
+		"reverse_card_name": "Vantress Visions",
+		"reverse_mana_cost": "{1}{U}",
+		"reverse_type_line": "Instant {-} Adventure",
+		"reverse_text": "Copy target activated or triggered ability you control. You may choose new targets for the copy.",
+		"reverse_power": "",
+		"reverse_toughness": "",
+		"card_template": "Adventure / Omen / Prepare",
+		"quantity": 1
+	},
+	{
+		"card_name": "Artist's Talent",
+		"mana_cost": "{1}{R}",
+		"type_line": "Enchantment {-} Class",
+		"card_text": "<i>(Gain the next level as a sorcery to add its ability.)</i>\nWhenever you cast a noncreature spell, you may discard a card. If you do, draw a card.\n{2}{R}: Level 2\nNoncreature spells you cast cost {1} less to cast.\n{2}{R}: Level 3\nIf a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, it deals that much damage plus 2 instead.",
+		"power": "",
+		"toughness": "",
+		"card_template": "Class",
+		"quantity": 1
+	}
+]

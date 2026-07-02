@@ -5,17 +5,24 @@ import {MTGCard} from "@/lib/card";
 import {FlavorTextBehavior, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
-import {NewBadge} from "@/app/components/tags/new";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
 import Link from "next/link";
 import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 
-export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAction, cancelButtonText = "Cancel"}: {
+export function ImportMTG({
+							  cards,
+							  setCardsAction,
+							  closeDialogAction,
+							  onImportAction,
+							  cancelButtonText = "Cancel",
+							  animateHeight = true
+						  }: {
 	cards: MTGCard[],
 	setCardsAction: (cards: MTGCard[]) => void,
 	closeDialogAction?: () => void,
 	onImportAction?: () => void,
 	cancelButtonText?: string,
+	animateHeight?: boolean,
 }) {
 	const [importMessage, setImportMessage] = useState<string>("");
 	const [importText, setImportText] = useState<string>("");
@@ -157,7 +164,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 	}
 
-	return (<AnimatedModalHeight>
+	const innerContent = (<>
 		<h2>Import Cards</h2>
 		<div className="custom-divider"/>
 
@@ -221,7 +228,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 						   setImportType("archidekt");
 					   }}/>
 
-				<span>Import from Archidekt <NewBadge/></span>
+				<span>Import from Archidekt</span>
 			</label>
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Archidekt deck URL here:</p>
@@ -239,7 +246,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 						   setImportType("moxfield");
 					   }}/>
 
-				<span>Import from Moxfield <NewBadge/></span>
+				<span>Import from Moxfield</span>
 			</label>
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Moxfield deck URL here:</p>
@@ -277,6 +284,8 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 		</div>
 
 		<br/>
+
+		<div className="grow"/>
 
 		<div className="collapse bg-base-100 border-gray-500 border h-max">
 			<input type="checkbox" defaultChecked={true}/>
@@ -401,8 +410,6 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 			</>)
 		}
 
-		<div className="grow"/>
-
 		<div className="flex flex-row gap-2 w-full">
 			{cancelButtonText && (<button className="btn btn-secondary grow" onClick={() => {
 				if (closeDialogAction) {
@@ -415,5 +422,13 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 			}} disabled={disableButtons}>Import
 			</button>
 		</div>
-	</AnimatedModalHeight>)
+	</>)
+
+	if (animateHeight) {
+		return (<AnimatedModalHeight>
+				{innerContent}
+			</AnimatedModalHeight>)
+	}
+
+	return innerContent;
 }

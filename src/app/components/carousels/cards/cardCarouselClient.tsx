@@ -70,7 +70,6 @@ export function CardCarouselClient({data, time, className, gameId}: {
 					   className={`carousel-item ${imageSrcs.length == 0 ? "visible active" : "hidden"}`}/>
 			</div>
 
-			{/* Hide this container once all srcs have been created (I would delete it but don't know how to) */}
 			{/* TODO: Delete this container once srcs have been created */}
 			<div className={`opacity-0 absolute top-0 left-0 ${data.length == imageSrcs.length ? "hidden" : ""}`}>
 				{
