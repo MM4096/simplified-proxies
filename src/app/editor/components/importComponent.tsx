@@ -2,6 +2,7 @@
 
 import {ComponentType, useEffect, useRef, useState} from "react";
 import {Card} from "@/lib/card";
+import AnimatedModalHeight from "@/app/components/animatedModalHeight";
 
 export type ImportProps = {
 	cards: Card[],

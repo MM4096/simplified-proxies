@@ -17,14 +17,10 @@ export default function SimplifiedMTGEditor() {
 				router.push("/");
 			}} onImportAction={() => {
 				router.push("/editor/mtg/print");
-			}}/>
+			}} animateHeight={false}/>;
 		}}
 
-		cardInputsAction={function (props: {
-			onChange: (key: string, value: string) => void;
-			card: Card;
-		}): ReactNode {
+		cardInputsAction={function (props: { onChange: (key: string, value: string) => void; card: Card; }): ReactNode {
 			throw new Error("Function not implemented.");
-		}}
-	/>)
+		}}	/>)
 }

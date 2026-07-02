@@ -1,0 +1,64 @@
+[
+	{
+		"card_name": "Tezzeret, Cruel Captain",
+		"mana_cost": "{3}",
+		"type_line": "Legendary Planeswalker {-} Tezzeret",
+		"card_text": "Whenever an artifact you control enters, put a loyalty counter on Tezzeret.\n0: Untap target artifact or creature. If it's an artifact creature, put a +1/+1 counter on it.\n\u22123: Search your library for an artifact card with mana value 1 or less, reveal it, put it into your hand, then shuffle.\n\u22127: You get an emblem with \"At the beginning of combat on your turn, put three +1/+1 counters on target artifact you control. If it's not a creature, it becomes a 0/0 Robot artifact creature.\"",
+		"power": "4",
+		"toughness": "",
+		"card_template": "Planeswalker",
+		"quantity": 1
+	},
+	{
+		"card_name": "Emeritus of Conflict",
+		"mana_cost": "{1}{R}",
+		"type_line": "Creature {-} Human Wizard",
+		"card_text": "First strike\nWhenever you cast your third spell each turn, this creature becomes prepared.",
+		"power": "2",
+		"toughness": "2",
+		"reverse_card_name": "Lightning Bolt",
+		"reverse_mana_cost": "{R}",
+		"reverse_type_line": "Instant",
+		"reverse_text": "Lightning Bolt deals 3 damage to any target.",
+		"reverse_power": "",
+		"reverse_toughness": "",
+		"card_template": "Adventure / Omen / Prepare",
+		"quantity": 1
+	},
+	{
+		"card_name": "Dismember",
+		"flavor_name": "'Tis But a Scratch!",
+		"mana_cost": "{1}{B/P}{B/P}",
+		"type_line": "Instant",
+		"card_text": "<i>({B/P} can be paid with either {B} or 2 life.)</i>\nTarget creature gets -5/-5 until end of turn.",
+		"power": "",
+		"toughness": "",
+		"quantity": 1
+	},
+	{
+		"card_name": "Dusk",
+		"mana_cost": "{2}{W}{W}",
+		"type_line": "Sorcery",
+		"card_text": "Destroy all creatures with power 3 or greater.",
+		"power": "",
+		"toughness": "",
+		"reverse_card_name": "Dawn",
+		"reverse_mana_cost": "{3}{W}{W}",
+		"reverse_type_line": "Sorcery",
+		"reverse_text": "Aftermath <i>(Cast this spell only from your graveyard. Then exile it.)</i>\nReturn all creature cards with power 2 or less from your graveyard to your hand.",
+		"reverse_power": "",
+		"reverse_toughness": "",
+		"card_template": "Aftermath Split",
+		"quantity": 1
+	},
+	{
+		"card_name": "Summon: Bahamut",
+		"mana_cost": "{9}",
+		"type_line": "Enchantment Creature {-} Saga Dragon",
+		"card_text": "<i>(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)</i>\nI, II {-} Destroy up to one target nonland permanent.\nIII {-} Draw two cards.\nIV {-} Mega Flare {-} This creature deals damage equal to the total mana value of other permanents you control to each opponent.\nFlying",
+		"power": "9",
+		"toughness": "9",
+		"card_template": "Saga",
+		"quantity": 1
+	}
+]

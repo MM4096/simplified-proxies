@@ -5,17 +5,24 @@ import {MTGCard} from "@/lib/card";
 import {FlavorTextBehavior, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
-import {NewBadge} from "@/app/components/tags/new";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
 import Link from "next/link";
 import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 
-export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAction, cancelButtonText = "Cancel"}: {
+export function ImportMTG({
+							  cards,
+							  setCardsAction,
+							  closeDialogAction,
+							  onImportAction,
+							  cancelButtonText = "Cancel",
+							  animateHeight = true
+						  }: {
 	cards: MTGCard[],
 	setCardsAction: (cards: MTGCard[]) => void,
 	closeDialogAction?: () => void,
 	onImportAction?: () => void,
 	cancelButtonText?: string,
+	animateHeight?: boolean,
 }) {
 	const [importMessage, setImportMessage] = useState<string>("");
 	const [importText, setImportText] = useState<string>("");
@@ -108,7 +115,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 							<label className="label text-sm whitespace-pre italic">Something wrong? Please open a
 								bug report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-												   target="_blank" className="link">GitHub</Link></label>
+								                   target="_blank" className="link">GitHub</Link></label>
 						</>),
 						"Cancel Import", "Continue Anyways");
 					if (!shouldNotAbort) {
@@ -156,7 +163,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 	}
 
-	return (<AnimatedModalHeight>
+	const innerContent = (<>
 		<h2>Import Cards</h2>
 		<div className="custom-divider"/>
 
@@ -164,9 +171,9 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 			<label className="tab">
 				<input type="radio" name="mtg-import-type"
-					   id="list-import"
-					   defaultChecked={true}
-					   onChange={() => {
+				       id="list-import"
+				       defaultChecked={true}
+				       onChange={() => {
 						   setImportType("list");
 					   }}/>
 
@@ -205,8 +212,8 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 				<fieldset className="fieldset">
 					<legend className="fieldset-legend"></legend>
 					<textarea className="textarea w-full" placeholder="Paste your card data here"
-							  value={importText}
-							  onChange={(e) => {
+					          value={importText}
+					          onChange={(e) => {
 								  setImportText(e.target.value);
 							  }}/>
 				</fieldset>
@@ -215,42 +222,42 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 			<label className="tab">
 				<input type="radio" name="mtg-import-type"
-					   id="archidekt-import"
-					   onChange={() => {
+				       id="archidekt-import"
+				       onChange={() => {
 						   setImportType("archidekt");
 					   }}/>
 
-				<span>Import from Archidekt <NewBadge/></span>
+				<span>Import from Archidekt</span>
 			</label>
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Archidekt deck URL here:</p>
 				<input className="input w-full" type="url"
-					   placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
-					   onChange={(e) => {
+				       placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
+				       onChange={(e) => {
 						   setImportText(e.target.value);
 					   }}/>
 			</div>
 
 			<label className="tab">
 				<input type="radio" name="mtg-import-type"
-					   id="moxfield-import"
-					   onChange={() => {
+				       id="moxfield-import"
+				       onChange={() => {
 						   setImportType("moxfield");
 					   }}/>
 
-				<span>Import from Moxfield <NewBadge/></span>
+				<span>Import from Moxfield</span>
 			</label>
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Moxfield deck URL here:</p>
 				<input className="input w-full" type="url"
-					   placeholder="https://moxfield.com/decks/1234567890" value={importText}
-					   onChange={(e) => {
+				       placeholder="https://moxfield.com/decks/1234567890" value={importText}
+				       onChange={(e) => {
 						   setImportText(e.target.value);
 					   }}/>
 				<br/><br/>
 				<label className="label label-sm text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={moxfieldImportMaybeboard}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setMoxfieldImportMaybeboard(e.target.checked);
 						   }}
 					/>
@@ -262,13 +269,15 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 		<br/>
 
+		<div className="grow"/>
+
 		<div className="collapse bg-base-100 border-gray-500 border h-max">
 			<input type="checkbox" defaultChecked={true}/>
 			<div className="collapse-title font-semibold pr-8">Additional Settings</div>
 			<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap">
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setImportBasicLands(e.target.checked);
 						   }}/>
 					Import basic lands
@@ -283,7 +292,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<select className="select select-sm w-min" value={importReminderTextBehavior}
-							onChange={(e) => {
+					        onChange={(e) => {
 								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
 							}}>
 						<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
@@ -300,7 +309,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<select className="select select-sm w-min" value={importFlavorTextBehavior}
-							onChange={(e) => {
+					        onChange={(e) => {
 								setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
 							}}>
 						<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
@@ -317,7 +326,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importSplitDFCs}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setImportSplitDFCs(e.target.checked);
 						   }}/>
 					Split DFCs into separate cards
@@ -331,7 +340,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 				<label className="label text-sm">
 					<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates}
-						   onChange={(e) => {
+					       onChange={(e) => {
 							   setImportTemplates(e.target.checked);
 						   }}/>
 					Automatically apply templates
@@ -359,7 +368,7 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 
 		<label className="label">
 			<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
-				   onChange={(e) => {
+			       onChange={(e) => {
 					   setOverwrite(e.target.checked);
 				   }}/>
 			Overwrite existing cards
@@ -379,13 +388,11 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 						<label className="label text-sm whitespace-pre italic">If this issue persists, please open a
 							bug
 							report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
-										   target="_blank" className="link">GitHub</Link></label>
+							               target="_blank" className="link">GitHub</Link></label>
 					</>)
 				}
 			</>)
 		}
-
-		<div className="grow"/>
 
 		<div className="flex flex-row gap-2 w-full">
 			{cancelButtonText && (<button className="btn btn-secondary grow" onClick={() => {
@@ -399,5 +406,13 @@ export function ImportMTG({cards, setCardsAction, closeDialogAction, onImportAct
 			}} disabled={disableButtons}>Import
 			</button>
 		</div>
-	</AnimatedModalHeight>)
+	</>)
+
+	if (animateHeight) {
+		return (<AnimatedModalHeight>
+				{innerContent}
+			</AnimatedModalHeight>)
+	}
+
+	return innerContent;
 }
