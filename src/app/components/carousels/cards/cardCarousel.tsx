@@ -11,7 +11,7 @@ export async function CardCarousel({jsonPath, time, className, gameId}: {
 	className?: string,
 	gameId: "mtg" | "ptcg"
 }) {
-	const filePath: string = path.join(process.cwd(), jsonPath);
+	const filePath: string = path.join(/*turbopackIgnore: true*/ process.cwd(), jsonPath);
 	const contents: string = fs.readFileSync(filePath, "utf8");
 	if (!contents) throw new Error(
 		`Could not find file at path: ${filePath}`

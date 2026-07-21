@@ -2,7 +2,7 @@ import "./styles/index.css"
 3
 import Link from "next/link";
 import {Carousel} from "@/app/components/carousels/images/carousel";
-import {BiBug, BiLogoGithub} from "react-icons/bi";
+import {BiBug, BiInfoCircle, BiLogoGithub} from "react-icons/bi";
 import {CreditsBox} from "@/app/components/creditsBox";
 import {ChangelogComponent} from "@/app/components/changelogComponent";
 import {CardCarousel} from "@/app/components/carousels/cards/cardCarousel";
@@ -27,10 +27,24 @@ export default function Home() {
 
 			<div className="flex flex-col items-center h-full justify-center text-center child-w-full gap-2 index-contents">
 				<h1>Simplified Proxies</h1>
-				<p>Make print-friendly proxies for Magic: The Gathering and Pokemon Trading Card Game</p>
+				<p>Make print-friendly proxies for Magic: The Gathering</p>
 				<div className="mb-5"/>
-				<Link href="/editor/mtg" className="btn btn-primary mtg-editor">Traditional Editor</Link>
-				<Link href="/editor/mtg/simplified" className="btn btn-primary mtg-simplified-editor">Simplified Editor <NewBadge/></Link>
+
+
+				<Link href="/editor/mtg" className="btn btn-primary mtg-editor">
+					Traditional Editor
+					<span className="tooltip">
+						<span className="tooltip-content">Powerful and Complex.<br/>Everything in the Simplified Editor, plus the ability to edit any card.</span>
+						<BiInfoCircle/>
+					</span>
+				</Link>
+				<Link href="/editor/mtg/simplified" className="btn btn-primary mtg-simplified-editor">
+					Simplified Editor <NewBadge/>
+					<span className="tooltip">
+						<span className="tooltip-content">Quick and Simple.<br/>Create proxies from a decklist. Supports Moxfield and Archidekt links.</span>
+						<BiInfoCircle/>
+					</span>
+				</Link>
 			</div>
 
 			<div className="flex flex-col items-center justify-center gap-4 mtg-panel carousel">

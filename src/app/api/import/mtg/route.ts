@@ -6,7 +6,6 @@ export const maxDuration = 60;
  * Gets MTG Card data
  */
 export async function POST(request: Request) {
-	//region Convert Data
 	const body = await request.json();
 
 	const cards: string = (body["cards"] as string).trim();

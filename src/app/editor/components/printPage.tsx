@@ -25,6 +25,8 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [roundCorners, setRoundCorners] = useState<boolean>(true);
 	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
 
+	const [usingSimplifiedEditor, setUsingSimplifiedEditor] = useState<boolean>(false);
+
 	function getProjectNames() {
 		if (!isMounted) {
 			return [];
@@ -42,6 +44,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 
 	useEffect(() => {
 		setIsMounted(true);
+		setUsingSimplifiedEditor(isSimplifiedEditor());
 	}, []);
 
 	useEffect(() => {
@@ -73,7 +76,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 			<h1>Preview and Print Proxies</h1>
 			<br/>
 			<div className="flex flex-row gap-2 items-center">
-				<Link href={`/editor/${gameId}${isSimplifiedEditor() ? "/simplified" : ""}`} className="btn btn-secondary">Back to Editor</Link>
+				<Link href={`/editor/${gameId}${usingSimplifiedEditor ? "/simplified" : ""}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
 				}}>Print {allCards.length || "??"} Proxies
