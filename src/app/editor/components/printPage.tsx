@@ -75,7 +75,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 		<div className="no-print p-2">
 			<h1>Preview and Print Proxies</h1>
 			<br/>
-			<div className="flex flex-row gap-2 items-center">
+			<div className="flex flex-row flex-wrap gap-2 items-center">
 				<Link href={`/editor/${gameId}${usingSimplifiedEditor ? "/simplified" : ""}`} className="btn btn-secondary">Back to Editor</Link>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();

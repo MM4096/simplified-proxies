@@ -189,21 +189,21 @@ export function ImportMTG({
 						<p>Deflecting Swat</p>
 						<p>Deflecting Swat</p>
 						<p>sakura tribe elder</p>
-						<p>chandra flames fury</p>
+						<p>jace the perfected mind</p>
 						<p>commit // memory</p>
 					</div>
 					<div className="border p-2 grow md:w-max">
 						<p>2 Plains</p>
 						<p>2 Deflecting Swat</p>
 						<p>4 sakura tribe elder</p>
-						<p>10 chandra flames fury</p>
+						<p>10 jace the perfected mind</p>
 						<p>1 Commit</p>
 					</div>
 					<div className="border p-2 grow md:w-max">
 						<p>2x Plains</p>
 						<p>2x Deflecting Swat</p>
 						<p>4x sakura tribe elder</p>
-						<p>10x chandra flames fury</p>
+						<p>10x jace the perfected mind</p>
 						<p>1x Memory</p>
 					</div>
 				</div>
@@ -274,7 +274,8 @@ export function ImportMTG({
 							   }}
 						/>
 						<span>Preserve Original Card Language</span>
-						<div className="tooltip tooltip-top" data-tip="If checked, will import all cards according to the language as they appear in Moxfield (e.g. Japanese cards will use Japanese). If unchecked, imports the English version.">
+						<div className="tooltip"
+						     data-tip="If checked, will import all cards according to the language as they appear in Moxfield (e.g. Japanese cards will use Japanese). If unchecked, imports the English version.">
 							<BiInfoCircle/>
 						</div>
 					</label>
@@ -297,9 +298,9 @@ export function ImportMTG({
 							   setImportBasicLands(e.target.checked);
 						   }}/>
 					Import basic lands
-					<span className="tooltip tooltip-right ">
+					<span className="tooltip">
 								<span
-									className="tooltip-content">If unchecked, any card who&apos;s name is exactly &quot;Plains&quot;, &quot;Mountain&quot;, &quot;Swamp&quot;, &quot;Forest&quot;, or &quot;Island&quot; will be skipped.</span>
+									className="tooltip-content">Whether to import basic lands.<br/><span className="text-xs">Plains, Mountain, Swamp, Island, and Forest are considered basic lands.</span></span>
 								<BiInfoCircle/>
 							</span>
 				</label>
@@ -346,7 +347,7 @@ export function ImportMTG({
 							   setImportSplitDFCs(e.target.checked);
 						   }}/>
 					Split DFCs into separate cards
-					<span className="tooltip tooltip-right ">
+					<span className="tooltip">
 								<span className="tooltip-content">If checked, all DFCs will be imported as two cards instead of one.</span>
 								<BiInfoCircle/>
 							</span>
@@ -360,8 +361,8 @@ export function ImportMTG({
 							   setImportTemplates(e.target.checked);
 						   }}/>
 					Automatically apply templates
-					<span className="tooltip tooltip-left ">
-								<span className="tooltip-content">Whether to automatically apply templates based on card types (such as the Planeswalker template for Planeswalkers or Spacecraft template for Spacecraft)</span>
+					<span className="tooltip">
+								<span className="tooltip-content">Whether to automatically apply templates based on detected card types.</span>
 								<BiInfoCircle/>
 							</span>
 				</label>
@@ -372,7 +373,7 @@ export function ImportMTG({
 					<input className="input input-sm" value={importNote} onChange={(e) => {
 						setImportNote(e.target.value);
 					}} placeholder="Import Notes (optional)"/>
-					<span className="tooltip tooltip-left ">
+					<span className="tooltip">
 								<span className="tooltip-content">Any note you want to add to all the cards</span>
 								<BiInfoCircle/>
 								</span>
@@ -426,8 +427,8 @@ export function ImportMTG({
 
 	if (animateHeight) {
 		return (<AnimatedModalHeight>
-				{innerContent}
-			</AnimatedModalHeight>)
+			{innerContent}
+		</AnimatedModalHeight>)
 	}
 
 	return innerContent;
