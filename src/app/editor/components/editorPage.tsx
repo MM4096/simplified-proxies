@@ -69,6 +69,8 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		function getProjectData() {
 			const savedData = localStorage.getItem(gameLocalStorageKey);
 
+			console.log("refreshing card list: " + savedData)
+
 			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
 				return [];
 			}
@@ -88,6 +90,8 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	// write cards to storage
 	useEffect(() => {
 		function setProjectData(data: MTGCard[]) {
+			console.log("saving card list: " + JSON.stringify(data))
+
 			const savedData = localStorage.getItem(gameLocalStorageKey);
 			let parsedData = JSON.parse(savedData || "{}");
 			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
@@ -100,6 +104,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		setProjectData(cards);
 	}, [cards, currentProject, gameLocalStorageKey]);
+
 	useEffect(() => {
 		if (editingIndex !== null && editingIndex >= 0 && editingIndex < cards.length) {
 			setTempCard(cards[editingIndex]);

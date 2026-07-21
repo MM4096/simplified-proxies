@@ -26,6 +26,9 @@ export const changelog: Changelog = [
 				available.
 			</li>
 			<li>Removed the Pokemon editor from the main page. This can still be found at <Link href="/editor/ptcg" className="link">/editor/ptcg</Link> but will receive no further updates.</li>
+
+			<li><BugBadge/> Fixed a visual bug causing dropdown arrows to overlap with the text.</li>
+			<li><BugBadge/> Fixed a visual bug causing tooltips to clip by displaying on the left or right side.</li>
 		</ul>)
 	},
 	{
