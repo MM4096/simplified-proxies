@@ -41,6 +41,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
 	// TODO: Fix this when a better solution exists
 	const [refreshCardList, setRefreshCardList] = useState<number>(0);
+	const [hasLoadedInitialCardList, setHasLoadedInitialCardList] = useState<boolean>(false);
 
 	function changeVal(key: string, value: string) {
 		const tempCardCopy = {...tempCard, [key as keyof Card]: value};
@@ -69,8 +70,6 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 		function getProjectData() {
 			const savedData = localStorage.getItem(gameLocalStorageKey);
 
-			console.log("refreshing card list: " + savedData)
-
 			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
 				return [];
 			}
@@ -84,13 +83,16 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		const projectData = getProjectData();
 		setCards(projectData);
+		setHasLoadedInitialCardList(true);
 
 	}, [currentProject, gameLocalStorageKey, refreshCardList])
 
 	// write cards to storage
 	useEffect(() => {
 		function setProjectData(data: MTGCard[]) {
-			console.log("saving card list: " + JSON.stringify(data))
+			if (!hasLoadedInitialCardList) {
+				return;
+			}
 
 			const savedData = localStorage.getItem(gameLocalStorageKey);
 			let parsedData = JSON.parse(savedData || "{}");
