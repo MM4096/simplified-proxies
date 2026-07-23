@@ -27,7 +27,7 @@ export default function Home() {
 
 			<div className="flex flex-col items-center h-full justify-center text-center child-w-full gap-2 index-contents">
 				<h1>Simplified Proxies</h1>
-				<p>Make print-friendly proxies for Magic: The Gathering</p>
+				<p>Create custom cards and print-friendly proxies for Magic: The Gathering</p>
 				<div className="mb-5"/>
 
 

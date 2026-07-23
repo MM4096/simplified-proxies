@@ -283,6 +283,15 @@ export function ImportMTG({
 			</div>
 
 		</div>
+		<br/>
+
+		<label className="label">
+			<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
+			       onChange={(e) => {
+					   setOverwrite(e.target.checked);
+				   }}/>
+			Overwrite existing cards
+		</label>
 
 		<br/>
 
@@ -381,16 +390,6 @@ export function ImportMTG({
 
 			</div>
 		</div>
-		<br/>
-
-		<label className="label">
-			<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
-			       onChange={(e) => {
-					   setOverwrite(e.target.checked);
-				   }}/>
-			Overwrite existing cards
-		</label>
-
 		<br/>
 
 		{
