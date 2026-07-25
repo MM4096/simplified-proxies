@@ -16,7 +16,7 @@
     "daisyui": "^5.5.14",
     "html2canvas-pro": "^1.6.6",
     "isomorphic-dompurify": "^3.19.0",
-    "next": "^16.2.10",
+    "next": "^16.2.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0"
@@ -29,9 +29,15 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^10.0.0",
+    "eslint": "^10.8.0",
     "eslint-config-next": "^0.2.4",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true
+  },
+  "overrides": {
+    "sharp": "^0.35.0"
   }
 }
