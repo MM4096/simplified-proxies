@@ -43,9 +43,7 @@ export async function POST(request: NextRequest) {
 		const name = card["card"]["oracleCard"]["name"];
 		import_cards.push(`${quantity} ${name}`);
 	}
-	const card_list = import_cards.join("\n");
-	// console.log(card_list);
-	body["cards"] = card_list;
+	body["cards"] = import_cards.join("\n");
 
 	return await doScryfallSearch(body);
 }

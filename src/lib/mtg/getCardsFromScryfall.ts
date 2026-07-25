@@ -9,7 +9,6 @@ import {
 	ReminderTextBehavior
 } from "@/lib/mtg/mtgHelper";
 
-//region Fetch cards from Scryfall
 const SCRYFALL_HEADERS = {
 	"Content-Type": "application/json",
 	"User-Agent": "SimplifiedProxies/1.0",
@@ -118,9 +117,6 @@ async function fuzzyScryfall(cardName: string): Promise<unknown> {
 	return await response.json();
 }
 
-/**
- * Gets MTG Card data, run instead of calling the API
- */
 export async function doScryfallSearch(body: any): Promise<Response> {
 	if (!body.hasOwnProperty("cards") && !body.hasOwnProperty("ids")) {
 		return new Response(JSON.stringify({message: "Missing card list"}), {
@@ -409,5 +405,3 @@ function applyImportNote(cardObject: MTGCard, importNote: string) {
 		}
 	}
 }
-
-//endregion

@@ -8,6 +8,7 @@ import Image from "next/image";
 import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
 import {TbCaretUpDownFilled, TbCaretUpFilled} from "react-icons/tb";
 import {hasReverseFace, isolateFrontAndBackFaces} from "@/lib/mtg/mtgHelper";
+import {AutoTextSize} from "auto-text-size";
 
 function getPowerToughnessText(power?: string, toughness?: string): string | null {
 	if ((power === undefined || power === "") && (toughness === undefined || toughness === "")) {

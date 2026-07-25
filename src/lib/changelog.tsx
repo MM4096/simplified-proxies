@@ -18,6 +18,22 @@ const gitURL: string = "https://github.com/MM4096/simplified-proxies"
 
 export const changelog: Changelog = [
 	{
+		date: "2026-07-21",
+		version: "v1.13",
+		changes: (<ul className="list-disc">
+			<li><b><FeatureBadge/>INTRODUCING SIMPLIFIED EDITOR!</b><br/>For those who just want to proxy a decklist and
+				not have to mess with the advanced settings of the traditional editor. The traditional editor is still
+				available.
+			</li>
+			<li>Removed the Pokemon editor from the main page. This can still be found at <Link href="/editor/ptcg" className="link">/editor/ptcg</Link> but will receive no further updates.</li>
+			<br/>
+			<li><BugBadge/> Fixed a margin bug causing pages to print with only 6 proxies (2 columns of 3), rather than 9 (3 columns of 3)</li>
+			<li><FeatureBadge/> Added an option to permanently disable the warning popup shown when hiding credit while printing.</li>
+			<li><BugBadge/> Fixed a visual bug causing dropdown arrows to overlap with the text.</li>
+			<li><BugBadge/> Fixed a visual bug causing tooltips to clip by displaying on the left or right side.</li>
+		</ul>)
+	},
+	{
 		date: "2026-06-24",
 		version: "v1.12.2",
 		changes: (<ul className="list-disc">
@@ -114,7 +130,7 @@ export const changelog: Changelog = [
 		version: "v1.9.2",
 		changes: (<>
 			<ul className="list-disc">
-				<li><ChangeBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin
+				<li><BugBadge/> <MTGBadge/> Import Cards with Moxfield/Archidekt no longer requires the URL to begin
 					with <code>HTTPS</code>.
 				</li>
 			</ul>

@@ -21,9 +21,12 @@
 /*  }*/
 /*}*/
 
-.btn,
-.select {
+.btn {
 	@apply px-4 py-2 rounded-md;
+}
+
+.select {
+	@apply rounded-md;
 }
 
 body {

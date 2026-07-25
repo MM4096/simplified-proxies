@@ -1,24 +1,38 @@
 "use client";
 
-import {useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 
 export function HideCreditBox({showCredit, setShowCreditAction}: {
 	showCredit: boolean,
 	setShowCreditAction: (hideCredit: boolean) => void;
 }) {
+	const localStorageKey = "showWatermarkPopup";
+	const [showWatermarkPopup, setShowWatermarkPopup] = useState<boolean>(true);
+	const [isMounted, setIsMounted] = useState<boolean>(false);
+
 	const dialogRef = useRef<HTMLDialogElement>(null);
 
+	useEffect(() => {
+		setIsMounted(true);
+		setShowWatermarkPopup((localStorage.getItem(localStorageKey) || "1") === "1");
+	}, []);
+
+	useEffect(() => {
+		if (!isMounted) return;
+		localStorage.setItem(localStorageKey, showWatermarkPopup ? "1" : "0");
+	}, [showWatermarkPopup, isMounted]);
+
 	return (<>
-		<fieldset className="flex flex-row gap-2 ml-5">
-			<input type="checkbox" className="checkbox" checked={!showCredit} onChange={(e) => {
-				if (e.target.checked) {
+		<label className="label">
+			<input type="checkbox" className={`checkbox ${!showCredit && "checkbox-error"}`} checked={!showCredit} onChange={(e) => {
+				if (e.target.checked && showWatermarkPopup) {
 					dialogRef.current?.showModal();
 				} else {
 					setShowCreditAction(!showCredit);
 				}
 			}}/>
-			<label className="label">Hide Watermark</label>
-		</fieldset>
+			Hide Watermark
+		</label>
 
 		<dialog className="modal" ref={dialogRef}>
 			<div className="modal-box flex flex-col gap-2">
@@ -26,11 +40,16 @@ export function HideCreditBox({showCredit, setShowCreditAction}: {
 				<p>
 					This will hide the watermark (<i>simplified-proxies.mm4096.com</i>) at the bottom of each card.
 					<br/><br/>
-					This action is discouraged, as it doesn&apos;t give Simplified Proxies any credit for your proxies,
-					but you can choose to hide the watermark this time anyways.
-					<br/>
-					Showing the watermark signifies your support for Simplified Proxies, and is very appreciated!
+					Showing the watermark signifies your support for Simplified Proxies, and is very appreciated.
 				</p>
+
+				<label className="label">
+					<input type="checkbox" className="checkbox" checked={!showWatermarkPopup} onChange={(e) => {
+						setShowWatermarkPopup(!e.target.checked);
+					}}/>
+					Don't show this message again
+				</label>
+
 				<div className="flex flex-row gap-2">
 					<button className="btn btn-outline grow" onClick={() => {
 						dialogRef.current?.close();

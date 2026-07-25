@@ -41,6 +41,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	const [currentProject, setCurrentProject] = useState<string | null>(null);
 	// TODO: Fix this when a better solution exists
 	const [refreshCardList, setRefreshCardList] = useState<number>(0);
+	const [hasLoadedInitialCardList, setHasLoadedInitialCardList] = useState<boolean>(false);
 
 	function changeVal(key: string, value: string) {
 		const tempCardCopy = {...tempCard, [key as keyof Card]: value};
@@ -82,12 +83,17 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		const projectData = getProjectData();
 		setCards(projectData);
+		setHasLoadedInitialCardList(true);
 
 	}, [currentProject, gameLocalStorageKey, refreshCardList])
 
 	// write cards to storage
 	useEffect(() => {
 		function setProjectData(data: MTGCard[]) {
+			if (!hasLoadedInitialCardList) {
+				return;
+			}
+
 			const savedData = localStorage.getItem(gameLocalStorageKey);
 			let parsedData = JSON.parse(savedData || "{}");
 			if (savedData === null || Array.isArray(JSON.parse(savedData))) {
@@ -100,6 +106,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 
 		setProjectData(cards);
 	}, [cards, currentProject, gameLocalStorageKey]);
+
 	useEffect(() => {
 		if (editingIndex !== null && editingIndex >= 0 && editingIndex < cards.length) {
 			setTempCard(cards[editingIndex]);
@@ -123,7 +130,7 @@ export function EditorPage({gameName, gameId, gameLocalStorageKey, cardInputsAct
 	}, [gameId, tempCard]);
 
 	return (<div className="main-container">
-		<h1 className="small-hidden">Simplified Proxies: <i>{gameName}</i></h1>
+		<h1 className="small-hidden">Simplified Proxies</h1>
 
 		<div className="main-wrapper">
 
@@ -265,7 +272,7 @@ export function SimplifiedEditorPage({
 	}, [cards, gameLocalStorageKey]);
 
 	return (<div className="main-container">
-		<h1 className="small-hidden">Simplified Editors: <i>{gameName}</i></h1>
+		<h1 className="small-hidden">Simplified Proxies: Simplified Editor</h1>
 
 		<div className="border p-2 h-full flex flex-col gap-2">
 			{importCardsAction({setCards, cards})}

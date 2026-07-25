@@ -7,6 +7,7 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card} from "@/lib/card";
 import {isSimplifiedEditor} from "@/lib/storage";
+import {useRouter} from "next/navigation";
 
 /**
  * A generic template for all editor pages
@@ -25,6 +26,10 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [roundCorners, setRoundCorners] = useState<boolean>(true);
 	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
 
+	const [usingSimplifiedEditor, setUsingSimplifiedEditor] = useState<boolean>(false);
+
+	const router = useRouter();
+
 	function getProjectNames() {
 		if (!isMounted) {
 			return [];
@@ -42,6 +47,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 
 	useEffect(() => {
 		setIsMounted(true);
+		setUsingSimplifiedEditor(isSimplifiedEditor());
 	}, []);
 
 	useEffect(() => {
@@ -69,11 +75,13 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	}, [cards]);
 
 	return (<div className="text-left w-full h-full flex flex-row flex-wrap gap-2">
-		<div className="no-print p-2">
+		<div className="no-print pl-2 pt-2 h-min">
 			<h1>Preview and Print Proxies</h1>
 			<br/>
-			<div className="flex flex-row gap-2 items-center">
-				<Link href={`/editor/${gameId}${isSimplifiedEditor() ? "/simplified" : ""}`} className="btn btn-secondary">Back to Editor</Link>
+			<div className="flex flex-row flex-wrap gap-2 items-center">
+				<button className="btn btn-secondary" onClick={() => {
+					router.push(`/editor/${gameId}${usingSimplifiedEditor ? "/simplified" : ""}`);
+				}}>Back to Editor</button>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
 				}}>Print {allCards.length || "??"} Proxies

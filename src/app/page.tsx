@@ -2,41 +2,59 @@ import "./styles/index.css"
 3
 import Link from "next/link";
 import {Carousel} from "@/app/components/carousels/images/carousel";
-import {BiBug, BiLogoGithub} from "react-icons/bi";
+import {BiBug, BiInfoCircle, BiLogoGithub} from "react-icons/bi";
 import {CreditsBox} from "@/app/components/creditsBox";
 import {ChangelogComponent} from "@/app/components/changelogComponent";
 import {CardCarousel} from "@/app/components/carousels/cards/cardCarousel";
+import {NewBadge} from "@/app/components/tags/new";
+import {carouselLinksLeft, carouselLinksRight} from "@/lib/index/carouselLinks";
+
+const carouselTime: number = 5000;
 
 export default function Home() {
 	return (<>
 		<div className="index">
 
 			<div className="flex flex-col items-center justify-center gap-4 mtg-panel carousel">
-				<Carousel time={3000}
+				<Carousel time={carouselTime}
 						  standardPaths={{
 							  prefix: "/images/index/carousel/mtg/actual",
-							  paths: ["three-visits", "urza-s-saga", "commit", "jared-carthalion", "virtue-of-persistence"],
+							  paths: carouselLinksLeft,
 							  suffix: ".jpg",
 						  }} className="w-1/3"/>
-				<CardCarousel jsonPath="public/data/index/mtg-carousel.json" time={3000} gameId="mtg" className="w-1/3"/>
+				<CardCarousel jsonPath="public/data/index/carousel-left.json" time={carouselTime} gameId="mtg" className="w-1/3"/>
 			</div>
 
 			<div className="flex flex-col items-center h-full justify-center text-center child-w-full gap-2 index-contents">
 				<h1>Simplified Proxies</h1>
-				<p>Make print-friendly proxies for Magic: The Gathering and Pokemon Trading Card Game</p>
+				<p>Create custom cards and print-friendly proxies for Magic: The Gathering</p>
 				<div className="mb-5"/>
-				<Link href="/editor/mtg" className="btn btn-primary mtg-editor">Magic: The Gathering Editor</Link>
-				<Link href="/editor/ptcg" className="btn btn-primary ptcg-editor">Pokemon Trading Card Game Editor</Link>
+
+
+				<Link href="/editor/mtg" className="btn btn-primary mtg-editor">
+					Traditional Editor
+					<span className="tooltip">
+						<span className="tooltip-content">Powerful and Complex.<br/>Everything in the Simplified Editor, plus the ability to edit any card.</span>
+						<BiInfoCircle/>
+					</span>
+				</Link>
+				<Link href="/editor/mtg/simplified" className="btn btn-primary mtg-simplified-editor">
+					Simplified Editor <NewBadge/>
+					<span className="tooltip">
+						<span className="tooltip-content">Quick and Simple.<br/>Create proxies from a decklist. Supports Moxfield and Archidekt links.</span>
+						<BiInfoCircle/>
+					</span>
+				</Link>
 			</div>
 
-			<div className="flex flex-col items-center justify-center gap-4 ptcg-panel carousel">
-				<Carousel time={3000}
+			<div className="flex flex-col items-center justify-center gap-4 mtg-panel carousel">
+				<Carousel time={carouselTime}
 						  standardPaths={{
-							  prefix: "/images/index/carousel/ptcg/actual",
-							  paths: ["arven", "budew", "gardevoir-ex", "legacy-energy", "tm-fluorite"],
-							  suffix: ".png",
+							  prefix: "/images/index/carousel/mtg/actual",
+							  paths: carouselLinksRight,
+							  suffix: ".jpg",
 						  }} className="w-1/3"/>
-				<CardCarousel jsonPath="public/data/index/ptcg-carousel.json" time={3000} gameId="ptcg" className="w-1/3"/>
+				<CardCarousel jsonPath="public/data/index/carousel-right.json" time={carouselTime} gameId="mtg" className="w-1/3"/>
 			</div>
 
 		</div>
