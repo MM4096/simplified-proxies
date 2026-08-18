@@ -18,6 +18,14 @@ const gitURL: string = "https://github.com/MM4096/simplified-proxies"
 
 export const changelog: Changelog = [
 	{
+		date: "2026-08-18",
+		version: "v1.13.1",
+		changes: (<ul className="list-disc">
+			<li><BugBadge/> Fuzzy-found cards (near match) are now inserted into their original positions instead of being appended to the end of their respective chunk.</li>
+			<li><BugBadge/> Cards on homepage now properly render as intended.</li>
+		</ul>)
+	},
+	{
 		date: "2026-07-21",
 		version: "v1.13",
 		changes: (<ul className="list-disc">

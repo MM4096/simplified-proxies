@@ -37,6 +37,7 @@
 		border: 1px solid black;
 		border-radius: 0.1in;
 		height: min-content;
+		white-space: nowrap;
 	}
 
 	.card-reverse {
@@ -101,14 +102,12 @@
 	border: 1px solid black;
 	border-radius: 0.1in;
 
-	padding-top: 0.01in;
-	padding-bottom: 0.01in;
-
+	padding: 0.01in 0.02in;
 	margin-right: 0.05in;
 	height: min-content;
 	flex-shrink: 0;
 	text-align: center;
-	width: 5ch;
+	min-width: 5ch;
 }
 
 .double-card {

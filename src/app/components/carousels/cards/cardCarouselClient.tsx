@@ -63,11 +63,11 @@ export function CardCarouselClient({data, time, className, gameId}: {
 					imageSrcs.map((imageSrc, index) => {
 						// eslint-disable-next-line @next/next/no-img-element
 						return (<img className={`carousel-item ${activeIndex === index ? "active" : ""}`} src={imageSrc}
-									 alt={index.toString()} key={index}/>)
+						             alt={index.toString()} key={index}/>)
 					})
 				}
 				<Image width={300} height={500} src="/images/index/carousel/placeholder.png" alt="Loading Preview..."
-					   className={`carousel-item ${imageSrcs.length == 0 ? "visible active" : "hidden"}`}/>
+				       className={`carousel-item ${imageSrcs.length == 0 ? "visible active" : "hidden"}`}/>
 			</div>
 
 			{/* TODO: Delete this container once srcs have been created */}
