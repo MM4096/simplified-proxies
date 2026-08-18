@@ -257,7 +257,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 		}
 
 		const json = await response.json();
-		const cardData = json["data"];
+		const cardData = json["data"] as Array<Record<string, unknown>>;
 
 		if (json["not_found"] && json["not_found"].length > 0) {
 			for (let i = 0; i < json["not_found"].length; i++) {
@@ -272,7 +272,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 				const thisName: string = json["not_found"][i]["name"];
 
 				// scryfall rate limit
-				await setTimeout(500)
+				await setTimeout(500);
 
 				const fuzzyResponse = (await fuzzyScryfall(thisName)) as Record<string, unknown>;
 				if (fuzzyResponse["object"] === "error") {
@@ -302,7 +302,23 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 					warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}.`);
 				}
 
-				cardData.push(fuzzyResponse);
+				let originalIndex = -1;
+				for (let findIndex = 0; findIndex <= (thisChunk.identifiers as Array<unknown>).length; findIndex++) {
+					const thisIdentifier =  (thisChunk.identifiers as Array<Record<string, unknown>>)[findIndex];
+					if (!thisIdentifier.hasOwnProperty("name")) {
+						continue;
+					}
+					if (thisIdentifier["name"] == thisName) {
+						originalIndex = findIndex;
+						break;
+					}
+				}
+
+				if (originalIndex >= 0) {
+					cardData.splice(originalIndex, 0, fuzzyResponse);
+				} else {
+					cardData.push(fuzzyResponse);
+				}
 			}
 
 		}
@@ -313,7 +329,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 			// check for a basic land (yes, I know this was handled earlier, this is just a rerun to weed out cards imported with IDs)
 			if (!importBasicLands) {
-				const lowercase = thisCard["name"].toString().toLowerCase();
+				const lowercase = (thisCard["name"] as string).toString().toLowerCase();
 				if (lowercase === "plains" || lowercase === "island" || lowercase === "swamp" || lowercase === "mountain" || lowercase === "forest") {
 					// ignore
 					continue;
