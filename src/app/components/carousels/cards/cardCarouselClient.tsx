@@ -7,6 +7,7 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {snapdom} from "@zumer/snapdom";
 import Image from "next/image";
+import {awaitAnimationFrame, timeout} from "@/lib/timer";
 
 export function CardCarouselClient({data, time, className, gameId}: {
 	data: Array<MTGCard | PTCGCard>,
@@ -35,6 +36,8 @@ export function CardCarouselClient({data, time, className, gameId}: {
 		async function updateImageSrcs() {
 			const tempImageSrcs: Array<string> = [];
 			const tempImages: Array<HTMLImageElement> = [];
+
+			await awaitAnimationFrame();
 
 			for (let index = 0; index < cardObjects.current.length; index++) {
 				const el = cardObjects.current[index];
