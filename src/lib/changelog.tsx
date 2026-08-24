@@ -1,11 +1,13 @@
 import {ReactNode} from "react";
-import {ExperimentalBadge} from "@/app/components/tags/experimental";
-import {MTGBadge} from "@/app/components/tags/games/mtg";
-import {PTCGBadge} from "@/app/components/tags/games/ptcg";
-import {BugBadge} from "@/app/components/tags/bug";
-import {FeatureBadge} from "@/app/components/tags/feature";
 import Link from "next/link";
-import {ChangeBadge} from "@/app/components/tags/change";
+import {
+	BugBadge,
+	ChangeBadge,
+	ExperimentalBadge,
+	FeatureBadge,
+	MTGBadge,
+	PTCGBadge
+} from "@/app/components/tags/badges";
 
 export type ChangelogEntry = {
 	date: string,

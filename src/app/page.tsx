@@ -1,13 +1,13 @@
 import "./styles/index.css"
-3
+
 import Link from "next/link";
 import {Carousel} from "@/app/components/carousels/images/carousel";
 import {BiBug, BiInfoCircle, BiLogoGithub} from "react-icons/bi";
 import {CreditsBox} from "@/app/components/creditsBox";
 import {ChangelogComponent} from "@/app/components/changelogComponent";
 import {CardCarousel} from "@/app/components/carousels/cards/cardCarousel";
-import {NewBadge} from "@/app/components/tags/new";
 import {carouselLinksLeft, carouselLinksRight} from "@/lib/index/carouselLinks";
+import {NewBadge} from "@/app/components/tags/badges";
 
 const carouselTime: number = 5000;
 

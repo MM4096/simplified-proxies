@@ -5,6 +5,14 @@ import "../../../styles/carousel/carousel.css"
 
 import Image from "next/image";
 
+/**
+ * Carousel for a list of images
+ * @param components
+ * @param components.standardPaths prefix, paths, and suffix for each of the images to display
+ * @param components.time time between card transitions, in milliseconds
+ * @param components.className any additional classes to add to the carousel
+ * @constructor
+ */
 export function Carousel({standardPaths, time, className}: {
 	standardPaths: { prefix: string, paths: Array<string>, suffix: string },
 	time: number,

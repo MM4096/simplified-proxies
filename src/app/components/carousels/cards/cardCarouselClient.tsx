@@ -7,8 +7,18 @@ import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {snapdom} from "@zumer/snapdom";
 import Image from "next/image";
-import {awaitAnimationFrame, timeout} from "@/lib/timer";
+import {awaitAnimationFrame} from "@/lib/timer";
 
+/**
+ * Client-side handling for a card carousel that displays cards from a JSON file.<br>
+ * For the server-side, see {@link CardCarousel}<br>
+ * @param components
+ * @param components.data JSON data to render
+ * @param components.time time between card transitions, in milliseconds
+ * @param components.className any additional classes to add to the carousel
+ * @param components.gameId what type of card objects are in the data
+ * @constructor
+ */
 export function CardCarouselClient({data, time, className, gameId}: {
 	data: Array<MTGCard | PTCGCard>,
 	time: number,
@@ -32,11 +42,14 @@ export function CardCarouselClient({data, time, className, gameId}: {
 		}
 	}, [activeIndex, hasSetInterval, data.length, time]);
 
+	// generate images from card objects
 	useEffect(() => {
 		async function updateImageSrcs() {
 			const tempImageSrcs: Array<string> = [];
 			const tempImages: Array<HTMLImageElement> = [];
 
+			// wait 2 frames to fix weird layout issues
+			await awaitAnimationFrame();
 			await awaitAnimationFrame();
 
 			for (let index = 0; index < cardObjects.current.length; index++) {
@@ -74,6 +87,7 @@ export function CardCarouselClient({data, time, className, gameId}: {
 			</div>
 
 			{/* TODO: Delete this container once srcs have been created */}
+			{/* Or not, this doesn't consume too many resources, and at this point, I can't be bothered. */}
 			<div className={`opacity-0 absolute top-0 left-0 ${data.length == imageSrcs.length ? "hidden" : ""}`}>
 				{
 					data.map((node, index) => {
