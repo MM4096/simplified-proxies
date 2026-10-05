@@ -4,6 +4,12 @@ import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
 
 export const maxDuration = 60;
 
+/**
+ * Imports a MTG decklist from Moxfield.
+ * Takes the decklist as a search parameter "url", and converts it to a card list.
+ * @param request
+ * @constructor
+ */
 export async function POST(request: NextRequest) {
 	const body = await request.json();
 	const searchParams = request.nextUrl.searchParams;

@@ -47,7 +47,10 @@ export type PTCGImportCollapsedCard = PTCGImportCard & {
 	id: string | number,
 }
 
-
+/**
+ * Converts an imported card into a `PTCGCard`.
+ * @param card
+ */
 function getCard(card: PTCGImportCollapsedCard): PTCGCard {
 	const thisCard: PTCGCard = {};
 
@@ -117,6 +120,11 @@ function getCard(card: PTCGImportCollapsedCard): PTCGCard {
 	return thisCard;
 }
 
+/**
+ * @deprecated PTCG functions are no longer being updated
+ * @param request
+ * @constructor
+ */
 export async function POST(request: NextRequest) {
 	const body = await request.json();
 	const searchParams = request.nextUrl.searchParams;

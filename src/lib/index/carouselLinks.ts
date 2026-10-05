@@ -1,3 +1,2 @@
-
-export const carouselLinksLeft: string[] = ["the-theorist-jace-beleren", "the-arkenstone", "vibranium-dynamo", "appeal-authority", "summon-fenrir"];
-export const carouselLinksRight: string[] = ["gleaming-splendor", "smaug-the-magnificent", "burn-burn-tree-and-fern", "extinguisher-battleship", "alchemists-talent"];
+export const carouselLinksLeft: string[] = ["garruk-curse-breaker", "naktamun-lorespinner", "start-finish", "awaken-the-honored-dead", "emerakul-the-exigent-doom"];
+export const carouselLinksRight: string[] = ["garruk-veiled-butcher", "variable-chaser", "floatsam-jetsam", "advanced-reconstruction", "emerakul-the-aeons-torn"];

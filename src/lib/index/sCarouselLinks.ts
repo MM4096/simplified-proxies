@@ -1,0 +1,4 @@
+export const secretCarouselLinksLeft: string[] = ["jace-arcane-strategist", "jace-architect-of-thought", "jace-beleren", "jace-cunning-castaway", "jace-ingenious-mind-mage", "jace-memory-adept", "jace-mirror-mage", "jace-multiverse-architect"];
+export const secretCarouselLinksRight: string[] = ["jace-reawakened", "jace-the-living-guildpact", "jace-reality-sculptor", "jace-the-mind-sculptor", "jace-the-perfected-mind", "jace-unraveler-of-secrets", "jace-weilder-of-mysteries", "space-beleren", "the-theorist-jace-beleren"];
+export const secretCarouselPercentage: number = 10;
+export const secretCarouselMessage: string | undefined = "Get Jaced.";

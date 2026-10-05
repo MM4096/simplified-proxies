@@ -131,8 +131,10 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	// const includeTokens = body["includeTokens"] || false;
 	const splitDFCs = body["splitDFCs"] || false;
 
-	// gets populated with non-critical warnings
+	// gets populated with non-critical warnings which are returned
 	const warnings: string[] = [];
+	// gets populated with debug messages which are returned
+	const debugMessages: string[] = [];
 
 	const importNote = body["importNote"] || "";
 
@@ -258,6 +260,8 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 		const json = await response.json();
 		const cardData = json["data"] as Array<Record<string, unknown>>;
+		// contains key: updated name, value: original name for fuzzy-found cards
+		const fuzzyMatch: Record<string, string> = {};
 
 		if (json["not_found"] && json["not_found"].length > 0) {
 			for (let i = 0; i < json["not_found"].length; i++) {
@@ -302,6 +306,9 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 					warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}.`);
 				}
 
+				// update fuzzy dictionary
+				fuzzyMatch[fuzzyResponse["name"] as string] = originalName;
+
 				let originalIndex = -1;
 				for (let findIndex = 0; findIndex <= (thisChunk.identifiers as Array<unknown>).length; findIndex++) {
 					const thisIdentifier =  (thisChunk.identifiers as Array<Record<string, unknown>>)[findIndex];
@@ -339,8 +346,17 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 			// get original quantity
 			let originalQuantity = 1;
 			let matchedQuantity = false;
+
+			// map to original name
+			let thisCardName = thisCard["name"] as string;
+
+			if (fuzzyMatch.hasOwnProperty(thisCardName)) {
+				debugMessages.push(`MISSMATCHREMATCH ${thisCardName} -> ${fuzzyMatch[thisCardName]}`);
+				thisCardName = fuzzyMatch[thisCardName]
+			}
+
 			// check quantity through name map
-			const thisCollapsedName = collapseCardName(thisCard["name"] as string);
+			const thisCollapsedName = collapseCardName(thisCardName);
 			if (nameMap.hasOwnProperty(thisCollapsedName)) {
 				const mappedName = nameMap[thisCollapsedName];
 				for (let j = 0; j < thisChunkOriginalNames.length; j++) {
@@ -407,6 +423,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	return new Response(JSON.stringify({
 		cards: returnedCards,
 		warnings: warnings,
+		messages: debugMessages,
 	}), {
 		status: 200,
 	});

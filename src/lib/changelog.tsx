@@ -20,6 +20,15 @@ const gitURL: string = "https://github.com/MM4096/simplified-proxies"
 
 export const changelog: Changelog = [
 	{
+		date: "2026-10-05",
+		version: "v1.13.2",
+		changes: (<ul className="list-disc">
+			<li><BugBadge/> Fixed a bug causing autocorrected cards to import with a quantity of 1 rather than their requested quantity.</li>
+			<li><BugBadge/> Fixed a bug causing the carousel to desync when focus is lost on the window.</li>
+			<li><span className="badge badge-xs badge-outline">Jace</span> Jace.</li>
+		</ul>)
+	},
+	{
 		date: "2026-08-18",
 		version: "v1.13.1",
 		changes: (<ul className="list-disc">

@@ -1,5 +1,16 @@
 import {ReactNode, useEffect, useRef} from "react";
 
+/**
+ * A confirmation modal.<br>
+ * Directly using this is not recommended, use {@link confirmationPrompt} for easy handling of creation and responses.
+ * @param components
+ * @param components.title
+ * @param components.message
+ * @param components.onAction called when either button is pressed, or when the modal is closed, and returns that outcome.
+ * @param components.noButtonText
+ * @param components.yesButtonText
+ * @constructor
+ */
 export function ConfirmationModal({title, message, onAction, noButtonText, yesButtonText}: {
 	title?: ReactNode | string,
 	message?: ReactNode | string,
@@ -51,6 +62,16 @@ export function ConfirmationModal({title, message, onAction, noButtonText, yesBu
 	</>)
 }
 
+/**
+ * An alert modal.<br>
+ * Directly using this is not recommended, use {@link alertPrompt} for easy handling of creation and responses.
+ * @param components
+ * @param components.title
+ * @param components.message
+ * @param components.onAction returns void when the modal is closed.
+ * @param components.okButtonText
+ * @constructor
+ */
 export function AlertModal({title, message, onAction, okButtonText}: {
 	title?: ReactNode | string,
 	message?: ReactNode | string,

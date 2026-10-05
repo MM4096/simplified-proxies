@@ -1,6 +1,14 @@
 import {NextRequest} from "next/server";
 import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
 
+export const maxDuration = 60;
+
+/**
+ * Imports a MTG decklist from Archidekt.
+ * Decklist should be passed as a search parameter "url", and decklist is then converted to a card list.
+ * @param request
+ * @constructor
+ */
 export async function POST(request: NextRequest) {
 	const body = await request.json();
 	const searchParams = request.nextUrl.searchParams;

@@ -5,16 +5,23 @@ import time
 import requests
 
 IMAGES_FOLDER = "../images/index/carousel/mtg/actual"
-DATA_FOLDER = "../data/index"
 IMAGES_URL_FILE = "../../src/lib/index/carouselLinks.ts"
+S_IMAGES_URL_FILE = "../../src/lib/index/sCarouselLinks.ts"
+DATA_FILE = "../../src/lib/index/carouselData.ts"
+S_DATA_FILE = "../../src/lib/index/sCarouselData.ts"
 
 
 def test_directories() -> bool:
 	print(f"=== Image Folder contents ===\n{os.listdir(IMAGES_FOLDER)}")
-	print(f"=== Data Folder contents ===\n{os.listdir(DATA_FOLDER)}")
-	with open(IMAGES_URL_FILE) as file:
-		print(f"=== URLs File contents ===\n{file.read()}")
+	with open(IMAGES_URL_FILE) as f:
+		print(f"=== URLs File contents ===\n{f.read()}")
+	with open(DATA_FILE) as f:
+		print(f"=== Data File contents ===\n{f.read()}")
 	return input("\nIs this information correct? [y/N] ") == "y"
+
+
+def is_secret() -> bool:
+	return input("Is this for the secret version? [y/N]") == "y"
 
 
 def get_card_names() -> list[str]:
@@ -64,7 +71,7 @@ def download_card_images(card_names: list[str]) -> list[str]:
 
 
 # fetches from API
-def get_card_data(card_list: list[str], save_file: str) -> None:
+def get_card_data(card_list: list[str]) -> dict:
 	card_data = "\n".join(card_list)
 	response = requests.post(f"https://simplified-proxies.mm4096.com/api/import/mtg",
 	                         data=json.dumps({
@@ -82,14 +89,15 @@ def get_card_data(card_list: list[str], save_file: str) -> None:
 		print(response.status_code)
 		raise Exception("Couldn't get card data from Simplified Proxies!")
 
-	res_data = json.dumps(response.json()["cards"])
-	with open(os.path.join(DATA_FOLDER, save_file), "w") as file:
-		file.write(res_data)
+	return response.json()["cards"]
 
 
 if __name__ == "__main__":
 	if not test_directories():
 		exit(0)
+
+	secret = is_secret()
+
 	print("Input left column cards")
 	left_column_cards = get_card_names()
 	print("Input right column cards")
@@ -98,10 +106,29 @@ if __name__ == "__main__":
 	left_save = download_card_images(left_column_cards)
 	right_save = download_card_images(right_column_cards)
 
-	get_card_data(left_column_cards, "carousel-left.json")
-	get_card_data(right_column_cards, "carousel-right.json")
+	left_data = get_card_data(left_column_cards)
+	right_data = get_card_data(right_column_cards)
+	if not secret:
+		with open(DATA_FILE, "w") as file:
+			file.write(f"""export const carouselDataLeft: Array<unknown> = {json.dumps(left_data)}
+export const carouselDataRight: Array<unknown> = {json.dumps(right_data)}
+""")
+	else:
+		with open(S_DATA_FILE, "w") as file:
+			file.write(f"""export const sCarouselDataLeft: Array<unknown> = {json.dumps(left_data)}
+export const sCarouselDataRight: Array<unknown> = {json.dumps(right_data)}
+""")
 
-	with open(IMAGES_URL_FILE, "w") as file:
-		file.write(f'''
-export const carouselLinksLeft: string[] = {json.dumps(left_save)};
+	if not secret:
+		with open(IMAGES_URL_FILE, "w") as file:
+			file.write(f'''export const carouselLinksLeft: string[] = {json.dumps(left_save)};
 export const carouselLinksRight: string[] = {json.dumps(right_save)};''')
+	else:
+		percentage = input("Chance for secret to appear (0 - 100): ")
+		message = input("Secret message (leave blank to not display text): ")
+
+		with open(S_IMAGES_URL_FILE, "w") as file:
+			file.write(f'''export const secretCarouselLinksLeft: string[] = {json.dumps(left_save)};
+export const secretCarouselLinksRight: string[] = {json.dumps(right_save)};
+export const secretCarouselPercentage: number = {percentage}
+export const secretCarouselMessage: string | undefined = {"undefined" if message == "" else "\"" + message + "\""};''')

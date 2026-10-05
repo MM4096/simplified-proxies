@@ -9,28 +9,20 @@ import Image from "next/image";
  * Carousel for a list of images
  * @param components
  * @param components.standardPaths prefix, paths, and suffix for each of the images to display
- * @param components.time time between card transitions, in milliseconds
+ * @param components.activeIndex which card to display, is wrapped by this component
  * @param components.className any additional classes to add to the carousel
  * @constructor
  */
-export function Carousel({standardPaths, time, className}: {
+export function ImageCarousel({standardPaths, activeIndex, className}: {
 	standardPaths: { prefix: string, paths: Array<string>, suffix: string },
-	time: number,
+	activeIndex: number,
 	className?: string
 }) {
-	const [activeIndex, setActiveIndex] = useState<number>(0);
-	const [hasSetInterval, setHasSetInterval] = useState<boolean>(false);
+	const [computedActiveIndex, setComputedActiveIndex] = useState<number>(0);
 
 	useEffect(() => {
-		if (!hasSetInterval) {
-			setInterval(() => {
-				setActiveIndex((prevState) => {
-					return (prevState + 1) % standardPaths.paths.length;
-				})
-			}, time);
-			setHasSetInterval(true);
-		}
-	}, [activeIndex, hasSetInterval, standardPaths.paths.length, time]);
+		setComputedActiveIndex(activeIndex % standardPaths.paths.length);
+	}, [activeIndex, standardPaths.paths.length]);
 
 	return (
 		<div className={`${className || ""} carousel-container`}>
@@ -39,7 +31,7 @@ export function Carousel({standardPaths, time, className}: {
 					return (
 						<Image src={standardPaths.prefix + "/" + imagePath + standardPaths.suffix} alt={imagePath}
 							   key={index} width={1000} height={0}
-							   className={`carousel-item ${activeIndex === index ? "active" : ""}`}/>)
+							   className={`carousel-item ${computedActiveIndex === index ? "active" : ""}`}/>)
 				})
 			}
 		</div>
