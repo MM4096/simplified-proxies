@@ -1,20 +1,31 @@
 import {setTimeout} from "node:timers/promises";
 import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
+import {applyTemplates, cardListRules, DUNGEONS, hasReverseFace, isolateFrontAndBackFaces} from "@/lib/mtg/mtgHelper";
 import {
-	applyTemplates,
-	DUNGEONS,
 	FlavorTextBehavior,
-	hasReverseFace,
-	isolateFrontAndBackFaces,
+	MatchType,
+	MTGAPIImportIdType,
+	MTGAPIImportType,
 	ReminderTextBehavior
-} from "@/lib/mtg/mtgHelper";
+} from "@/lib/mtg/mtgTypes";
+import {getEnumKeys} from "@/lib/enum";
+
+type ImportItem = {
+	name: string;
+	quantity: number;
+}
 
 const SCRYFALL_HEADERS = {
 	"Content-Type": "application/json",
 	"User-Agent": "SimplifiedProxies/1.0",
 };
-const NOT_FOUND_MESSAGE = "Please check your spellings and ensure that deck headers (e.g. \"Deck\" and \"Sideboard\") are removed."
+const NOT_FOUND_MESSAGE = "Please check your spelling and ensure that deck headers are removed."
 
+/**
+ * Parses reminder text and handles it according to request.
+ * @param text The text to handle
+ * @param reminderTextBehavior How to handle the reminder text.
+ */
 function handleReminderText(text: string, reminderTextBehavior: ReminderTextBehavior): string {
 	// regex gets all bracketed groups
 	const regex = /\([^(]+\)/g;
@@ -33,6 +44,13 @@ function handleReminderText(text: string, reminderTextBehavior: ReminderTextBeha
 	return text;
 }
 
+/**
+ * Converts JSON returned by Scryfall into a `MTGCard`
+ * @param scryfallResult JSON returned by Scryfall
+ * @param reminderTextBehavior how to handle reminder text
+ * @param flavorTextBehavior what to do with flavor text
+ * @param importTemplates whether to use auto-applied templates
+ */
 function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>, reminderTextBehavior: ReminderTextBehavior = ReminderTextBehavior.NORMAL, flavorTextBehavior: FlavorTextBehavior = FlavorTextBehavior.NAME, importTemplates: boolean = false) {
 	const thisCard: MTGCard = {};
 	let faceData = [scryfallResult as Record<string, string | object>];
@@ -95,6 +113,127 @@ function convertScryfallResultToMtgCard(scryfallResult: Record<string, unknown>,
 	return thisCard;
 }
 
+/**
+ * Removes blank lines and special lines from a provided array,
+ * then converts leftover lines to a list of {@link ImportItem}.
+ * @param cardList an array containing lines, each of which is a card
+ * @param parameters optional; original import options. Used for handling basic land imports
+ * @return an array of parsed cards, their original names (without parsing), and warnings and errors returned.
+ */
+function trimCardList(cardList: string[], parameters: MTGAPIImportType | null = null): {
+	cardList: Array<MTGAPIImportIdType>,
+	originalNames: string[],
+	messages: string[],
+	warnings: string[],
+} {
+	const notIntendedText = "If this is unexpected, add two exclamation marks (!!) in front of this line.";
+
+	const messages: string[] = [];
+	const warnings: string[] = [];
+	const originalNames: string[] = [];
+	const returnCardList: Array<MTGAPIImportIdType> = [];
+
+	const importBasicLands: boolean = parameters != null && parameters.importBasicLands == true
+
+	// parse each line, skipping over lines as required
+	const cleanedLines: string[] = [];
+	for (const line of cardList) {
+		if (line.trim() == "") {
+			continue;
+		}
+
+		const trimmedLine = line.trim();
+		// check whether line should be forced through
+		if (trimmedLine.startsWith("!!")) {
+			// remove first 2 characters (should be "!!")
+			messages.push(`Forced line ${trimmedLine} (starts with "!!")`)
+			cleanedLines.push(trimmedLine.slice(2));
+			continue;
+		}
+
+		let matchedRule: boolean = false;
+		let matchedRuleName: string = "";
+		for (const rule of cardListRules) {
+			switch (rule.matchType) {
+				case MatchType.STARTSWITH:
+					matchedRule = trimmedLine.toLowerCase().startsWith(rule.match);
+					matchedRuleName = rule.name;
+					break;
+				case MatchType.ENDSWITH:
+					matchedRule = trimmedLine.toLowerCase().endsWith(rule.match);
+					matchedRuleName = rule.name;
+					break;
+				case MatchType.COMPLETEMATCH:
+					matchedRule = trimmedLine.toLowerCase() == rule.match;
+					matchedRuleName = rule.name;
+					break;
+				default:
+					messages.push(`FILTERCARDLIST: Unspecified match type ${getEnumKeys(MatchType)[rule.matchType]}. Allowing card.`);
+					break;
+			}
+
+			if (matchedRule) {
+				break;
+			}
+		}
+		if (matchedRule) {
+			warnings.push(`Removed header-like line "${trimmedLine}" (matched rule: ${matchedRuleName}). ${notIntendedText}`);
+			continue;
+		}
+
+		if (line.trim() !== "") {
+			cleanedLines.push(line.trim());
+		}
+	}
+
+	for (let i = 0; i < cleanedLines.length; i++) {
+		let line = cleanedLines[i] as string;
+
+		const parts = line.split(" ") as string[];
+
+		// check whether card has a quantity
+		let quantity = 1;
+
+		const quantity_part = parts[0].replace("x", "");
+		let number = parseInt(quantity_part);
+
+		if (isNaN(number)) {
+			quantity = 1;
+		} else {
+			line = parts.slice(1).join(" ");
+			quantity = number;
+		}
+
+		if (line.includes("(")) {
+			const trim_line = line.split("(")[0].trim();
+			warnings.push(`Card name contains parentheses: \"${line}\". Removed parentheses. (Please note that checking set ID is not supported.)`);
+			line = trim_line;
+		}
+
+		// check for a basic land
+		if (!importBasicLands) {
+			const lowercase = line.toLowerCase();
+			if (lowercase === "plains" || lowercase === "island" || lowercase === "swamp" || lowercase === "mountain" || lowercase === "forest") {
+				// ignore
+				continue;
+			}
+		}
+
+		originalNames.push(line);
+		returnCardList.push({
+			name: line,
+			quantity: quantity,
+		});
+	}
+
+	return {
+		cardList: returnCardList,
+		originalNames: originalNames,
+		messages: messages,
+		warnings: warnings,
+	}
+}
+
 function collapseCardName(cardName: string): string {
 	return cardName.toLowerCase().replace(/[^a-zA-Z0-9_]/g, "");
 }
@@ -108,6 +247,10 @@ function matchCollapsedName(collapsedCardName: string, allNames: string[]): stri
 	return null
 }
 
+/**
+ * Performs a fuzzy search according to [Scryfall's API](https://scryfall.com/docs/api/cards/named)
+ * @param cardName
+ */
 async function fuzzyScryfall(cardName: string): Promise<unknown> {
 	const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${cardName}`, {
 		headers: SCRYFALL_HEADERS,
@@ -117,7 +260,11 @@ async function fuzzyScryfall(cardName: string): Promise<unknown> {
 	return await response.json();
 }
 
-export async function doScryfallSearch(body: any): Promise<Response> {
+/**
+ * Gets a list of cards from Scryfall.
+ * @param body card list to search for
+ */
+export async function doScryfallSearch(body: MTGAPIImportType): Promise<Response> {
 	if (!body.hasOwnProperty("cards") && !body.hasOwnProperty("ids")) {
 		return new Response(JSON.stringify({message: "Missing card list"}), {
 			status: 400,
@@ -139,67 +286,27 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 	const importNote = body["importNote"] || "";
 
 	let lines: string[] = [];
-	if (body.hasOwnProperty("cards")) {
-		lines = body["cards"].split("\n");
+	if (body.hasOwnProperty("cards") && body.cards) {
+		lines = body.cards.split("\n");
 	}
-	let ids: Array<{ quantity: number, id: string, name: string }> = [];
-	if (body.hasOwnProperty("ids")) {
+	let ids: Array<MTGAPIImportIdType> = [];
+	if (body.hasOwnProperty("ids") && body.ids) {
 		ids = body["ids"];
+	}
+	if (lines.length == 0 && ids.length == 0) {
+		return new Response(JSON.stringify({message: "No cards provided"}), {
+			status: 400,
+		});
 	}
 
 	const originalNames: string[] = [];
-	const importCards: Array<{ name?: string, id?: string, quantity: number }> = [];
+	const importCards: Array<MTGAPIImportIdType> = [];
 
-	const tempLines: string[] = [];
-	for (const line of lines) {
-		if (line.trim() !== "") {
-			tempLines.push(line.trim());
-		}
-	}
-	lines = tempLines;
-
-	//region Handle card list
-	for (let i = 0; i < lines.length; i++) {
-		let line = lines[i] as string;
-		if (line === "") {
-			continue;
-		}
-
-		const parts = line.split(" ") as string[];
-
-		// check whether card has a quantity
-		let quantity = 1;
-
-		const quantity_part = parts[0].replace("x", "");
-		let number = parseInt(quantity_part);
-
-		if (isNaN(number)) {
-			quantity = 1;
-		} else {
-			// hasQuantities = true;
-			line = parts.slice(1).join(" ");
-			quantity = number;
-		}
-
-		if (line.includes("(")) {
-			const trim_line = line.split("(")[0].trim();
-			warnings.push(`Card name contains parentheses: ${line}. Removed parentheses. (Please note that set ID is not currently supported.)`);
-			line = trim_line;
-		}
-
-		// check for a basic land
-		if (!importBasicLands) {
-			const lowercase = line.toLowerCase();
-			if (lowercase === "plains" || lowercase === "island" || lowercase === "swamp" || lowercase === "mountain" || lowercase === "forest") {
-				// ignore
-				continue;
-			}
-		}
-
-		originalNames.push(line);
-		importCards.push({name: line, quantity: quantity});
-	}
-	//endregion
+	const parsedNames = trimCardList(lines, body);
+	originalNames.push(...parsedNames.originalNames);
+	importCards.push(...parsedNames.cardList);
+	warnings.push(...parsedNames.warnings);
+	debugMessages.push(...parsedNames.messages)
 
 	//region Handle card IDs
 	for (let i = 0; i < ids.length; i++) {
@@ -301,8 +408,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 				// check whether a card ID could not be found
 				if (thisErrorCard.hasOwnProperty("id")) {
 					warnings.push(`ORIGINAL LANGUAGE: Could not find card ID: ${thisErrorCard["id"]}. Replaced with English version: ${fuzzyResponse["name"]}.`);
-				}
-				else if (!is_card_flavor_name && !is_same_name) {
+				} else if (!is_card_flavor_name && !is_same_name) {
 					warnings.push(`Could not find card: ${originalName}. Replaced with near match: ${fuzzyResponse["name"]}.`);
 				}
 
@@ -311,7 +417,7 @@ export async function doScryfallSearch(body: any): Promise<Response> {
 
 				let originalIndex = -1;
 				for (let findIndex = 0; findIndex <= (thisChunk.identifiers as Array<unknown>).length; findIndex++) {
-					const thisIdentifier =  (thisChunk.identifiers as Array<Record<string, unknown>>)[findIndex];
+					const thisIdentifier = (thisChunk.identifiers as Array<Record<string, unknown>>)[findIndex];
 					if (!thisIdentifier.hasOwnProperty("name")) {
 						continue;
 					}

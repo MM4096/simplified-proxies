@@ -2,12 +2,12 @@
 
 import {useState} from "react";
 import {MTGCard} from "@/lib/card";
-import {FlavorTextBehavior, ReminderTextBehavior} from "@/lib/mtg/mtgHelper";
 import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
 import Link from "next/link";
 import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
+import {FlavorTextBehavior, MTGAPIImportType, ReminderTextBehavior} from "@/lib/mtg/mtgTypes";
 
 export function ImportMTG({
 							  cards,
@@ -79,7 +79,7 @@ export function ImportMTG({
 				includeTokens: importIncludeTokens,
 				splitDFCs: importSplitDFCs,
 				importNote: importNote,
-			}),
+			} as MTGAPIImportType),
 		}).then(async (response) => {
 			if (response.ok) {
 				const json = await response.json();
