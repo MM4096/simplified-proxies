@@ -272,11 +272,13 @@ export async function doScryfallSearch(body: MTGAPIImportType): Promise<Response
 	}
 
 	const importBasicLands = body["importBasicLands"] || false;
-	const reminderTextBehavior: ReminderTextBehavior = body["reminderTextBehavior"] || ReminderTextBehavior.NORMAL;
-	const flavorTextBehavior: FlavorTextBehavior = body["flavorTextBehavior"] || FlavorTextBehavior.NAME;
-	const importTemplates = body["importTemplates"] || false;
+	const reminderTextBehavior: ReminderTextBehavior = body.reminderTextBehavior || ReminderTextBehavior.NORMAL;
+	const flavorTextBehavior: FlavorTextBehavior = body.flavorTextBehavior || FlavorTextBehavior.NAME;
+	const importTemplates = body.importTemplates || false;
 	// const includeTokens = body["includeTokens"] || false;
-	const splitDFCs = body["splitDFCs"] || false;
+	const splitDFCs = body.splitDFCs || false;
+	const suppressWarnings = body.suppressWarnings || false;
+	const includeDebugMessages = body.includeMessages || false;
 
 	// gets populated with non-critical warnings which are returned
 	const warnings: string[] = [];
@@ -526,11 +528,15 @@ export async function doScryfallSearch(body: MTGAPIImportType): Promise<Response
 		}
 	}
 
-	return new Response(JSON.stringify({
-		cards: returnedCards,
-		warnings: warnings,
-		messages: debugMessages,
-	}), {
+	const responseData: Record<string, unknown> = {cards: returnedCards};
+	if (!suppressWarnings) {
+		responseData["warnings"] = warnings;
+	}
+	if (includeDebugMessages) {
+		responseData["messages"] = debugMessages
+	}
+
+	return new Response(JSON.stringify(responseData), {
 		status: 200,
 	});
 }

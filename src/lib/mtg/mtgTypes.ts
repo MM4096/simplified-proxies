@@ -24,6 +24,8 @@ export type MTGAPIImportType = {
 	includeTokens?: boolean;
 	splitDFCs?: boolean;
 	importNote?: string;
+	suppressWarnings?: boolean;
+	includeMessages?: boolean;
 } & (| {
 	cards: string;
 	ids?: never;

@@ -6,8 +6,9 @@ import {BiInfoCircle} from "react-icons/bi";
 import {useUmamiEvent} from "@/app/components/analytics";
 import AnimatedModalHeight from "@/app/components/animatedModalHeight";
 import Link from "next/link";
-import {confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
+import {alertPrompt, confirmationPrompt} from "@/app/components/confirmation/confirmationFunctions";
 import {FlavorTextBehavior, MTGAPIImportType, ReminderTextBehavior} from "@/lib/mtg/mtgTypes";
+import {CheckboxInput, EnumInput, StringInput} from "@/app/editor/components/inputs/inputs";
 
 export function ImportMTG({
 							  cards,
@@ -25,27 +26,40 @@ export function ImportMTG({
 	animateHeight?: boolean,
 }) {
 	const [importMessage, setImportMessage] = useState<string>("");
-	const [importText, setImportText] = useState<string>("");
 	const [importError, setImportError] = useState<string>("");
 	const [overwrite, setOverwrite] = useState<boolean>(false);
 
 	const [disableButtons, setDisableButtons] = useState<boolean>(false);
 
-	const [importBasicLands, setImportBasicLands] = useState<boolean>(true);
-	const [importReminderTextBehavior, setImportReminderTextBehavior] = useState<ReminderTextBehavior>(ReminderTextBehavior.ITALIC);
-	const [importFlavorTextBehavior, setImportFlavorTextBehavior] = useState<FlavorTextBehavior>(FlavorTextBehavior.NAME);
-	const [importTemplates, setImportTemplates] = useState<boolean>(true);
-	const [importIncludeTokens, setImportIncludeTokens] = useState<boolean>(false);
-	const [importSplitDFCs, setImportSplitDFCs] = useState<boolean>(false);
-	const [importNote, setImportNote] = useState<string>("");
+	const [requestBody, setRequestBody] = useState<MTGAPIImportType>({
+		cards: "",
+		importBasicLands: true,
+		reminderTextBehavior: ReminderTextBehavior.ITALIC,
+		flavorTextBehavior: FlavorTextBehavior.NAME,
+		importTemplates: true,
+		includeTokens: false,
+		splitDFCs: false,
+		importNote: "",
+		suppressWarnings: false,
+		includeMessages: false,
+	});
 
 	const [importType, setImportType] = useState<"moxfield" | "archidekt" | "list">("list");
 	const [moxfieldImportMaybeboard, setMoxfieldImportMaybeboard] = useState<boolean>(false);
 	const [moxfieldUseForeignLanguage, setmoxfieldUseForeignLanguage] = useState<boolean>(true);
 
+	const [additionalSettingText, setAdditionalSettingText] = useState<string>("");
+
 	const [importErrorCount, setImportErrorCount] = useState<number>(0);
 
 	const umamiTracker = useUmamiEvent();
+
+	function setRequestValue(key: keyof MTGAPIImportType, value: any) {
+		setRequestBody({
+			...requestBody,
+			[key]: value,
+		})
+	}
 
 	async function importCards() {
 		setDisableButtons(true);
@@ -55,13 +69,13 @@ export function ImportMTG({
 		let fetchUrl: string;
 		switch (importType) {
 			case "archidekt":
-				fetchUrl = `/api/import/mtg/archidekt?url=${encodeURIComponent(importText)}`;
+				fetchUrl = `/api/import/mtg/archidekt?url=${encodeURIComponent(requestBody.cards || "")}`;
 				break;
 			case "list":
 				fetchUrl = `/api/import/mtg`;
 				break;
 			case "moxfield":
-				fetchUrl = `/api/import/mtg/moxfield?url=${encodeURIComponent(importText)}&importMaybeboard=${moxfieldImportMaybeboard}&useForeignLanguage=${moxfieldUseForeignLanguage}`;
+				fetchUrl = `/api/import/mtg/moxfield?url=${encodeURIComponent(requestBody.cards || "")}&importMaybeboard=${moxfieldImportMaybeboard}&useForeignLanguage=${moxfieldUseForeignLanguage}`;
 				break;
 		}
 
@@ -70,16 +84,7 @@ export function ImportMTG({
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({
-				cards: importText,
-				importBasicLands: importBasicLands,
-				reminderTextBehavior: importReminderTextBehavior,
-				flavorTextBehavior: importFlavorTextBehavior,
-				importTemplates: importTemplates,
-				includeTokens: importIncludeTokens,
-				splitDFCs: importSplitDFCs,
-				importNote: importNote,
-			} as MTGAPIImportType),
+			body: JSON.stringify(requestBody),
 		}).then(async (response) => {
 			if (response.ok) {
 				const json = await response.json();
@@ -88,13 +93,6 @@ export function ImportMTG({
 				// check if API returned any warnings
 				const warnings: string[] = json.hasOwnProperty("warnings") ? json["warnings"] : [];
 				if (warnings.length > 0) {
-					umamiTracker("mtg-CardsImported", {
-						importType: importType,
-						importBody: importText,
-						success: "true",
-						warnings: warnings,
-					});
-
 					setImportMessage("Resolving Warnings...")
 
 					const shouldNotAbort = await confirmationPrompt(`Warning`,
@@ -118,13 +116,44 @@ export function ImportMTG({
 								bug report on<Link href="https://github.com/MM4096/simplified-proxies/issues/new/choose"
 								                   target="_blank" className="link">GitHub</Link></label>
 						</>),
-						"Cancel Import", "Continue Anyways");
+						"Cancel Import", "Accept Changes");
+
+					umamiTracker("mtg-CardsImported", {
+						importType: importType,
+						importBody: requestBody.cards,
+						success: shouldNotAbort,
+						warnings: warnings,
+					});
+
 					if (!shouldNotAbort) {
 						setImportMessage("");
 						setImportError("Import Cancelled: User Aborted");
 						setDisableButtons(false);
 						return;
 					}
+				} else {
+					umamiTracker("mtg-CardsImported", {
+						importType: importType,
+						importBody: requestBody.cards,
+						success: true,
+						warnings: warnings,
+					});
+				}
+
+				const messages: string[] = json.hasOwnProperty("messages") ? json["messages"] : [];
+				if (messages.length > 0) {
+					await alertPrompt("Debug Log", (<>
+						<b>Record of {messages.length} log{messages.length != 1 ? "s" : ""}:</b>
+						<div className="overflow-scroll">
+							<ul className="list-disc">
+								{
+									messages.map((message, index) => {
+										return (<li key={index}>{index + 1}: <i>{message}</i></li>)
+									})
+								}
+							</ul>
+						</div>
+					</>), "Close");
 				}
 
 				if (overwrite) {
@@ -136,7 +165,6 @@ export function ImportMTG({
 					setCardsAction(newCards);
 				}
 
-				umamiTracker("mtg-CardsImported", {importType: importType, success: "true"});
 				setImportErrorCount(0);
 				if (onImportAction) {
 					onImportAction();
@@ -147,7 +175,7 @@ export function ImportMTG({
 
 				umamiTracker("mtg-CardsImported", {
 					importType: importType,
-					importBody: importText,
+					importBody: requestBody.cards,
 					success: "false",
 					error: json["message"],
 				});
@@ -213,9 +241,9 @@ export function ImportMTG({
 				<fieldset className="fieldset">
 					<legend className="fieldset-legend"></legend>
 					<textarea className="textarea w-full" placeholder="Paste your card data here"
-					          value={importText}
+					          value={requestBody.cards}
 					          onChange={(e) => {
-								  setImportText(e.target.value);
+								  setRequestValue("cards", e.target.value);
 							  }}/>
 				</fieldset>
 			</div>
@@ -233,9 +261,9 @@ export function ImportMTG({
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Archidekt deck URL here:</p>
 				<input className="input w-full" type="url"
-				       placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={importText}
+				       placeholder="https://archidekt.com/decks/1234567890/my-first-deck" value={requestBody.cards}
 				       onChange={(e) => {
-						   setImportText(e.target.value);
+						   setRequestValue("cards", e.target.value);
 					   }}/>
 			</div>
 
@@ -251,9 +279,9 @@ export function ImportMTG({
 			<div className="tab-content border-black p-3">
 				<p>Paste in your Moxfield deck URL here:</p>
 				<input className="input w-full" type="url"
-				       placeholder="https://moxfield.com/decks/1234567890" value={importText}
+				       placeholder="https://moxfield.com/decks/1234567890" value={requestBody.cards}
 				       onChange={(e) => {
-						   setImportText(e.target.value);
+						   setRequestValue("cards", e.target.value);
 					   }}/>
 				<br/><br/>
 
@@ -297,97 +325,94 @@ export function ImportMTG({
 
 		<div className="grow"/>
 
-		<div className="collapse bg-base-100 border-gray-500 border h-max">
+		<div className="collapse collapse-arrow bg-base-100 border-gray-500 border h-max">
 			<input type="checkbox" defaultChecked={true}/>
 			<div className="collapse-title font-semibold pr-8">Additional Settings</div>
-			<div className="collapse-content flex flex-col md:flex-row overflow-x-none flex-wrap">
-				<label className="label text-sm">
-					<input type="checkbox" className="checkbox checkbox-sm" checked={importBasicLands}
-					       onChange={(e) => {
-							   setImportBasicLands(e.target.checked);
-						   }}/>
-					Import basic lands
-					<span className="tooltip">
-								<span
-									className="tooltip-content">Whether to import basic lands.<br/><span className="text-xs">Plains, Mountain, Swamp, Island, and Forest are considered basic lands.</span></span>
-								<BiInfoCircle/>
-							</span>
-				</label>
+			<div className="collapse-content flex flex-col overflow-x-none">
+				<div className="w-full h-full flex flex-col md:flex-row overflow-x-none flex-wrap">
 
-				<div className="divider md:divider-horizontal"/>
+					<CheckboxInput text="Import Basic Lands" value={requestBody.importBasicLands || true}
+					               tooltipText="Whether to import basic lands. Plains, Mountain, Swamp, Island, and Forest are considered basic lands."
+					               setValueAction={
+									   (value) => setRequestValue("importBasicLands", value)
+								   }
+					               onTooltipAction={setAdditionalSettingText}
+					/>
 
-				<label className="label text-sm">
-					<select className="select select-sm w-min" value={importReminderTextBehavior}
-					        onChange={(e) => {
-								setImportReminderTextBehavior(parseInt(e.target.value) as ReminderTextBehavior);
-							}}>
-						<option value={ReminderTextBehavior.NORMAL}>Render reminder text as normal text</option>
-						<option value={ReminderTextBehavior.ITALIC}>Italicize reminder text</option>
-						<option value={ReminderTextBehavior.HIDDEN}>Exclude reminder text</option>
-					</select>
-					<span className="tooltip ">
-								<span className="tooltip-content">How reminder text should be handed (reminder text is anything in brackets, like this).</span>
-								<BiInfoCircle/>
-							</span>
-				</label>
+					<div className="divider md:divider-horizontal"/>
 
-				<div className="divider md:divider-horizontal"/>
+					<EnumInput
+						tooltipText="How reminder text should be handled. (Reminder text is anything in brackets, like this.)"
+						value={requestBody.reminderTextBehavior || 0}
+						setValueAction={(value) => setRequestValue("reminderTextBehavior", value)}
+						options={[{
+							value: ReminderTextBehavior.NORMAL,
+							text: "Render reminder text as normal text",
+						}, {
+							value: ReminderTextBehavior.ITALIC,
+							text: "Italicize reminder text",
+						}, {
+							value: ReminderTextBehavior.HIDDEN,
+							text: "Exclude reminder text",
+						}]}
+						onTooltipAction={setAdditionalSettingText} text="Reminder Text Behavior"/>
 
-				<label className="label text-sm">
-					<select className="select select-sm w-min" value={importFlavorTextBehavior}
-					        onChange={(e) => {
-								setImportFlavorTextBehavior(parseInt(e.target.value) as FlavorTextBehavior);
-							}}>
-						<option value={FlavorTextBehavior.NAME}>Import only flavor/alternative names</option>
-						<option value={FlavorTextBehavior.BOTH}>Import both flavor names and flavor text</option>
-						<option value={FlavorTextBehavior.NONE}>Exclude flavor</option>
-					</select>
-					<span className="tooltip ">
-								<span className="tooltip-content z-100">Flavor names are reprints with different names, e.g. Vivi&apos;s Thunder Magic is Lightning Bolt.</span>
-								<BiInfoCircle/>
-							</span>
-				</label>
+					<div className="divider md:divider-horizontal"/>
 
-				<div className="divider md:divider-horizontal"/>
+					<EnumInput value={requestBody.flavorTextBehavior || 0}
+					           tooltipText="Flavor names are reprints with different names (e.g. Vivi&apos;s Thunder Magic is Lightning Bolt.)"
+					           setValueAction={(value) => setRequestValue("flavorTextBehavior", value)}
+					           options={[{
+								   value: FlavorTextBehavior.NAME,
+								   text: "Import only flavor/alternative names",
+							   }, {
+								   value: FlavorTextBehavior.BOTH,
+								   text: "Import both flavor names and flavor text",
+							   }, {
+								   value: FlavorTextBehavior.NONE,
+								   text: "Exclude flavor names and flavor text",
+							   }]}
+					           onTooltipAction={setAdditionalSettingText} text="Flavor Text Behavior"/>
 
-				<label className="label text-sm">
-					<input type="checkbox" className="checkbox checkbox-sm" checked={importSplitDFCs}
-					       onChange={(e) => {
-							   setImportSplitDFCs(e.target.checked);
-						   }}/>
-					Split DFCs into separate cards
-					<span className="tooltip">
-								<span className="tooltip-content">If checked, all DFCs will be imported as two cards instead of one.</span>
-								<BiInfoCircle/>
-							</span>
-				</label>
+					<div className="divider md:divider-horizontal"/>
 
-				<div className="divider md:divider-horizontal"/>
+					<CheckboxInput text="Split DFCs into separate cards" value={requestBody.splitDFCs || false}
+					               setValueAction={(value) => setRequestValue("splitDFCs", value)}
+					               tooltipText="If checked, all DFCs will be imported as two cards, one for each side."
+					               onTooltipAction={setAdditionalSettingText}/>
 
-				<label className="label text-sm">
-					<input type="checkbox" className="checkbox checkbox-sm" checked={importTemplates}
-					       onChange={(e) => {
-							   setImportTemplates(e.target.checked);
-						   }}/>
-					Automatically apply templates
-					<span className="tooltip">
-								<span className="tooltip-content">Whether to automatically apply templates based on detected card types.</span>
-								<BiInfoCircle/>
-							</span>
-				</label>
+					<div className="divider md:divider-horizontal"/>
 
-				<div className="divider md:divider-horizontal"/>
+					<CheckboxInput text="Automatically apply templates" value={requestBody.importTemplates || false}
+					               setValueAction={(value) => setRequestValue("importTemplates", value)}
+					               tooltipText="Whether to automatically apply templates based on detected card types."
+					               onTooltipAction={setAdditionalSettingText}/>
 
-				<label className="label label-sm text-sm">
-					<input className="input input-sm" value={importNote} onChange={(e) => {
-						setImportNote(e.target.value);
-					}} placeholder="Import Notes (optional)"/>
-					<span className="tooltip">
-								<span className="tooltip-content">Any note you want to add to all the cards</span>
-								<BiInfoCircle/>
-								</span>
-				</label>
+					<div className="divider md:divider-horizontal"/>
 
+					<StringInput value={requestBody.importNote || ""} placeholder="Import Notes (optional)"
+					             setValueAction={(value) => setRequestValue("importNote", value)}
+					             tooltipText="Any note you want to add to all the cards"
+					             onTooltipAction={setAdditionalSettingText} text="Import Notes"/>
+
+					<div className="divider md:divider-horizontal"/>
+
+					<CheckboxInput text="Suppress Warnings" value={requestBody.suppressWarnings || false}
+					               setValueAction={(value) => setRequestValue("suppressWarnings", value)}
+					               tooltipText="If checked, will automatically accept all autocorrect suggestions and ignore all warnings."
+					               onTooltipAction={setAdditionalSettingText}/>
+
+					<div className="divider md:divider-horizontal"/>
+
+					<CheckboxInput text="Include Log" value={requestBody.includeMessages || false}
+					               setValueAction={(value) => setRequestValue("includeMessages", value)}
+					               tooltipText="If checked, will return and display any logs produced."
+					               onTooltipAction={setAdditionalSettingText}/>
+				</div>
+
+				<div className="divider"/>
+
+				<p className="text-sm italic">{additionalSettingText != "" ? additionalSettingText : "Click on an info circle to learn more about a setting."}</p>
 			</div>
 		</div>
 		<br/>
