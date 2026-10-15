@@ -235,9 +235,6 @@ export function ImportMTG({
 						<p>1x Memory</p>
 					</div>
 				</div>
-				<p className="text-xs">All cards must either have no quantity given, or all cards must have
-					quantities.<br/>
-					Headers (such as &quot;Main Deck&quot; or &quot;Sideboard&quot;) MUST be removed.</p>
 				<fieldset className="fieldset">
 					<legend className="fieldset-legend"></legend>
 					<textarea className="textarea w-full" placeholder="Paste your card data here"
