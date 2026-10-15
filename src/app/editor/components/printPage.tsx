@@ -7,8 +7,6 @@ import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
 import {Card} from "@/lib/card";
 import {isSimplifiedEditor} from "@/lib/storage";
 import {useRouter} from "next/navigation";
-import {snapdom} from "@zumer/snapdom";
-import {pdf} from "@zumer/snapdom-plugins";
 
 /**
  * A generic template for all editor pages
