@@ -1,16 +1,48 @@
-import {FaceType, MTGCard, MTGCardTemplate} from "@/lib/card";
+import {MTGCard, MTGCardTemplate} from "@/lib/card";
+import {MatchType} from "@/lib/mtg/mtgTypes";
 
-export enum ReminderTextBehavior {
-	NORMAL,
-	ITALIC,
-	HIDDEN,
-}
 
-export enum FlavorTextBehavior {
-	NAME,
-	NONE,
-	BOTH,
-}
+/**
+ * List of rules used when importing. Skips cards that match one or more rules.
+ */
+export const cardListRules: Array<{name: string, match: string, matchType: MatchType, details: string}> = [
+	{
+		name: "SIDEBOARD",
+		match: "sideboard",
+		matchType: MatchType.STARTSWITH,
+		details: "Line is, or starts with, \"sideboard\"."
+	},
+	{
+		name: "MAINBOARD",
+		match: "mainboard",
+		matchType: MatchType.STARTSWITH,
+		details: "Line is, or starts with, \"mainboard\"."
+	},
+	{
+		name: "NAME",
+		match: "name",
+		matchType: MatchType.STARTSWITH,
+		details: "Line starts with \"name\". Treating as name of deck."
+	},
+	{
+		name: "DECK",
+		match: "deck",
+		matchType: MatchType.COMPLETEMATCH,
+		details: "Line matches \"deck\"."
+	},
+	{
+		name: "COMMANDER",
+		match: "commander",
+		matchType: MatchType.COMPLETEMATCH,
+		details: "Line matches \"commander\"."
+	},
+	{
+		name: "ABOUT",
+		match: "about",
+		matchType: MatchType.COMPLETEMATCH,
+		details: "Line matches \"about\"."
+	}
+]
 
 export const DUNGEONS: Record<string, MTGCard> = {
 	"tomb of annihilation": {

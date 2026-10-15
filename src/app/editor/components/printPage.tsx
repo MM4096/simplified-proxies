@@ -1,7 +1,6 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import Link from "next/link";
+import {useEffect, useRef, useState} from "react";
 import {HideCreditBox} from "@/app/editor/components/hideCreditBox";
 import {MTGCardObject} from "@/app/editor/components/cards/mtgCardObject";
 import {PTCGCardObject} from "@/app/editor/components/cards/ptcgCardObject";
@@ -27,6 +26,8 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 	const [shrinkCards, setShrinkCards] = useState<boolean>(false);
 
 	const [usingSimplifiedEditor, setUsingSimplifiedEditor] = useState<boolean>(false);
+
+	const cardContainerRef = useRef<HTMLDivElement>(null);
 
 	const router = useRouter();
 
@@ -81,7 +82,8 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 			<div className="flex flex-row flex-wrap gap-2 items-center">
 				<button className="btn btn-secondary" onClick={() => {
 					router.push(`/editor/${gameId}${usingSimplifiedEditor ? "/simplified" : ""}`);
-				}}>Back to Editor</button>
+				}}>Back to Editor
+				</button>
 				<button className="btn btn-primary" onClick={() => {
 					window.print();
 				}}>Print {allCards.length || "??"} Proxies
@@ -95,7 +97,7 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 							{
 								getProjectNames().map((project) => {
 									return <option key={project}
-												   value={project === "UNSAVED" ? "" : project}>{project}</option>
+									               value={project === "UNSAVED" ? "" : project}>{project}</option>
 								})
 							}
 						</select>)
@@ -105,19 +107,19 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 				<div className="divider divider-horizontal"/>
 				<label className="label">
 					<input type="checkbox" className="checkbox" checked={useGap}
-						   onChange={(e) => setUseGap(e.target.checked)}/>
+					       onChange={(e) => setUseGap(e.target.checked)}/>
 					Gap between cards
 				</label>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
 					<input type="checkbox" className="checkbox" checked={roundCorners}
-						   onChange={(e) => setRoundCorners(e.target.checked)}/>
+					       onChange={(e) => setRoundCorners(e.target.checked)}/>
 					Rounded Corners
 				</label>
 				<div className="divider divider-horizontal"/>
 				<label className="label">
 					<input type="checkbox" className="checkbox" checked={shrinkCards}
-						   onChange={(e) => setShrinkCards(e.target.checked)}/>
+					       onChange={(e) => setShrinkCards(e.target.checked)}/>
 					Shrink Cards by 10%
 				</label>
 			</div>
@@ -125,18 +127,19 @@ export function PrintPage({gameId, gameLocalStorageKey,}: {
 			<div className="custom-divider"/>
 		</div>
 		<div
-			className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}>
+			className={`card-print ${useGap ? "gap" : ""} ${roundCorners ? "" : "no-rounded-corners"} ${shrinkCards ? "shrink-cards" : ""} transform`}
+			ref={cardContainerRef}>
 			{
 				allCards.map((card, index) => {
 					switch (gameId) {
 						case "mtg":
 							return <MTGCardObject card={card} isBlackWhite={true} key={index}
-												  includeCredit={showCredit}/>
+							                      includeCredit={showCredit}/>
 						case "ptcg":
 							return <PTCGCardObject card={card} isBlackWhite={true} key={index}
-												   includeCredit={showCredit}/>
+							                       includeCredit={showCredit}/>
 						default:
-							return <p className="text-error" key={index}>ERR_GAMEID_MISMATCH (Error code 1)</p>
+							return <p className="text-error" key={index}>ERR_GAMEID_INVALID</p>
 					}
 				})
 			}

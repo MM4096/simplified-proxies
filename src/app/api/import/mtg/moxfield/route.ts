@@ -1,6 +1,7 @@
 import {NextRequest} from "next/server";
 import {awaitCooldown} from "@/lib/redis";
 import {doScryfallSearch} from "@/lib/mtg/getCardsFromScryfall";
+import {MTGAPIImportIdType} from "@/lib/mtg/mtgTypes";
 
 export const maxDuration = 60;
 
@@ -60,7 +61,7 @@ export async function POST(request: NextRequest) {
 
 	const boards = decklist["boards"] as Record<string, Record<string, unknown>>;
 
-	let import_ids: Array<{quantity: number, id: string, name: string}> = [];
+	let import_ids: Array<MTGAPIImportIdType> = [];
 	let import_cards: string[] = [];
 	for (const [key, value] of Object.entries(boards)) {
 		if (key == "maybeboard" && !importMaybeboard) {

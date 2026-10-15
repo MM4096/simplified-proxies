@@ -20,6 +20,16 @@ const gitURL: string = "https://github.com/MM4096/simplified-proxies"
 
 export const changelog: Changelog = [
 	{
+		date: "2026-10-10",
+		version: "v1.13.3",
+		changes: (<ul className="list-disc">
+			<li><FeatureBadge/> Importing a decklist including headers now <i>shouldn't</i> cause a card not found error.</li>
+			<li><FeatureBadge/> Added an option to suppress warnings when importing cards. If checked, all autocorrect options are accepted.</li>
+			<li><FeatureBadge/> Added an option to show an additional alert containing logging information generated while importing.</li>
+			<li><BugBadge/> Additional options' tooltips no longer clip the container. <i>(The container is gone.)</i></li>
+		</ul>)
+	},
+	{
 		date: "2026-10-05",
 		version: "v1.13.2",
 		changes: (<ul className="list-disc">
