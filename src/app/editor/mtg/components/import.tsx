@@ -308,7 +308,7 @@ export function ImportMTG({
 			</div>
 
 		</div>
-		<br/>
+		{/*<br/>*/}
 
 		<label className="label">
 			<input type="checkbox" className="checkbox checkbox-error" checked={overwrite}
@@ -317,16 +317,15 @@ export function ImportMTG({
 				   }}/>
 			Overwrite existing cards
 		</label>
-
-		<br/>
+		{/*<br/>*/}
 
 		<div className="grow"/>
 
 		<div className="collapse collapse-arrow bg-base-100 border-gray-500 border h-max">
 			<input type="checkbox" defaultChecked={true}/>
 			<div className="collapse-title font-semibold pr-8">Additional Settings</div>
-			<div className="collapse-content flex flex-col overflow-x-none">
-				<div className="w-full h-full flex flex-col md:flex-row overflow-x-none flex-wrap">
+			<div className="collapse-content flex flex-col overflow-x-hidden">
+				<div className="w-full flex flex-col md:flex-row overflow-x-hidden flex-wrap">
 
 					<CheckboxInput text="Import Basic Lands" value={requestBody.importBasicLands || true}
 					               tooltipText="Whether to import basic lands. Plains, Mountain, Swamp, Island, and Forest are considered basic lands."
