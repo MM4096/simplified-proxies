@@ -41,8 +41,9 @@ export async function confirmationPrompt(title: string, message: string | ReactN
  * @param title
  * @param message
  * @param okButtonText
+ * @param closeOnBackgroundClicked
  */
-export async function alertPrompt(title: string, message: string | ReactNode, okButtonText: string = "OK"): Promise<void> {
+export async function alertPrompt(title: string, message: string | ReactNode, okButtonText: string = "OK", closeOnBackgroundClicked: boolean = true): Promise<void> {
 	return new Promise<void>((resolve) => {
 		const container: HTMLDivElement = document.createElement("div");
 		document.body.appendChild(container);
@@ -56,6 +57,6 @@ export async function alertPrompt(title: string, message: string | ReactNode, ok
 		}
 
 		root.render(<AlertModal onAction={() => handleResult()} okButtonText={okButtonText} message={message}
-		                        title={title}/>)
+		                        title={title} closeOnBackgroundClick={closeOnBackgroundClicked}/>)
 	})
 }

@@ -7,9 +7,26 @@ export default function AnimatedModalHeight({children}: {children: ReactNode}) {
 	const [height, setHeight] = useState(0);
 
 	useEffect(() => {
-		if (divRef.current) {
-			setHeight(divRef.current.scrollHeight);
+		function updateHeight(elem: HTMLDivElement) {
+			setHeight(elem.scrollHeight);
 		}
+
+		const element = divRef.current;
+		if (!element) {
+			return;
+		}
+
+		updateHeight(element);
+
+		const resizeObserver = new ResizeObserver(() => {
+			updateHeight(element);
+		});
+
+		resizeObserver.observe(element);
+
+		return () => {
+			resizeObserver.disconnect();
+		};
 	}, [children]);
 
 	return (

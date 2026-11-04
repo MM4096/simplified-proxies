@@ -31,7 +31,6 @@ export function ImportComponent({cards, setCardsAction, InnerComponent}: {
 		</button>
 		<dialog className="modal w-full" ref={dialogRef}>
 			<div className="modal-box min-w-[50vw] max-w-[100vw] md:max-w-[75vw] max-h-[90vh] overflow-y-auto">
-				{/* TODO: Fix hydration warning */}
 				<InnerComponent cards={cards} setCardsAction={setCardsAction} closeDialogAction={() => {
 					dialogRef?.current?.close();
 				}} onImportAction={() => {

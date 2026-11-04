@@ -52,6 +52,7 @@ export function CardCarousel({data, activeIndex, className, gameId}: {
 				const result = await snapdom(el);
 				const image = await result.toPng({
 					scale: 4,
+					reconcile: true,
 				})
 				const dataURL = image.src;
 
@@ -69,7 +70,8 @@ export function CardCarousel({data, activeIndex, className, gameId}: {
 				{
 					imageSrcs.map((imageSrc, index) => {
 						// eslint-disable-next-line @next/next/no-img-element
-						return (<img className={`carousel-item ${computedActiveIndex === index ? "active" : ""}`} src={imageSrc}
+						return (<img className={`carousel-item ${computedActiveIndex === index ? "active" : ""}`}
+						             src={imageSrc}
 						             alt={index.toString()} key={index}/>)
 					})
 				}
@@ -79,7 +81,7 @@ export function CardCarousel({data, activeIndex, className, gameId}: {
 
 			{/* TODO: Delete this container once srcs have been created */}
 			{/* Or not, this doesn't consume too many resources, and at this point, I can't be bothered. */}
-			<div className={`opacity-0 absolute top-0 left-0 ${data.length == imageSrcs.length ? "hidden" : ""}`}>
+			<div className={`opacity-0 absolute top-0 left-0 max-h-screen overflow-y-hidden ${data.length == imageSrcs.length ? "hidden" : ""}`}>
 				{
 					data.map((node, index) => {
 

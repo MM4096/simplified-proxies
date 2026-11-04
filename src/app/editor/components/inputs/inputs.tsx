@@ -12,15 +12,16 @@ function TooltipCircle({settingName, tooltipText, onTooltipClick}: {
 	</button>)
 }
 
-export function CheckboxInput({text, value, setValueAction, tooltipText, onTooltipAction}: {
+export function CheckboxInput({text, value, setValueAction, tooltipText, onTooltipAction, className}: {
 	text: string,
 	value: boolean,
 	setValueAction: (value: boolean) => void,
 	onTooltipAction: (value: string) => void,
 	tooltipText?: string,
+	className?: string,
 }) {
 	return (<label className="label label-sm text-sm">
-		<input type="checkbox" className="checkbox checkbox-sm" checked={value}
+		<input type="checkbox" className={`checkbox checkbox-sm ${className}`} checked={value}
 		       onChange={(e) => {
 				   setValueAction(e.target.checked);
 			   }}

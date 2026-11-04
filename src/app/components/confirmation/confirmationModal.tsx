@@ -33,6 +33,7 @@ export function ConfirmationModal({title, message, onAction, noButtonText, yesBu
 		function onCancel(e: Event) {
 			onAction(false);
 		}
+
 		dialog.addEventListener("cancel", onCancel);
 		return () => {
 			dialog.removeEventListener("cancel", onCancel);
@@ -56,7 +57,8 @@ export function ConfirmationModal({title, message, onAction, noButtonText, yesBu
 			<form method="dialog" className="modal-backdrop">
 				<button onClick={() => {
 					onAction(false);
-				}}>close</button>
+				}}>close
+				</button>
 			</form>
 		</dialog>
 	</>)
@@ -70,13 +72,15 @@ export function ConfirmationModal({title, message, onAction, noButtonText, yesBu
  * @param components.message
  * @param components.onAction returns void when the modal is closed.
  * @param components.okButtonText
+ * @param components.closeOnBackgroundClick if set, closes when the background is clicked.
  * @constructor
  */
-export function AlertModal({title, message, onAction, okButtonText}: {
+export function AlertModal({title, message, onAction, okButtonText = "OK", closeOnBackgroundClick = false}: {
 	title?: ReactNode | string,
 	message?: ReactNode | string,
 	onAction: () => void,
 	okButtonText: string,
+	closeOnBackgroundClick?: boolean,
 }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -93,6 +97,7 @@ export function AlertModal({title, message, onAction, okButtonText}: {
 		function onCancel(e: Event) {
 			onAction();
 		}
+
 		dialog.addEventListener("cancel", onCancel);
 		return () => {
 			dialog.removeEventListener("cancel", onCancel);
@@ -100,7 +105,7 @@ export function AlertModal({title, message, onAction, okButtonText}: {
 	}, [dialogRef, onAction]);
 
 	return (<>
-	<dialog className="modal" ref={dialogRef}>
+		<dialog className="modal" ref={dialogRef}>
 			<div className="modal-box w-1/2 max-h-3/4 flex flex-col gap-3">
 				<h3 className="font-Tomorrow font-bold text-xl">{title || "Alert"}</h3>
 				{message || ""}
@@ -110,6 +115,11 @@ export function AlertModal({title, message, onAction, okButtonText}: {
 					}}>{okButtonText}</button>
 				</div>
 			</div>
-	</dialog>
+			{
+				closeOnBackgroundClick && (<form method="dialog" className="modal-backdrop">
+					<button>Close Modal</button>
+				</form>)
+			}
+		</dialog>
 	</>)
 }

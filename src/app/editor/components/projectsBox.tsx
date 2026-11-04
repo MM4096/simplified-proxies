@@ -135,7 +135,7 @@ export function ProjectsBox({localStorageKey, setProjectAction, selectedProject}
 						if (newProjectName.length === 0) return;
 						const projects = getProjectNames();
 						if (projects.includes(newProjectName)) {
-							await alertPrompt("Name Conflict", `You already have a project named ${newProjectName}. Please choose a different name.`, "OK");
+							await alertPrompt("Name Conflict", `You already have a project named ${newProjectName}. Please choose a different name.`, "OK", false);
 							return;
 						}
 						setProjectAction(newProjectName);

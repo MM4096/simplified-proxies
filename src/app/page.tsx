@@ -28,7 +28,7 @@ export default function Home() {
 					</span>
 				</Link>
 				<Link href="/editor/mtg/simplified" className="btn btn-primary mtg-simplified-editor">
-					Simplified Editor <NewBadge/>
+					Simplified Editor
 					<span className="tooltip">
 						<span className="tooltip-content">Quick and Simple.<br/>Create proxies from a decklist. Supports Moxfield and Archidekt links.</span>
 						<BiInfoCircle/>

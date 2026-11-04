@@ -20,6 +20,16 @@ const gitURL: string = "https://github.com/MM4096/simplified-proxies"
 
 export const changelog: Changelog = [
 	{
+		date: "2026-11-04",
+		version: "v1.13.4",
+		changes: (<ul className="list-disc">
+			<li>Moved the "Overwrite Existing Cards" option into "Additional Settings"</li>
+			<li><BugBadge/> Fixed a bug causing the additional settings box to clip its container as a modal.</li>
+			<li><BugBadge/> Fixed a bug causing basic lands to be force-imported.</li>
+			<li><BugBadge/> Fixed a variety of layout issues affecting Chrome-based browsers.</li>
+		</ul>)
+	},
+	{
 		date: "2026-10-10",
 		version: "v1.13.3",
 		changes: (<ul className="list-disc">
